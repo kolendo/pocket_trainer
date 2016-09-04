@@ -1,8 +1,22 @@
 <resources>
 	<string name="app_name">Pocket Trainer</string>
 
+	<!-- Navigation Drawer -->
+	<string name="home">Home</string>
+	<string name="calculate_bmi">Calculate BMI</string>
+	<string name="calculate_fat">Calculate BFP</string>
+	<string name="log_out">Log out</string>
+
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
 
 	<string name="action_settings">Settings</string>
+
+	<!-- Calculators -->
+	<string name="calculate_your_bmi">Calculate your \nBody Mass Index</string>
+	<string name="bmi_weight_hint">Enter weight</string>
+	<string name="bmi_height_hint">Enter height</string>
+	<string name="calculate">Calculate</string>
+
+
 </resources>

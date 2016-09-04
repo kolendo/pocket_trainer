@@ -1,0 +1,88 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			 xmlns:tools="http://schemas.android.com/tools"
+			 android:layout_width="match_parent"
+			 android:layout_height="match_parent">
+
+	<!-- TODO: Update blank fragment layout -->
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_gravity="center"
+		>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/calculate_your_bmi"
+			android:gravity="center_horizontal"
+			android:textSize="24sp"
+			android:textColor="@color/colorAccent"
+			/>
+
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:paddingTop="@dimen/nav_header_vertical_spacing"
+			android:src="@drawable/ic_calculator_100dp" />
+
+
+		<com.humandevice.validator.widget.ValidatorTextInputLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+
+			>
+
+			<com.humandevice.validator.widget.ValidatorEditText
+				android:id="@+id/bmi_weight"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="16sp"
+				android:hint="@string/bmi_weight_hint"
+				android:imeActionId="@+id/action_login"
+				android:imeOptions="actionSend"
+				android:inputType="textEmailAddress"
+				/>
+
+		</com.humandevice.validator.widget.ValidatorTextInputLayout>
+
+		<com.humandevice.validator.widget.ValidatorTextInputLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+
+			>
+
+			<com.humandevice.validator.widget.ValidatorEditText
+				android:id="@+id/bmi_height"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="16sp"
+				android:hint="@string/bmi_height_hint"
+				android:imeActionId="@+id/action_login"
+				android:imeOptions="actionSend"
+				android:inputType="textEmailAddress"
+				/>
+
+		</com.humandevice.validator.widget.ValidatorTextInputLayout>
+
+
+		<Button
+			android:id="@+id/trace_packing"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp"
+			android:background="@color/colorAccent"
+			android:textColor="@color/common_google_signin_btn_text_dark"
+			android:text="@string/calculate"
+			android:layout_gravity="center_horizontal"
+
+			/>
+
+
+	</LinearLayout>
+
+</FrameLayout>

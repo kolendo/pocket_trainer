@@ -6,10 +6,10 @@ import android.content.Context;
 /**
  * TODO Dokumentacja
  *
- * @author Wojtek
+ * @author Wojtek Kolendo
  * @date 14.08.2016
  */
-public class PocketTrainerApplication extends Application {
+public class TrainerApplication extends Application {
 
 	private static Context sContext;
 
