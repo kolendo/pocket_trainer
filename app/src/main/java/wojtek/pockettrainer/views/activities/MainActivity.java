@@ -20,6 +20,7 @@ import com.humandevice.android.core.tools.ViewUtils;
 import com.humandevice.android.mvpframework.PresenterActivity;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.views.fragments.menu.CalculatorBfpFragment;
 import wojtek.pockettrainer.views.fragments.menu.CalculatorBmiFragment;
 import wojtek.pockettrainer.views.fragments.menu.HomeFragment;
 
@@ -78,7 +79,7 @@ public class MainActivity extends PresenterActivity implements NavigationView.On
 			drawer.closeDrawer(GravityCompat.START);
 		} else if (!(mCurrentFragment instanceof HomeFragment)) { //If main fragment changes this should be changed.
 			mNavigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
-			setTitle(R.string.home);
+			setTitle(R.string.app_name);
 			changeFragment(HomeFragment.newInstance(), false);
 		} else {
 			super.onBackPressed();
@@ -126,13 +127,14 @@ public class MainActivity extends PresenterActivity implements NavigationView.On
 				case R.id.nav_home:
 					changeFragment(HomeFragment.newInstance(), false);
 					break;
+				case R.id.nav_profile:
+					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
+					break;
 				case R.id.nav_calculate_bmi:
 					changeFragment(CalculatorBmiFragment.newInstance(), false);
 					break;
 				case R.id.nav_calculate_bfp:
-//					changeFragment(TakenPackingListFragment.newInstance(), false);
-					// TODO: Implementacja!
-					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
+					changeFragment(CalculatorBfpFragment.newInstance(), false);
 					break;
 				case R.id.nav_log_out:
 //					UserService.getInstance().logout();

@@ -3,6 +3,7 @@
 
 	<!-- Navigation Drawer -->
 	<string name="home">Home</string>
+	<string name="profile">Profile</string>
 	<string name="calculate_bmi">Calculate BMI</string>
 	<string name="calculate_fat">Calculate BFP</string>
 	<string name="log_out">Log out</string>
@@ -14,8 +15,9 @@
 
 	<!-- Calculators -->
 	<string name="calculate_your_bmi">Calculate your \nBody Mass Index</string>
-	<string name="bmi_weight_hint">Enter weight</string>
-	<string name="bmi_height_hint">Enter height</string>
+	<string name="calculate_your_bfp">Calculate your \nBody Fat Percentage</string>
+	<string name="hint_weight">Enter weight</string>
+	<string name="hint_height">Enter height</string>
 	<string name="calculate">Calculate</string>
 
 
