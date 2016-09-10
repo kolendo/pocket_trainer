@@ -2,7 +2,7 @@ package wojtek.pockettrainer.presenters;
 
 import com.humandevice.android.mvpframework.Presenter;
 
-import wojtek.pockettrainer.views.CalculatorBmiView;
+import wojtek.pockettrainer.views.BmiCalculatorView;
 
 /**
  * TODO Dokumentacja
@@ -10,5 +10,5 @@ import wojtek.pockettrainer.views.CalculatorBmiView;
  * @author Wojtek Kolendo
  * @date 04.09.2016
  */
-public interface CalculatorBmiPresenter extends Presenter<CalculatorBmiView> {
+public interface BmiCalculatorPresenter extends Presenter<BmiCalculatorView> {
 }

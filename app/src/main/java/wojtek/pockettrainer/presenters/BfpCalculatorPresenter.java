@@ -2,7 +2,7 @@ package wojtek.pockettrainer.presenters;
 
 import com.humandevice.android.mvpframework.Presenter;
 
-import wojtek.pockettrainer.views.CalculatorBfpView;
+import wojtek.pockettrainer.views.BfpCalculatorView;
 
 /**
  * TODO Dokumentacja
@@ -10,5 +10,5 @@ import wojtek.pockettrainer.views.CalculatorBfpView;
  * @author Wojtek Kolendo
  * @date 04.09.2016
  */
-public interface CalculatorBfpPresenter extends Presenter<CalculatorBfpView> {
+public interface BfpCalculatorPresenter extends Presenter<BfpCalculatorView> {
 }

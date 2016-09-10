@@ -8,6 +8,6 @@ import com.humandevice.android.core.layers.LayerView;
  * @author Wojtek Kolendo
  * @date 04.09.2016
  */
-public interface CalculatorBmiView extends LayerView {
+public interface BfpCalculatorView extends LayerView {
 
 }

@@ -1,6 +1,5 @@
 package wojtek.pockettrainer.views.activities;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,8 +19,8 @@ import com.humandevice.android.core.tools.ViewUtils;
 import com.humandevice.android.mvpframework.PresenterActivity;
 
 import wojtek.pockettrainer.R;
-import wojtek.pockettrainer.views.fragments.menu.CalculatorBfpFragment;
-import wojtek.pockettrainer.views.fragments.menu.CalculatorBmiFragment;
+import wojtek.pockettrainer.views.fragments.BfpCalculatorFragment;
+import wojtek.pockettrainer.views.fragments.menu.BmiFragment;
 import wojtek.pockettrainer.views.fragments.menu.HomeFragment;
 
 public class MainActivity extends PresenterActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -130,11 +129,11 @@ public class MainActivity extends PresenterActivity implements NavigationView.On
 				case R.id.nav_profile:
 					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
 					break;
-				case R.id.nav_calculate_bmi:
-					changeFragment(CalculatorBmiFragment.newInstance(), false);
+				case R.id.nav_bmi:
+					changeFragment(BmiFragment.newInstance(), false);
 					break;
 				case R.id.nav_calculate_bfp:
-					changeFragment(CalculatorBfpFragment.newInstance(), false);
+					changeFragment(BfpCalculatorFragment.newInstance(), false);
 					break;
 				case R.id.nav_log_out:
 //					UserService.getInstance().logout();

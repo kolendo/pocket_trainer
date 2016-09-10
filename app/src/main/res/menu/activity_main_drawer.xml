@@ -20,7 +20,7 @@
 		android:id="@+id/group_calculators"
 		android:checkableBehavior="single">
 		<item
-			android:id="@+id/nav_calculate_bmi"
+			android:id="@+id/nav_bmi"
 			android:icon="@drawable/ic_calculator_24dp"
 			android:title="@string/calculate_bmi" />
 

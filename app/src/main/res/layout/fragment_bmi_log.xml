@@ -15,7 +15,7 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="@string/calculate_your_bfp"
+			android:text="@string/calculate_your_bmi"
 			android:gravity="center_horizontal"
 			android:textSize="24sp"
 			android:textColor="@color/colorAccent"
@@ -37,14 +37,14 @@
 			>
 
 			<com.humandevice.validator.widget.ValidatorEditText
-				android:id="@+id/bfp_weight"
+				android:id="@+id/bmi_weight"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:textSize="16sp"
 				android:hint="@string/hint_weight"
 				android:imeActionId="@+id/action_login"
-				android:imeOptions="actionSend"
-				android:inputType="textEmailAddress"
+				android:imeOptions="actionNext"
+				android:inputType="number"
 				/>
 
 		</com.humandevice.validator.widget.ValidatorTextInputLayout>
@@ -57,21 +57,21 @@
 			>
 
 			<com.humandevice.validator.widget.ValidatorEditText
-				android:id="@+id/bfp_height"
+				android:id="@+id/bmi_height"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:textSize="16sp"
 				android:hint="@string/hint_height"
 				android:imeActionId="@+id/action_login"
-				android:imeOptions="actionSend"
-				android:inputType="textEmailAddress"
+				android:imeOptions="actionDone"
+				android:inputType="number"
 				/>
 
 		</com.humandevice.validator.widget.ValidatorTextInputLayout>
 
 
 		<Button
-			android:id="@+id/bfp_calculate"
+			android:id="@+id/bmi_calculate"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="10dp"
