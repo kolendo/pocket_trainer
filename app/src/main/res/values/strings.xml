@@ -9,11 +9,19 @@
 	<!-- Navigation Drawer -->
 	<string name="home">Home</string>
 	<string name="profile">Profile</string>
+	<string name="workout">Workout</string>
+	<string name="history">History</string>
 	<string name="calculate_bmi">Calculate BMI</string>
 	<string name="calculate_fat">Calculate BFP</string>
 	<string name="log_out">Log out</string>
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
+
+	<!-- Workout -->
+	<string name="start">Start</string>
+	<string name="select_workout_title">Select new \nworkout type</string>
+	<string name="running">Running</string>
+	<string name="cycling">Cycling</string>
 
 	<!-- Calculators -->
 	<string name="bmi_info">Body Mass Index is a measure of body fat based on your weight in relation to your weight.</string>

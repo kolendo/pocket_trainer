@@ -18,7 +18,6 @@ import wojtek.pockettrainer.presenters.BmiPresenter;
 import wojtek.pockettrainer.presenters.impl.BmiPresenterImpl;
 import wojtek.pockettrainer.views.BmiView;
 import wojtek.pockettrainer.views.fragments.BmiCalculatorFragment;
-import wojtek.pockettrainer.views.fragments.BmiLogFragment;
 import wojtek.pockettrainer.views.fragments.BmiRangesFragment;
 
 /**

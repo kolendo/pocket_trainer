@@ -22,6 +22,7 @@ import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.views.fragments.BfpCalculatorFragment;
 import wojtek.pockettrainer.views.fragments.menu.BmiFragment;
 import wojtek.pockettrainer.views.fragments.menu.HomeFragment;
+import wojtek.pockettrainer.views.fragments.menu.NewWorkoutFragment;
 
 public class MainActivity extends PresenterActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -79,7 +80,7 @@ public class MainActivity extends PresenterActivity implements NavigationView.On
 		} else if (!(mCurrentFragment instanceof HomeFragment)) { //If main fragment changes this should be changed.
 			mNavigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
 			setTitle(R.string.app_name);
-			changeFragment(HomeFragment.newInstance(), false);
+			changeFragment(HomeFragment.newInstance(), true);
 		} else {
 			super.onBackPressed();
 		}
@@ -124,16 +125,22 @@ public class MainActivity extends PresenterActivity implements NavigationView.On
 			}
 			switch (item.getItemId()) {
 				case R.id.nav_home:
-					changeFragment(HomeFragment.newInstance(), false);
+					changeFragment(HomeFragment.newInstance(), true);
 					break;
 				case R.id.nav_profile:
 					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
 					break;
+				case R.id.nav_workout:
+					changeFragment(NewWorkoutFragment.newInstance(), true);
+					break;
+				case R.id.nav_history:
+					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
+					break;
 				case R.id.nav_bmi:
-					changeFragment(BmiFragment.newInstance(), false);
+					changeFragment(BmiFragment.newInstance(), true);
 					break;
 				case R.id.nav_calculate_bfp:
-					changeFragment(BfpCalculatorFragment.newInstance(), false);
+					changeFragment(BfpCalculatorFragment.newInstance(), true);
 					break;
 				case R.id.nav_log_out:
 //					UserService.getInstance().logout();
