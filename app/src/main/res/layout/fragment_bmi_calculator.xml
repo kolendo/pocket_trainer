@@ -1,7 +1,8 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			 xmlns:tools="http://schemas.android.com/tools"
-			 android:layout_width="match_parent"
-			 android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_gravity="center_horizontal"
+	>
 
 	<!-- TODO: Update blank fragment layout -->
 
@@ -9,7 +10,8 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
-		android:layout_gravity="center"
+		android:layout_gravity="center_horizontal"
+		android:paddingTop="@dimen/nav_header_vertical_spacing"
 		>
 
 		<TextView
@@ -19,20 +21,70 @@
 			android:gravity="center_horizontal"
 			android:textSize="24sp"
 			android:textColor="@color/colorAccent"
+			android:layout_gravity="center_horizontal"
 			/>
 
 		<ImageView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_width="100dp"
+			android:layout_height="100dp"
 			android:layout_gravity="center_horizontal"
 			android:paddingTop="@dimen/nav_header_vertical_spacing"
-			android:src="@drawable/ic_calculator_100dp" />
+			android:src="@drawable/ic_calculator_24dp"
+			android:layout_marginBottom="5dp"/>
+
+
+		<RadioGroup
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:id="@+id/bmi_units"
+			android:layout_gravity="left|center_horizontal">
+
+			<RadioButton
+				android:layout_width="100dp"
+				android:layout_height="wrap_content"
+				android:text="@string/metric_units"
+				android:id="@+id/bmi_metric"
+				android:layout_margin="5dp"
+				android:layout_gravity="left|center_vertical"/>
+
+			<RadioButton
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/imperial_units"
+				android:id="@+id/bmi_imperial"
+				android:layout_margin="5dp"/>
+		</RadioGroup>
+
+		<RadioGroup
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:id="@+id/bmi_sex"
+			android:layout_gravity="left|center_horizontal">
+
+			<RadioButton
+				android:layout_width="100dp"
+				android:layout_height="wrap_content"
+				android:text="@string/male"
+				android:id="@+id/bmi_male"
+				android:layout_margin="5dp"
+				android:layout_gravity="left|center_vertical"/>
+
+			<RadioButton
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/female"
+				android:id="@+id/bmi_female"
+				android:layout_margin="5dp"/>
+		</RadioGroup>
 
 
 		<com.humandevice.validator.widget.ValidatorTextInputLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
+			android:layout_marginTop="5dp"
 
 			>
 
@@ -74,7 +126,7 @@
 			android:id="@+id/bmi_calculate"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="10dp"
+			android:layout_marginTop="15dp"
 			android:background="@color/colorAccent"
 			android:textColor="@color/common_google_signin_btn_text_dark"
 			android:text="@string/calculate"
@@ -85,4 +137,4 @@
 
 	</LinearLayout>
 
-</FrameLayout>
+</ScrollView>

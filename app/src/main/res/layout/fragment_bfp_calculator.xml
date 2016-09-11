@@ -26,7 +26,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
 			android:paddingTop="@dimen/nav_header_vertical_spacing"
-			android:src="@drawable/ic_calculator_100dp" />
+			android:src="@drawable/ic_calculator_24dp" />
 
 
 		<com.humandevice.validator.widget.ValidatorTextInputLayout

@@ -12,6 +12,10 @@ import wojtek.pockettrainer.presenters.BmiLogPresenter;
 import wojtek.pockettrainer.presenters.impl.BmiLogPresenterImpl;
 import wojtek.pockettrainer.R;
 
+/**
+ * @author Wojtek Kolendo
+ * @date 10.09.2016
+ */
 public class BmiLogFragment extends PresenterFragment<BmiLogView, BmiLogPresenter> implements BmiLogView {
 
 	public static BmiLogFragment newInstance() {

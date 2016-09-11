@@ -10,4 +10,6 @@ import com.humandevice.android.core.layers.LayerView;
  */
 public interface BmiCalculatorView extends LayerView {
 
+	void setResult(double result);
+
 }

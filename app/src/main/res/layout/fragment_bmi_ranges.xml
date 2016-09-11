@@ -1,88 +1,152 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			 xmlns:tools="http://schemas.android.com/tools"
-			 android:layout_width="match_parent"
-			 android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<!-- TODO: Update blank fragment layout -->
-
-	<LinearLayout
-		android:layout_width="wrap_content"
+	<RelativeLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:layout_gravity="center"
-		>
+		android:padding="5dp">
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/calculate_your_bmi"
-			android:gravity="center_horizontal"
-			android:textSize="24sp"
-			android:textColor="@color/colorAccent"
-			/>
-
-		<ImageView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_horizontal"
-			android:paddingTop="@dimen/nav_header_vertical_spacing"
-			android:src="@drawable/ic_calculator_100dp" />
-
-
-		<com.humandevice.validator.widget.ValidatorTextInputLayout
+		<android.support.v7.widget.CardView
+			android:id="@+id/bmi_info_card"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center_horizontal"
-
-			>
-
-			<com.humandevice.validator.widget.ValidatorEditText
-				android:id="@+id/bmi_weight"
-				android:layout_width="match_parent"
+			app:cardCornerRadius="0dp"
+			app:cardUseCompatPadding="true">
+			<TextView
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textSize="16sp"
-				android:hint="@string/hint_weight"
-				android:imeActionId="@+id/action_login"
-				android:imeOptions="actionNext"
-				android:inputType="number"
-				/>
+				android:text="@string/bmi_info"
+				android:gravity="center_horizontal"
+				android:padding="10dp"/>
+		</android.support.v7.widget.CardView>
 
-		</com.humandevice.validator.widget.ValidatorTextInputLayout>
-
-		<com.humandevice.validator.widget.ValidatorTextInputLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_horizontal"
-
-			>
-
-			<com.humandevice.validator.widget.ValidatorEditText
-				android:id="@+id/bmi_height"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textSize="16sp"
-				android:hint="@string/hint_height"
-				android:imeActionId="@+id/action_login"
-				android:imeOptions="actionDone"
-				android:inputType="number"
-				/>
-
-		</com.humandevice.validator.widget.ValidatorTextInputLayout>
-
-
-		<Button
-			android:id="@+id/bmi_calculate"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="10dp"
-			android:background="@color/colorAccent"
-			android:textColor="@color/common_google_signin_btn_text_dark"
-			android:text="@string/calculate"
-			android:layout_gravity="center_horizontal"
-
+		<View
+			android:id="@+id/horizontal_center"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_below="@+id/bmi_info_card"
+			android:layout_centerHorizontal="true"
 			/>
 
+		<android.support.v7.widget.CardView
+			android:id="@+id/result_card"
+			app:cardBackgroundColor="@color/colorAccent"
+			app:cardElevation="1dp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="2dp"
+			android:layout_marginLeft="4dp"
+			android:layout_marginRight="4dp"
+			android:layout_marginTop="2dp"
+			android:layout_alignTop="@+id/horizontal_center"
+			android:layout_centerHorizontal="true">
 
-	</LinearLayout>
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:paddingBottom="8dp"
+				android:paddingTop="8dp"
+				android:paddingRight="16dp"
+				android:paddingLeft="16dp">
 
-</FrameLayout>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textColor="@color/white"
+					android:textSize="21sp"
+					android:text="@string/your_bmi"
+					/>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textColor="@color/white"
+					android:textSize="21sp"
+					android:text="@string/use_calculator"
+					android:id="@+id/bmi_result"
+					android:paddingLeft="20dp"
+					/>
+			</LinearLayout>
+		</android.support.v7.widget.CardView>
+
+		<android.support.v7.widget.CardView
+			android:id="@+id/policy_card"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/result_card"
+			android:layout_marginBottom="2dp"
+			android:layout_marginLeft="4dp"
+			android:layout_marginRight="4dp"
+			android:layout_marginTop="4dp"
+			android:animateLayoutChanges="true"
+			android:background="?attr/selectableItemBackgroundBorderless">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:paddingBottom="16dp"
+					android:paddingTop="16dp">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginBottom="8dp"
+						android:text="fdbdfbd"
+						android:textColor="@color/text_light"
+						android:textSize="16sp"/>
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal">
+
+						<TextView
+							android:id="@+id/policy_name"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginBottom="4dp"
+							android:layout_weight="1"
+							android:textColor="@color/text_light"
+							android:textSize="13sp"
+							android:text="GrubasGrubasGrubasGrubas"/>
+
+					</LinearLayout>
+
+					<TextView
+						android:id="@+id/policy_description"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:animateLayoutChanges="true"
+						android:text="@string/lorem_impsum_long"/>
+
+				</LinearLayout>
+
+				<Button
+					android:id="@+id/execute_policy"
+					style="@style/Widget.AppCompat.Button.Borderless"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="right"
+					android:layout_marginTop="-8dp"
+					android:text="gbnbnbvnvbn"
+					android:textColor="@color/colorAccent"/>
+
+			</LinearLayout>
+
+
+		</android.support.v7.widget.CardView>
+
+	</RelativeLayout>
+
+
+</ScrollView>

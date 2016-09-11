@@ -23,19 +23,23 @@ import wojtek.pockettrainer.views.fragments.BmiRangesFragment;
 
 /**
  * @author Wojtek Kolendo
- * @date 04.09.2016
+ * @date 10.09.2016
  */
 public class BmiFragment extends PresenterFragment<BmiView, BmiPresenter> implements BmiView {
 
 	private ViewPager mViewPager;
 	private FragmentPagerAdapter mAdapterViewPager;
 	private TabLayout mTabLayout;
+
 	private static final int NUM_ITEMS = 3;
 
 	public static class BmiAdapter extends FragmentPagerAdapter {
 
+		private BmiRangesFragment mRangesFragment;
+
 		public BmiAdapter(FragmentManager fragmentManager) {
 			super(fragmentManager);
+			mRangesFragment = mRangesFragment.newInstance();
 		}
 
 		@Override
@@ -49,7 +53,7 @@ public class BmiFragment extends PresenterFragment<BmiView, BmiPresenter> implem
 				case 0:
 					return BmiCalculatorFragment.newInstance();
 				case 1:
-					return BmiRangesFragment.newInstance();
+					return mRangesFragment;
 				case 2:
 					return BmiLogFragment.newInstance();
 				default:
@@ -63,7 +67,7 @@ public class BmiFragment extends PresenterFragment<BmiView, BmiPresenter> implem
 				case 0:
 					return "Calculate";
 				case 1:
-					return "Ranges";
+					return "Result";
 				case 2:
 					return "Logs";
 			}
@@ -87,12 +91,17 @@ public class BmiFragment extends PresenterFragment<BmiView, BmiPresenter> implem
 
 	@Override
 	protected void initView(View view) {
-
 		mViewPager = (ViewPager) view.findViewById(R.id.bmi_view_pager);
 		mAdapterViewPager = new BmiAdapter(getChildFragmentManager());
 		mViewPager.setAdapter(mAdapterViewPager);
 		mTabLayout = (TabLayout) view.findViewById(R.id.tabs);
 
 		mTabLayout.setupWithViewPager(mViewPager);
+	}
+
+	public void switchFragment(int page, double result) {
+		BmiRangesFragment fragment = (BmiRangesFragment) mAdapterViewPager.getItem(1);
+		fragment.setResult(result);
+		mViewPager.setCurrentItem(page, true);
 	}
 }

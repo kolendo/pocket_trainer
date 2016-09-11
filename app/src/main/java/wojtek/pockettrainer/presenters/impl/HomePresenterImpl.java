@@ -7,8 +7,6 @@ import wojtek.pockettrainer.views.HomeView;
 
 
 /**
- * TODO Dokumentacja
- *
  * @author Wojtek Kolendo
  * @date 04.09.2016
  */
