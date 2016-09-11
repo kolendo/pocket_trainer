@@ -3,7 +3,7 @@
 	
 	<string name="action_settings">Settings</string>
 	<string name="lorem_ipsum_short">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
-	<string name="lorem_impsum_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean interdum quam in magna ultricies egestas. Donec facilisis pretium est nec tempus. Nulla ac pharetra nisi. Proin eget justo turpis. Proin ultrices lacus et orci convallis dictum. Fusce semper augue felis, eget porttitor ipsum bibendum sed.</string>
+	<string name="lorem_ipsum_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean interdum quam in magna ultricies egestas. Donec facilisis pretium est nec tempus. Nulla ac pharetra nisi. Proin eget justo turpis. Proin ultrices lacus et orci convallis dictum. Fusce semper augue felis, eget porttitor ipsum bibendum sed.</string>
 
 
 	<!-- Navigation Drawer -->
@@ -31,8 +31,21 @@
 	<string name="validate_calculator_weight">Enter your weight</string>
 	<string name="validate_calculator_height">Enter your height</string>
 	<string name="your_bmi">Your BMI:</string>
-	<string name="use_calculator">Use calculator first</string>
-	
+	<string name="use_calculator">use calculator first</string>
+	<string name="bmi_result_title_great">Great!</string>
+	<string name="bmi_result_title_good">Good, but could be great!</string>
+	<string name="bmi_result_title_oops">Oops!</string>
+	<string name="bmi_underweight_info">You are underweight, you should seriously gain some weight.</string>
+	<string name="bmi_underweight_mild_info">You are little underweight, try gain some weight.</string>
+	<string name="bmi_normal_info">You have healthy weight and body, keep it up!</string>
+	<string name="bmi_overweight_info">You are overweight, try loose some weight and don\'t give up.</string>
+	<string name="bmi_obesity_info">You have obesity, you should seriously loose weight.</string>
+	<string name="underweight_severely">Severely underweight</string>
+	<string name="underweight">Underweight</string>
+	<string name="normal">Normal</string>
+	<string name="overweight">Overweight</string>
+	<string name="obesity">Obesity</string>
+	<string name="bmi_annotation">Bare in mind that those ranges don\'t fit exactly for everyone, for instance if you are well build. Muscles weight more than fat.</string>
 
 
 </resources>

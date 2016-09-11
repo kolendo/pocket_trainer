@@ -31,7 +31,7 @@ public class BmiFragment extends PresenterFragment<BmiView, BmiPresenter> implem
 	private FragmentPagerAdapter mAdapterViewPager;
 	private TabLayout mTabLayout;
 
-	private static final int NUM_ITEMS = 3;
+	private static final int NUM_ITEMS = 2;
 
 	public static class BmiAdapter extends FragmentPagerAdapter {
 
@@ -54,8 +54,6 @@ public class BmiFragment extends PresenterFragment<BmiView, BmiPresenter> implem
 					return BmiCalculatorFragment.newInstance();
 				case 1:
 					return mRangesFragment;
-				case 2:
-					return BmiLogFragment.newInstance();
 				default:
 					return null;
 			}
@@ -68,8 +66,6 @@ public class BmiFragment extends PresenterFragment<BmiView, BmiPresenter> implem
 					return "Calculate";
 				case 1:
 					return "Result";
-				case 2:
-					return "Logs";
 			}
 			return null;
 		}

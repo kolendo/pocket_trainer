@@ -61,7 +61,8 @@
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
 			android:id="@+id/bmi_sex"
-			android:layout_gravity="left|center_horizontal">
+			android:layout_gravity="left|center_horizontal"
+			android:visibility="gone">
 
 			<RadioButton
 				android:layout_width="100dp"

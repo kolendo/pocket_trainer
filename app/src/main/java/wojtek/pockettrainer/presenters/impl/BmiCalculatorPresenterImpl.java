@@ -19,7 +19,7 @@ public class BmiCalculatorPresenterImpl extends BasicPresenter<BmiCalculatorView
 			if (metric) {
 				result = metricBmi(Double.parseDouble(weight), (Double.parseDouble(height)/100));
 			} else {
-				result = imperialBmi(Double.parseDouble(weight), (Double.parseDouble(height)/100));
+				result = imperialBmi(Double.parseDouble(weight), (Double.parseDouble(height))*12);
 			}
 			mView.setResult(result);
 		}
@@ -30,7 +30,7 @@ public class BmiCalculatorPresenterImpl extends BasicPresenter<BmiCalculatorView
 	}
 
 	private double imperialBmi(double weight, double height) {
-		return ((weight*4.88)/(height*height));
+		return ((weight*703)/(height*height));
 	}
 
 	@Override

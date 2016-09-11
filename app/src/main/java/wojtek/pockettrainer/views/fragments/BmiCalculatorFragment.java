@@ -95,10 +95,10 @@ public class BmiCalculatorFragment extends PresenterFragment<BmiCalculatorView, 
 			Toast.makeText(getContext(), R.string.validate_calculator_units, Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		if (mSexRadioGroup.getCheckedRadioButtonId() == -1) {
-			Toast.makeText(getContext(), R.string.validate_calculator_sex, Toast.LENGTH_SHORT).show();
-			return false;
-		}
+//		if (mSexRadioGroup.getCheckedRadioButtonId() == -1) {
+//			Toast.makeText(getContext(), R.string.validate_calculator_sex, Toast.LENGTH_SHORT).show();
+//			return false;
+//		}
 		if (TextUtils.isEmpty(mWeightEditText.getText().toString())) {
 			Toast.makeText(getContext(), R.string.validate_calculator_weight, Toast.LENGTH_SHORT).show();
 			return false;
