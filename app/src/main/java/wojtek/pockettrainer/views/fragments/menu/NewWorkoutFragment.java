@@ -1,6 +1,8 @@
 package wojtek.pockettrainer.views.fragments.menu;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +12,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.humandevice.android.v4.mvpframework.PresenterFragment;
 
 import wojtek.pockettrainer.models.enums.WorkoutType;
-import wojtek.pockettrainer.views.NewWorkoutView;
-import wojtek.pockettrainer.presenters.NewWorkoutPresenter;
-import wojtek.pockettrainer.presenters.impl.NewWorkoutPresenterImpl;
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.views.adapters.WorkoutTypeAdapter;
 
@@ -23,7 +21,7 @@ import wojtek.pockettrainer.views.adapters.WorkoutTypeAdapter;
  * @author Wojtek Kolendo
  * @date 11.09.2016
  */
-public class NewWorkoutFragment extends PresenterFragment<NewWorkoutView, NewWorkoutPresenter> implements NewWorkoutView {
+public class NewWorkoutFragment extends Fragment {
 
 	Spinner mWorkoutTypeSpinner;
 	ArrayAdapter<WorkoutType> mWorkoutTypeAdapter;
@@ -35,17 +33,13 @@ public class NewWorkoutFragment extends PresenterFragment<NewWorkoutView, NewWor
 	}
 
 	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_new_workout, container, false);
-	}
-
-	@Override
-	public Class<? extends NewWorkoutPresenter> getPresenterClass() {
-		return NewWorkoutPresenterImpl.class;
-	}
-
-	@Override
-	protected void initView(View view) {
+		View view = inflater.inflate(R.layout.fragment_new_workout, container, false);
 		mWorkoutTypeSpinner = (Spinner) view.findViewById(R.id.workout_type);
 		mWorkoutTypeAdapter = new WorkoutTypeAdapter(getContext(), R.layout.spinner_workout_type);
 		mWorkoutTypeImageView = (ImageView) view.findViewById(R.id.workout_type_icon);
@@ -55,6 +49,7 @@ public class NewWorkoutFragment extends PresenterFragment<NewWorkoutView, NewWor
 		mWorkoutTypeSpinner.setOnItemSelectedListener(onSpinnerListener);
 
 		mStartView.setOnClickListener(onStartListener);
+		return view;
 	}
 
 	private View.OnClickListener onStartListener = new View.OnClickListener() {

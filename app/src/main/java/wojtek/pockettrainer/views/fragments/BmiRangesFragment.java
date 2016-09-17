@@ -1,27 +1,21 @@
 package wojtek.pockettrainer.views.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.humandevice.android.v4.mvpframework.PresenterFragment;
-
-import wojtek.pockettrainer.views.BmiRangesView;
-import wojtek.pockettrainer.presenters.BmiRangesPresenter;
-import wojtek.pockettrainer.presenters.impl.BmiRangesPresenterImpl;
 import wojtek.pockettrainer.R;
-import wojtek.pockettrainer.views.fragments.menu.BmiFragment;
 
 /**
  * @author Wojtek Kolendo
  * @date 10.09.2016
  */
-public class BmiRangesFragment extends PresenterFragment<BmiRangesView, BmiRangesPresenter> implements BmiRangesView {
+public class BmiRangesFragment extends Fragment {
 
 	private CardView mResultCardView;
 	private TextView mResultTextView;
@@ -35,17 +29,13 @@ public class BmiRangesFragment extends PresenterFragment<BmiRangesView, BmiRange
 	}
 
 	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_bmi_ranges, container, false);
-	}
-
-	@Override
-	public Class<? extends BmiRangesPresenter> getPresenterClass() {
-		return BmiRangesPresenterImpl.class;
-	}
-
-	@Override
-	protected void initView(View view) {
+		View view = inflater.inflate(R.layout.fragment_bmi_ranges, container, false);
 		mResultCardView = (CardView) view.findViewById(R.id.bmi_result_info_card);
 		mResultTextView = (TextView) view.findViewById(R.id.bmi_result);
 		mResultTitleTextView = (TextView) view.findViewById(R.id.bmi_result_title);
@@ -54,8 +44,8 @@ public class BmiRangesFragment extends PresenterFragment<BmiRangesView, BmiRange
 		mSeverelyNumTextView = (TextView) view.findViewById(R.id.bmi_severely_underweight_num);
 		mSeverelyTextView = (TextView) view.findViewById(R.id.bmi_severely_underweight);
 
-		mUnderweightNumTextView = (TextView) view.findViewById(R.id.bmi_severely_underweight_num);
-		mUnderweightTextView = (TextView) view.findViewById(R.id.bmi_severely_underweight);
+		mUnderweightNumTextView = (TextView) view.findViewById(R.id.bmi_underweight_num);
+		mUnderweightTextView = (TextView) view.findViewById(R.id.bmi_underweight);
 
 		mNormalNumTextView = (TextView) view.findViewById(R.id.bmi_normal_num);
 		mNormalTextView = (TextView) view.findViewById(R.id.bmi_normal);
@@ -65,6 +55,7 @@ public class BmiRangesFragment extends PresenterFragment<BmiRangesView, BmiRange
 
 		mObesityNumTextView = (TextView) view.findViewById(R.id.bmi_obesity_num);
 		mObesityTextView = (TextView) view.findViewById(R.id.bmi_obesity);
+		return view;
 	}
 
 	public void setResult(double result) {

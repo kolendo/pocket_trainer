@@ -1,24 +1,18 @@
 package wojtek.pockettrainer.views.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.humandevice.android.v4.mvpframework.PresenterFragment;
-
 import wojtek.pockettrainer.R;
-import wojtek.pockettrainer.presenters.BmiCalculatorPresenter;
-import wojtek.pockettrainer.presenters.impl.BmiCalculatorPresenterImpl;
-import wojtek.pockettrainer.views.BmiCalculatorView;
 import wojtek.pockettrainer.views.fragments.menu.BmiFragment;
 
 
@@ -26,7 +20,7 @@ import wojtek.pockettrainer.views.fragments.menu.BmiFragment;
  * @author Wojtek Kolendo
  * @date 04.09.2016
  */
-public class BmiCalculatorFragment extends PresenterFragment<BmiCalculatorView, BmiCalculatorPresenter> implements BmiCalculatorView {
+public class BmiCalculatorFragment extends Fragment {
 
 	private RadioGroup mSystemRadioGroup, mSexRadioGroup;
 	private Button mCalculateButton;
@@ -41,18 +35,14 @@ public class BmiCalculatorFragment extends PresenterFragment<BmiCalculatorView, 
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		mParentFragment = (BmiFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_frame);
-		return inflater.inflate(R.layout.fragment_bmi_calculator, container, false);
 	}
 
 	@Override
-	public Class<? extends BmiCalculatorPresenter> getPresenterClass() {
-		return BmiCalculatorPresenterImpl.class;
-	}
-
-	@Override
-	protected void initView(View view) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_bmi_calculator, container, false);
 		mWeightEditText = (EditText) view.findViewById(R.id.bmi_weight);
 		mHeightEditText = (EditText) view.findViewById(R.id.bmi_height);
 		mCalculateButton = (Button) view.findViewById(R.id.bmi_calculate);
@@ -83,11 +73,12 @@ public class BmiCalculatorFragment extends PresenterFragment<BmiCalculatorView, 
 			@Override
 			public void onClick(View v) {
 				if (validateData()) {
-					getPresenter().calculateBmi(mMetric, mMale, mWeightEditText.getText().toString(),
+					calculateBmi(mMetric, mMale, mWeightEditText.getText().toString(),
 							mHeightEditText.getText().toString());
 				}
 			}
 		});
+		return view;
 	}
 
 	private boolean validateData() {
@@ -110,10 +101,34 @@ public class BmiCalculatorFragment extends PresenterFragment<BmiCalculatorView, 
 		return true;
 	}
 
-	@Override
-	public void setResult(double result) {
-		mParentFragment.switchFragment(1, getPresenter().round(result, 2));
+	private void setResult(double result) {
+		mParentFragment.switchFragment(1, round(result, 2));
 	}
 
+	public void calculateBmi(boolean metric, boolean male, String weight, String height) {
+		double result;
+		if (metric) {
+			result = metricBmi(Double.parseDouble(weight), (Double.parseDouble(height) / 100));
+		} else {
+			result = imperialBmi(Double.parseDouble(weight), (Double.parseDouble(height)) * 12);
+		}
+		setResult(result);
+	}
+
+	private double metricBmi(double weight, double height) {
+		return (weight/(height*height));
+	}
+
+	private double imperialBmi(double weight, double height) {
+		return ((weight*703)/(height*height));
+	}
+
+	private double round(double value, int places) {
+		if (places < 0) throw new IllegalArgumentException();
+		long factor = (long) Math.pow(10, places);
+		value = value * factor;
+		long tmp = Math.round(value);
+		return (double) tmp / factor;
+	}
 
 }

@@ -14,13 +14,6 @@ buildscript {
 
 allprojects {
     repositories {
-        maven {
-            credentials {
-                username 'maven'
-                password 'mavenDONEok'
-            }
-            url "http://maven.human-device.com"
-        }
         jcenter()
     }
 }

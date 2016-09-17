@@ -1,5 +1,6 @@
 package wojtek.pockettrainer.views.activities;
 
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,23 +11,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.ViewUtils;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.humandevice.android.core.tools.ViewUtils;
-import com.humandevice.android.mvpframework.PresenterActivity;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.views.fragments.BfpCalculatorFragment;
 import wojtek.pockettrainer.views.fragments.menu.BmiFragment;
 import wojtek.pockettrainer.views.fragments.menu.HomeFragment;
 import wojtek.pockettrainer.views.fragments.menu.NewWorkoutFragment;
 
-public class MainActivity extends PresenterActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-	private static final float DEFAULT_APP_BAR_ELEVATION = ViewUtils.dpToPx(4);
+	private static final float DEFAULT_APP_BAR_ELEVATION = dpToPx(4);
 	private static final int FRAGMENT_CONTAINER = R.id.fragment_frame;
 
 	private Toolbar mToolbar;
@@ -43,6 +46,10 @@ public class MainActivity extends PresenterActivity implements NavigationView.On
 		initDrawer();
 		changeFragment(HomeFragment.newInstance(), false);
 
+	}
+
+	private static int dpToPx(int dp) {
+		return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
 	}
 
 	private void initToolbar() {

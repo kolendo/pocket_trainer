@@ -1,16 +1,14 @@
 package wojtek.pockettrainer.views.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.humandevice.android.v4.mvpframework.PresenterFragment;
 
 import wojtek.pockettrainer.R;
-import wojtek.pockettrainer.presenters.BfpCalculatorPresenter;
-import wojtek.pockettrainer.presenters.impl.BfpCalculatorPresenterImpl;
-import wojtek.pockettrainer.views.BfpCalculatorView;
 
 
 /**
@@ -19,10 +17,15 @@ import wojtek.pockettrainer.views.BfpCalculatorView;
  * @author Wojtek Kolendo
  * @date 04.09.2016
  */
-public class BfpCalculatorFragment extends PresenterFragment<BfpCalculatorView, BfpCalculatorPresenter> implements BfpCalculatorView {
+public class BfpCalculatorFragment extends Fragment {
 
 	public static BfpCalculatorFragment newInstance() {
 		return new BfpCalculatorFragment();
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
@@ -30,13 +33,4 @@ public class BfpCalculatorFragment extends PresenterFragment<BfpCalculatorView, 
 		return inflater.inflate(R.layout.fragment_bfp_calculator, container, false);
 	}
 
-	@Override
-	public Class<? extends BfpCalculatorPresenter> getPresenterClass() {
-		return BfpCalculatorPresenterImpl.class;
-	}
-
-	@Override
-	protected void initView(View view) {
-
-	}
 }

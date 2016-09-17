@@ -81,7 +81,7 @@
 		</RadioGroup>
 
 
-		<com.humandevice.validator.widget.ValidatorTextInputLayout
+		<android.support.design.widget.TextInputLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
@@ -89,7 +89,7 @@
 
 			>
 
-			<com.humandevice.validator.widget.ValidatorEditText
+			<android.support.design.widget.TextInputEditText
 				android:id="@+id/bmi_weight"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -100,16 +100,16 @@
 				android:inputType="number"
 				/>
 
-		</com.humandevice.validator.widget.ValidatorTextInputLayout>
+		</android.support.design.widget.TextInputLayout>
 
-		<com.humandevice.validator.widget.ValidatorTextInputLayout
+		<android.support.design.widget.TextInputLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
 
 			>
 
-			<com.humandevice.validator.widget.ValidatorEditText
+			<android.support.design.widget.TextInputEditText
 				android:id="@+id/bmi_height"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
 				android:inputType="number"
 				/>
 
-		</com.humandevice.validator.widget.ValidatorTextInputLayout>
+		</android.support.design.widget.TextInputLayout>
 
 
 		<Button
