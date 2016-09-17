@@ -1,7 +1,8 @@
 <resources>
+	
+	<!-- Activity titles -->
 	<string name="app_name">Pocket Trainer</string>
 
-	<string name="action_settings">Settings</string>
 	<string name="lorem_ipsum_short">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
 	<string name="lorem_ipsum_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean interdum quam in magna ultricies egestas. Donec facilisis pretium est nec tempus. Nulla ac pharetra nisi. Proin eget justo turpis. Proin ultrices lacus et orci convallis dictum. Fusce semper augue felis, eget porttitor ipsum bibendum sed.</string>
 
@@ -22,6 +23,9 @@
 	<string name="select_workout_title">Select new \nworkout type</string>
 	<string name="running">Running</string>
 	<string name="cycling">Cycling</string>
+
+	<!-- Map tracing -->
+	<string name="new_whitespace">New </string>
 
 	<!-- Calculators -->
 	<string name="bmi_info">Body Mass Index is a measure of body fat based on your weight in relation to your weight.</string>
@@ -55,8 +59,10 @@
 	<string name="obesity">Obesity</string>
 	<string name="bmi_annotation">Bare in mind that those ranges don\'t fit exactly for everyone, for instance if you are well build. Muscles weight more than fat.</string>
 
-	<!-- TODO: Remove or change this placeholder text -->
-	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<!-- Dialogs -->
+	<string name="gps_disabled">Location service is disabled. Would you like to open settings?</string>
+	<string name="settings">Settings</string>
+	<string name="cancel">Cancel</string>
 
 
 </resources>

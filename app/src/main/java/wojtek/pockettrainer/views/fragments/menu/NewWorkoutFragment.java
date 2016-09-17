@@ -1,8 +1,18 @@
 package wojtek.pockettrainer.views.fragments.menu;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +23,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import wojtek.pockettrainer.models.Workout;
 import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.views.activities.MapsWorkoutActivity;
 import wojtek.pockettrainer.views.adapters.WorkoutTypeAdapter;
 
 /**
@@ -23,10 +35,14 @@ import wojtek.pockettrainer.views.adapters.WorkoutTypeAdapter;
  */
 public class NewWorkoutFragment extends Fragment {
 
+	private static final int REQUEST_PERMISSION_LOCATION = 10101;
+
 	Spinner mWorkoutTypeSpinner;
 	ArrayAdapter<WorkoutType> mWorkoutTypeAdapter;
 	ImageView mWorkoutTypeImageView;
 	View mStartView;
+
+	Workout mWorkout;
 
 	public static NewWorkoutFragment newInstance() {
 		return new NewWorkoutFragment();
@@ -44,6 +60,7 @@ public class NewWorkoutFragment extends Fragment {
 		mWorkoutTypeAdapter = new WorkoutTypeAdapter(getContext(), R.layout.spinner_workout_type);
 		mWorkoutTypeImageView = (ImageView) view.findViewById(R.id.workout_type_icon);
 		mStartView = view.findViewById(R.id.workout_start);
+		mWorkout = new Workout();
 
 		mWorkoutTypeSpinner.setAdapter(mWorkoutTypeAdapter);
 		mWorkoutTypeSpinner.setOnItemSelectedListener(onSpinnerListener);
@@ -55,7 +72,17 @@ public class NewWorkoutFragment extends Fragment {
 	private View.OnClickListener onStartListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			Toast.makeText(getContext(), "Not implemented", Toast.LENGTH_SHORT).show();
+			final LocationManager manager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
+			if (checkGpsPermission()) {
+				if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+					showGPSDisabledAlertToUser();
+				} else {
+					mWorkout.setDate(System.currentTimeMillis());
+					startMapActivity();
+				}
+			} else {
+				requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
+			}
 		}
 	};
 
@@ -65,9 +92,11 @@ public class NewWorkoutFragment extends Fragment {
 			switch ((int)id) {
 				case 0:
 					mWorkoutTypeImageView.setImageResource(R.drawable.ic_directions_run_black_24dp);
+					mWorkout.setWorkoutType(WorkoutType.RUNNING);
 					break;
 				case 1:
 					mWorkoutTypeImageView.setImageResource(R.drawable.ic_directions_bike_black_24dp);
+					mWorkout.setWorkoutType(WorkoutType.CYCLING);
 					break;
 			}
 		}
@@ -75,4 +104,47 @@ public class NewWorkoutFragment extends Fragment {
 		public void onNothingSelected(AdapterView<?> parentView) {
 		}
 	};
+
+	private boolean checkGpsPermission() {
+		return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		if (requestCode == REQUEST_PERMISSION_LOCATION) {
+			if (checkGpsPermission()) {
+				onStartListener.onClick(mStartView);
+			}
+		}
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+	}
+
+	private void showGPSDisabledAlertToUser() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+		alertDialogBuilder.setMessage(R.string.gps_disabled)
+				.setCancelable(false)
+				.setPositiveButton(R.string.settings,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								Intent callGPSSettingIntent = new Intent(
+										android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+								startActivity(callGPSSettingIntent);
+							}
+						});
+		alertDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alert = alertDialogBuilder.create();
+		alert.show();
+	}
+
+	private void startMapActivity() {
+		Intent intent = new Intent(getContext(), MapsWorkoutActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(MapsWorkoutActivity.EXTRA_WORKOUT, mWorkout);
+		intent.putExtras(bundle);
+		startActivity(intent);
+	}
 }

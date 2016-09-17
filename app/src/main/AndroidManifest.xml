@@ -2,13 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 		  package="wojtek.pockettrainer">
 
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
 	<application
 		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:supportsRtl="true"
 		android:theme="@style/TrainerTheme">
-
 		<activity
 			android:name=".views.activities.MainActivity"
 			android:label="@string/app_name"
@@ -19,6 +21,18 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
+
+		<activity
+			android:name=".views.activities.MapsWorkoutActivity"
+			android:label="Map">
+		</activity>
+
+		<!--
+             The API key for Google Maps
+        -->
+		<meta-data
+			android:name="com.google.android.geo.API_KEY"
+			android:value="@string/google_maps_key"/>
 	</application>
 
 </manifest>

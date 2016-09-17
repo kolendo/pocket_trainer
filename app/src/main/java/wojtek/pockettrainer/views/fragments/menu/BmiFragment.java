@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.views.fragments.BmiCalculatorFragment;
-import wojtek.pockettrainer.views.fragments.BmiRangesFragment;
+import wojtek.pockettrainer.views.fragments.BmiResultFragment;
 
 /**
  * @author Wojtek Kolendo
@@ -51,14 +51,14 @@ public class BmiFragment extends Fragment {
 	}
 
 	public void switchFragment(int page, double result) {
-		BmiRangesFragment fragment = (BmiRangesFragment) mAdapterViewPager.getItem(1);
+		BmiResultFragment fragment = (BmiResultFragment) mAdapterViewPager.getItem(1);
 		fragment.setResult(result);
 		mViewPager.setCurrentItem(page, true);
 	}
 
 	public static class BmiAdapter extends FragmentPagerAdapter {
 
-		private BmiRangesFragment mRangesFragment;
+		private BmiResultFragment mRangesFragment;
 
 		public BmiAdapter(FragmentManager fragmentManager) {
 			super(fragmentManager);

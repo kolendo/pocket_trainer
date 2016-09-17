@@ -15,7 +15,7 @@ import wojtek.pockettrainer.R;
  * @author Wojtek Kolendo
  * @date 10.09.2016
  */
-public class BmiRangesFragment extends Fragment {
+public class BmiResultFragment extends Fragment {
 
 	private CardView mResultCardView;
 	private TextView mResultTextView;
@@ -24,8 +24,8 @@ public class BmiRangesFragment extends Fragment {
 	private TextView mSeverelyTextView, mUnderweightTextView, mNormalTextView, mOverweightTextView, mObesityTextView;
 
 
-	public static BmiRangesFragment newInstance() {
-		return new BmiRangesFragment();
+	public static BmiResultFragment newInstance() {
+		return new BmiResultFragment();
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class BmiRangesFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_bmi_ranges, container, false);
+		View view = inflater.inflate(R.layout.fragment_bmi_result, container, false);
 		mResultCardView = (CardView) view.findViewById(R.id.bmi_result_info_card);
 		mResultTextView = (TextView) view.findViewById(R.id.bmi_result);
 		mResultTitleTextView = (TextView) view.findViewById(R.id.bmi_result_title);
