@@ -12,8 +12,6 @@ import wojtek.pockettrainer.R;
 
 
 /**
- * TODO Dokumentacja
- *
  * @author Wojtek Kolendo
  * @date 04.09.2016
  */

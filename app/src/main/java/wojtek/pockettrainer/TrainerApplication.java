@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 
 /**
- * TODO Dokumentacja
- *
  * @author Wojtek Kolendo
  * @date 14.08.2016
  */

@@ -2,12 +2,17 @@ package wojtek.pockettrainer.views.fragments;
 
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +38,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback {
 	private GoogleMap mGoogleMap;
 	private MapView mMapView;
 	private Workout mWorkout;
+	private Location mCurrentLocation, mLastLocation;
 
 	public static MapTracingFragment newInstance(Workout workout) {
 		Bundle args = new Bundle();

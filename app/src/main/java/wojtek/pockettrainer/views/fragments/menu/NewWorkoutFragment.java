@@ -72,14 +72,9 @@ public class NewWorkoutFragment extends Fragment {
 	private View.OnClickListener onStartListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			final LocationManager manager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
 			if (checkGpsPermission()) {
-				if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-					showGPSDisabledAlertToUser();
-				} else {
-					mWorkout.setDate(System.currentTimeMillis());
+					mWorkout.setStartDate(System.currentTimeMillis());
 					startMapActivity();
-				}
 			} else {
 				requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
 			}
@@ -117,27 +112,6 @@ public class NewWorkoutFragment extends Fragment {
 			}
 		}
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-	}
-
-	private void showGPSDisabledAlertToUser() {
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-		alertDialogBuilder.setMessage(R.string.gps_disabled)
-				.setCancelable(false)
-				.setPositiveButton(R.string.settings,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								Intent callGPSSettingIntent = new Intent(
-										android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-								startActivity(callGPSSettingIntent);
-							}
-						});
-		alertDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		});
-		AlertDialog alert = alertDialogBuilder.create();
-		alert.show();
 	}
 
 	private void startMapActivity() {

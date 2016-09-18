@@ -1,6 +1,11 @@
 package wojtek.pockettrainer.models;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import wojtek.pockettrainer.models.enums.WorkoutType;
@@ -14,10 +19,13 @@ public class Workout implements Serializable {
 
 	private long mId;
 
-	private Calendar mDate;
-
 	private WorkoutType mWorkoutType;
 
+	private Calendar mStartDate;
+
+	private Calendar mFinishDate;
+
+	private ArrayList<Location> mRouteList;
 
 //	region Getters and Setters
 	public long getId() {
@@ -28,17 +36,30 @@ public class Workout implements Serializable {
 		mId = id;
 	}
 
-	public Calendar getDate() {
-		return mDate;
+	public Calendar getStartDate() {
+		return mStartDate;
 	}
 
-	public void setDate(Calendar date) {
-		mDate = date;
+	public void setStartDate(Calendar date) {
+		mStartDate = date;
 	}
 
-	public void setDate(long date) {
-		mDate=Calendar.getInstance();
-		mDate.setTimeInMillis(date);
+	public void setStartDate(long date) {
+		mStartDate = Calendar.getInstance();
+		mStartDate.setTimeInMillis(date);
+	}
+
+	public Calendar getFinishDate() {
+		return mFinishDate;
+	}
+
+	public void setFinishDate(Calendar date) {
+		mFinishDate = date;
+	}
+
+	public void setFinishDate(long date) {
+		mFinishDate = Calendar.getInstance();
+		mFinishDate.setTimeInMillis(date);
 	}
 
 	public WorkoutType getWorkoutType() {
@@ -48,14 +69,25 @@ public class Workout implements Serializable {
 	public void setWorkoutType(WorkoutType workoutType) {
 		mWorkoutType = workoutType;
 	}
-//	endregion
+
+	public ArrayList<Location> getRouteList() {
+		return mRouteList;
+	}
+
+	public void setRouteList(ArrayList<Location> routeList) {
+		mRouteList = routeList;
+	}
+
+	//	endregion
 
 	@Override
 	public String toString() {
 		return "Packing{" +
 				"mId=" + mId +
-				", mDate='" + mDate + '\'' +
-				", mWorkoutType=" + mWorkoutType +
+				", mStartDate='" + mStartDate + '\'' +
+				", mFinishDate='" + mFinishDate + '\'' +
+				", mWorkoutType=" + mWorkoutType + '\'' +
+				", mRouteList=" + mRouteList +
 				'}';
 	}
 }
