@@ -10,11 +10,13 @@
 	<!-- Navigation Drawer -->
 	<string name="home">Home</string>
 	<string name="profile">Profile</string>
-	<string name="workout">Workout</string>
+	<string name="workout">New workout</string>
 	<string name="history">History</string>
 	<string name="calculate_bmi">Calculate BMI</string>
 	<string name="calculate_fat">Calculate BFP</string>
 	<string name="log_out">Log out</string>
+	<string name="settings">Settings</string>
+	<string name="quit">Quit</string>
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -64,7 +66,6 @@
 	<string name="locations_fail">Location service on device cannot be reached.</string>
 	<string name="locations_services_suspend">Location services suspended. Please reconnect.</string>
 	<string name="locations_services_fail">Location services failed.</string>
-	<string name="settings">Settings</string>
 	<string name="cancel">Cancel</string>
 	<string name="yes">Yes</string>
 	<string name="no">No</string>

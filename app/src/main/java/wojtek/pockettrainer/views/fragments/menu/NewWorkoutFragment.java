@@ -86,14 +86,13 @@ public class NewWorkoutFragment extends Fragment {
 		public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 			switch ((int)id) {
 				case 0:
-					mWorkoutTypeImageView.setImageResource(R.drawable.ic_directions_run_black_24dp);
-					mWorkout.setWorkoutType(WorkoutType.RUNNING);
-					break;
-				case 1:
-					mWorkoutTypeImageView.setImageResource(R.drawable.ic_directions_bike_black_24dp);
 					mWorkout.setWorkoutType(WorkoutType.CYCLING);
 					break;
+				case 1:
+					mWorkout.setWorkoutType(WorkoutType.RUNNING);
+					break;
 			}
+			mWorkoutTypeImageView.setImageResource(mWorkout.getWorkoutType().getResourceImage());
 		}
 		@Override
 		public void onNothingSelected(AdapterView<?> parentView) {

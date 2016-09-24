@@ -134,9 +134,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				case R.id.nav_home:
 					changeFragment(HomeFragment.newInstance(), true);
 					break;
-				case R.id.nav_profile:
-					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
-					break;
 				case R.id.nav_workout:
 					changeFragment(NewWorkoutFragment.newInstance(), true);
 					break;
@@ -149,10 +146,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				case R.id.nav_calculate_bfp:
 					changeFragment(BfpCalculatorFragment.newInstance(), true);
 					break;
-				case R.id.nav_log_out:
-//					UserService.getInstance().logout();
+				case R.id.nav_settings:
+					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
+					break;
+				case R.id.nav_quit:
 					finish();
-//					startActivity(new Intent(MainActivity.this, SearchPackageActivity.class));
 					break;
 			}
 		}

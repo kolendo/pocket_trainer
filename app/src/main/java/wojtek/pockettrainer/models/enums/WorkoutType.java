@@ -9,19 +9,29 @@ import wojtek.pockettrainer.TrainerApplication;
  */
 public enum WorkoutType {
 
-	RUNNING(R.string.running),
-	CYCLING(R.string.cycling);
+	CYCLING(R.string.cycling, R.drawable.ic_directions_bike_black_24dp),
+	RUNNING(R.string.running, R.drawable.ic_directions_run_black_24dp);
 
-	private int resourceId;
+	private int resourceString;
+	private int resourceImage;
 
-	WorkoutType(int id)
+	WorkoutType(int string, int image)
 	{
-		resourceId = id;
+		resourceString = string;
+		resourceImage = image;
 	}
 
 	public String getString()
 	{
-		return TrainerApplication.getContext().getString(resourceId);
+		return TrainerApplication.getContext().getString(resourceString);
+	}
+
+	public int getResourceString() {
+		return resourceString;
+	}
+
+	public int getResourceImage() {
+		return resourceImage;
 	}
 
 }

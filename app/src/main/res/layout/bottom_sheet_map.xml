@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:grid="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingBottom="24dp"
+	android:paddingLeft="24dp"
+	android:paddingRight="24dp"
+	android:background="@color/colorPrimary"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:id="@+id/map_bottom_sheet_header"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="16dp"
+		android:paddingBottom="16dp"
+		android:gravity="start"
+		android:orientation="horizontal">
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:orientation="vertical">
+			<ImageView
+				android:layout_width="48dp"
+				android:layout_height="48dp"
+				android:src="@drawable/ic_timer_white_24dp"/>
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="16dp"
+				android:textColor="@color/white"
+				android:text="1:12:43"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:orientation="vertical">
+			<ImageView
+				android:layout_width="48dp"
+				android:layout_height="48dp"
+				android:src="@drawable/ic_white_road_variant"/>
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="16dp"
+				android:textColor="@color/white"
+				android:text="67 km"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:gravity="end"
+			android:orientation="vertical">
+			<ImageView
+				android:layout_width="48dp"
+				android:layout_height="48dp"
+				android:src="@drawable/ic_white_speedometer"/>
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="16dp"
+				android:textColor="@color/white"
+				android:text="24 km/h"/>
+		</LinearLayout>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="60dp"
+		android:background="@color/amber_600"
+		android:orientation="horizontal">
+	</LinearLayout>
+
+</LinearLayout>
+

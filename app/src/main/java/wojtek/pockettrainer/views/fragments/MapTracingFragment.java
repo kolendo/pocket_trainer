@@ -10,12 +10,14 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.models.Workout;
 
 
@@ -37,6 +40,8 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback {
 
 	private GoogleMap mGoogleMap;
 	private MapView mMapView;
+	private View mBottomSheetView, mBottomSheetHeaderView;
+	private BottomSheetBehavior mBottomSheetBehavior;
 	private Workout mWorkout;
 	private Location mCurrentLocation, mLastLocation;
 
@@ -63,6 +68,11 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback {
 		mMapView = (MapView) view.findViewById(R.id.map_view);
 		mMapView.onCreate(savedInstanceState);
 		mMapView.getMapAsync(this);
+		mBottomSheetView = view.findViewById(R.id.map_bottom_sheet);
+		mBottomSheetHeaderView = view.findViewById(R.id.map_bottom_sheet_header);
+
+		mBottomSheetBehavior = BottomSheetBehavior.from(mBottomSheetView);
+		setBottomSheetPeek();
 		return view;
 	}
 
@@ -130,5 +140,15 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback {
 
 	private boolean checkGpsPermission() {
 		return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+	}
+
+	private void setBottomSheetPeek() {
+		mBottomSheetHeaderView.post(new Runnable() {
+			@Override
+			public void run() {
+				mBottomSheetBehavior.setPeekHeight(mBottomSheetHeaderView.getHeight());
+				mGoogleMap.setPadding(0, 0, 0, mBottomSheetHeaderView.getHeight());
+			}
+		});
 	}
 }

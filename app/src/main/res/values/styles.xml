@@ -29,34 +29,11 @@
 		<item name="colorAccent">@color/colorAccent</item>
 	</style>
 
-	<!--<style name="TrainerTheme.ProgressDialog" parent="TrainerTheme">-->
-		<!--<item name="android:windowBackground">@android:color/transparent</item>-->
-		<!--<item name="pd_backgroundColor">@color/colorPrimaryDark</item>-->
-		<!--<item name="pd_progressColor">@android:color/white</item>-->
-		<!--<item name="pd_progressTextColor">@android:color/white</item>-->
-		<!--<item name="pd_descriptionTextColor">@android:color/white</item>-->
-		<!--<item name="pd_backgroundAlpha">.9</item>-->
-		<!--<item name="pd_indeterminate">true</item>-->
-	<!--</style>-->
-
 	<style name="TrainerTheme.InfoLabel">
 		<item name="android:paddingBottom">12dp</item>
 		<item name="android:textColor">@color/colorAccent</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:textSize">12sp</item>
-	</style>
-
-	<style name="TrainerTheme.ProfileInfo">
-		<item name="android:textSize">17sp</item>
-		<item name="android:textColor">@color/secondary_text_light</item>
-		<item name="android:paddingTop">2dp</item>
-		<item name="android:paddingBottom">3dp</item>
-	</style>
-
-	<style name="TrainerTheme.ProfileSwitch">
-		<item name="android:layout_width">match_parent</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:textColor">@color/secondary_text_light</item>
 	</style>
 
 	<style name="TrainerTheme.InfoCard">
