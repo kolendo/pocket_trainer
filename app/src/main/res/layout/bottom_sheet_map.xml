@@ -1,83 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:grid="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:paddingBottom="24dp"
-	android:paddingLeft="24dp"
-	android:paddingRight="24dp"
-	android:background="@color/colorPrimary"
-	android:orientation="vertical">
+<android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+									  xmlns:grid="http://schemas.android.com/apk/res-auto"
+									  xmlns:tools="http://schemas.android.com/tools"
+									  android:layout_width="match_parent"
+									  android:layout_height="wrap_content"
+									  android:background="@color/colorPrimary"
+									  android:paddingBottom="@dimen/bottom_sheet_horizontal_margin"
+									  grid:columnCount="3"
+									  grid:rowCount="2">
 
-	<LinearLayout
-		android:id="@+id/map_bottom_sheet_header"
-		android:layout_width="match_parent"
+	<TextView
+		android:id="@+id/map_bottom_sheet_time"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:paddingTop="16dp"
-		android:paddingBottom="16dp"
-		android:gravity="start"
-		android:orientation="horizontal">
+		android:paddingTop="@dimen/bottom_sheet_vertical_margin"
+		android:paddingBottom="@dimen/bottom_sheet_vertical_margin"
+		android:gravity="center"
+		android:drawableTop="@drawable/ic_timer_white_24dp"
+		android:textColor="@color/white"
+		android:text="@string/blank_time"
+		tools:text="1:12:43"
+		grid:layout_column="0"
+		grid:layout_columnWeight="1"
+		grid:layout_row="0"/>
 
-		<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:orientation="vertical">
-			<ImageView
-				android:layout_width="48dp"
-				android:layout_height="48dp"
-				android:src="@drawable/ic_timer_white_24dp"/>
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="16dp"
-				android:textColor="@color/white"
-				android:text="1:12:43"/>
-		</LinearLayout>
+	<TextView
+		android:id="@+id/map_bottom_sheet_route"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/bottom_sheet_vertical_margin"
+		android:paddingBottom="@dimen/bottom_sheet_vertical_margin"
+		android:gravity="center"
+		android:drawableTop="@drawable/ic_white_road_variant"
+		android:textColor="@color/white"
+		android:text="@string/blank_route"
+		tools:text="43 km"
+		grid:layout_column="1"
+		grid:layout_columnWeight="1"
+		grid:layout_row="0"/>
 
-		<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:gravity="center"
-			android:orientation="vertical">
-			<ImageView
-				android:layout_width="48dp"
-				android:layout_height="48dp"
-				android:src="@drawable/ic_white_road_variant"/>
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="16dp"
-				android:textColor="@color/white"
-				android:text="67 km"/>
-		</LinearLayout>
+	<TextView
+		android:id="@+id/map_bottom_sheet_speed"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/bottom_sheet_vertical_margin"
+		android:paddingBottom="@dimen/bottom_sheet_vertical_margin"
+		android:gravity="center"
+		android:drawableTop="@drawable/ic_white_speedometer"
+		android:textColor="@color/white"
+		android:text="@string/dash"
+		tools:text="65 km/h"
+		grid:layout_column="2"
+		grid:layout_columnWeight="1"
+		grid:layout_row="0"/>
 
-		<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:gravity="end"
-			android:orientation="vertical">
-			<ImageView
-				android:layout_width="48dp"
-				android:layout_height="48dp"
-				android:src="@drawable/ic_white_speedometer"/>
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="16dp"
-				android:textColor="@color/white"
-				android:text="24 km/h"/>
-		</LinearLayout>
+	<TextView
+		android:id="@+id/map_bottom_sheet_resume"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:drawableTop="@drawable/ic_play_circle_outline_white_24dp"
+		android:textColor="@color/white"
+		android:text="@string/resume"
+		grid:layout_column="0"
+		grid:layout_columnWeight="1"
+		grid:layout_row="1"/>
 
-	</LinearLayout>
+	<TextView
+		android:id="@+id/map_bottom_sheet_pause"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:drawableTop="@drawable/ic_pause_circle_outline_white_24dp"
+		android:textColor="@color/white"
+		android:text="@string/pause"
+		grid:layout_column="1"
+		grid:layout_columnWeight="1"
+		grid:layout_row="1"/>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="60dp"
-		android:background="@color/amber_600"
-		android:orientation="horizontal">
-	</LinearLayout>
+	<TextView
+		android:id="@+id/map_bottom_sheet_stop"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:drawableTop="@drawable/ic_stop_circle_outline_white"
+		android:textColor="@color/white"
+		android:text="@string/finish"
+		grid:layout_column="2"
+		grid:layout_columnWeight="1"
+		grid:layout_row="1"/>
 
-</LinearLayout>
+</android.support.v7.widget.GridLayout>
 

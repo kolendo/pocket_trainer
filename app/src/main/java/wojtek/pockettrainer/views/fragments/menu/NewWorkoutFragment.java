@@ -73,7 +73,6 @@ public class NewWorkoutFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			if (checkGpsPermission()) {
-					mWorkout.setStartDate(System.currentTimeMillis());
 					startMapActivity();
 			} else {
 				requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
@@ -114,6 +113,7 @@ public class NewWorkoutFragment extends Fragment {
 	}
 
 	private void startMapActivity() {
+		mWorkout.setStartDate(System.currentTimeMillis());
 		Intent intent = new Intent(getContext(), MapsWorkoutActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(MapsWorkoutActivity.EXTRA_WORKOUT, mWorkout);

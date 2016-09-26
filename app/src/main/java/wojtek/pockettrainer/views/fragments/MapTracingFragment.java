@@ -2,9 +2,8 @@ package wojtek.pockettrainer.views.fragments;
 
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,20 +12,18 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
+import com.rafalzajfert.androidlogger.Logger;
 
 import wojtek.pockettrainer.R;
-import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.models.Workout;
 
 
@@ -36,18 +33,20 @@ import wojtek.pockettrainer.models.Workout;
  */
 public class MapTracingFragment extends Fragment implements OnMapReadyCallback {
 
-	private static final String WORKOUT_TRACKER_KEY = "workout_key";
+	private static final String WORKOUT_KEY = "workout_key";
 
 	private GoogleMap mGoogleMap;
 	private MapView mMapView;
-	private View mBottomSheetView, mBottomSheetHeaderView;
+	private View mBottomSheetView;
 	private BottomSheetBehavior mBottomSheetBehavior;
 	private Workout mWorkout;
 	private Location mCurrentLocation, mLastLocation;
 
+	private TextView mTimeTextView, mRouteTextView, mSpeedTextView, mResumeTextView, mPauseTextView, mStopTextView;
+
 	public static MapTracingFragment newInstance(Workout workout) {
 		Bundle args = new Bundle();
-		args.putSerializable(WORKOUT_TRACKER_KEY, workout);
+		args.putSerializable(WORKOUT_KEY, workout);
 		MapTracingFragment fragment = new MapTracingFragment();
 		fragment.setArguments(args);
 		return fragment;
@@ -58,7 +57,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback {
 		super.onCreate(savedInstanceState);
 		Bundle args = getArguments();
 		if (args != null) {
-			mWorkout = (Workout) args.getSerializable(WORKOUT_TRACKER_KEY);
+			mWorkout = (Workout) args.getSerializable(WORKOUT_KEY);
 		}
 	}
 
@@ -69,12 +68,41 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback {
 		mMapView.onCreate(savedInstanceState);
 		mMapView.getMapAsync(this);
 		mBottomSheetView = view.findViewById(R.id.map_bottom_sheet);
-		mBottomSheetHeaderView = view.findViewById(R.id.map_bottom_sheet_header);
+		mTimeTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_time);
+		mRouteTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_route);
+		mSpeedTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_speed);
+		mResumeTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_resume);
+		mPauseTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_pause);
+		mStopTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_stop);
 
 		mBottomSheetBehavior = BottomSheetBehavior.from(mBottomSheetView);
 		setBottomSheetPeek();
+		mResumeTextView.setOnClickListener(mResumeOnClickListener);
+		mPauseTextView.setOnClickListener(mPauseOnClickListener);
+		mStopTextView.setOnClickListener(mStopOnClickListener);
 		return view;
 	}
+
+	View.OnClickListener mResumeOnClickListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Toast.makeText(getContext(), "not implemented", Toast.LENGTH_SHORT).show();
+		}
+	};
+
+	View.OnClickListener mPauseOnClickListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Toast.makeText(getContext(), "not implemented", Toast.LENGTH_SHORT).show();
+		}
+	};
+
+	View.OnClickListener mStopOnClickListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Toast.makeText(getContext(), "not implemented", Toast.LENGTH_SHORT).show();
+		}
+	};
 
 	@Override
 	public void onResume() {
@@ -98,7 +126,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback {
 			try {
 				mMapView.onDestroy();
 			} catch (NullPointerException e) {
-
+				Logger.error(e);
 			}
 		}
 		super.onDestroy();
@@ -134,21 +162,19 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback {
 
 	}
 
-	public boolean isMapReady() {
-		return mGoogleMap != null;
-	}
-
 	private boolean checkGpsPermission() {
 		return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 	}
 
 	private void setBottomSheetPeek() {
-		mBottomSheetHeaderView.post(new Runnable() {
+		mBottomSheetView.post(new Runnable() {
 			@Override
 			public void run() {
-				mBottomSheetBehavior.setPeekHeight(mBottomSheetHeaderView.getHeight());
-				mGoogleMap.setPadding(0, 0, 0, mBottomSheetHeaderView.getHeight());
+				mBottomSheetBehavior.setPeekHeight(mTimeTextView.getHeight());
+				mGoogleMap.setPadding(0, 0, 0, mTimeTextView.getHeight());
 			}
 		});
 	}
+
+
 }

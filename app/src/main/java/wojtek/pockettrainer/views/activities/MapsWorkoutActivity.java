@@ -1,13 +1,15 @@
 package wojtek.pockettrainer.views.activities;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -15,7 +17,6 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,72 +35,78 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.rafalzajfert.androidlogger.Logger;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.models.Workout;
+import wojtek.pockettrainer.services.LocationService;
+import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
 import wojtek.pockettrainer.views.fragments.MapTracingFragment;
 
 /**
  * @author Wojtek Kolendo
  * @date 17.09.2016
  */
-public class MapsWorkoutActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-		com.google.android.gms.location.LocationListener, ResultCallback<LocationSettingsResult> {
+public class MapsWorkoutActivity extends AppCompatActivity implements LocationServiceCallback {
 
 	private static final int FRAGMENT_CONTAINER = R.id.fragment_frame_map;
 	public static final String EXTRA_WORKOUT = "extra_workout";
-	private static final String WORKOUT_KEY = "workout_key";
-	public static final String EXTRA_LOCATION = "extra_location";
 
-	public static final int REQUEST_CHECK_SETTINGS = 100;
-	public static final int UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
-	public static final int FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 5;
-
-	private AppBarLayout mAppBarLayout;
+	LocationService mService;
+	boolean mBound = false;
 	private Workout mWorkout;
-	private GoogleApiClient mGoogleApiClient;
-	Location mLocation;
-	LocationRequest mLocationRequest;
-	boolean mRequestingLocationUpdates = true;
-	LocationSettingsRequest.Builder gpsBuilder;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_maps_workout);
-		initWorkout(savedInstanceState);
+		initWorkout();
 		initToolbar();
-
-		if (mGoogleApiClient == null) {
-			mGoogleApiClient = new GoogleApiClient.Builder(this)
-					.addConnectionCallbacks(this)
-					.addOnConnectionFailedListener(this)
-					.addApi(LocationServices.API)
-					.build();
-		}
-		mLocationRequest = new LocationRequest();
-		mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-		mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 		if (savedInstanceState == null) {
 			changeFragment(MapTracingFragment.newInstance(mWorkout), false);
 		}
+		Intent intent = new Intent(this, LocationService.class);
+		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 	}
 
-	private void initWorkout(Bundle savedInstanceState) {
-		if (savedInstanceState != null) {
-			mWorkout = (Workout) savedInstanceState.getSerializable(WORKOUT_KEY);
-		} else {
-			mWorkout = (Workout) getIntent().getSerializableExtra(EXTRA_WORKOUT);
+	@Override
+	protected void onStart() {
+		super.onStart();
+	}
+
+	@Override
+	protected void onDestroy() {
+		unbindService(mConnection);
+		stopService(new Intent(this, LocationService.class));
+		super.onDestroy();
+	}
+
+	/** Defines callbacks for service binding, passed to bindService() */
+	private ServiceConnection mConnection = new ServiceConnection() {
+
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
+			mService = binder.getService();
+			mBound = true;
+			mService.setCallback(MapsWorkoutActivity.this);
 		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			mBound = false;
+		}
+	};
+
+	private void initWorkout() {
+		mWorkout = (Workout) getIntent().getSerializableExtra(EXTRA_WORKOUT);
 		if (mWorkout == null) {
 			throw new IllegalArgumentException(MapsWorkoutActivity.class.getSimpleName() + " must be started with EXTRA_WORKOUT argument");
 		}
 	}
 
 	private void initToolbar() {
-		mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_map);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_map);
 		setSupportActionBar(toolbar);
 		ActionBar actionBar = getSupportActionBar();
@@ -113,7 +120,7 @@ public class MapsWorkoutActivity extends AppCompatActivity implements GoogleApiC
 				onBackPressed();
 			}
 		});
-		setTitle(getResources().getText(R.string.new_whitespace) + mWorkout.getWorkoutType().toString());
+		setTitle(getResources().getText(R.string.new_with_whitespace) + mWorkout.getWorkoutType().toString());
 	}
 
 
@@ -141,97 +148,6 @@ public class MapsWorkoutActivity extends AppCompatActivity implements GoogleApiC
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
-		if (!mGoogleApiClient.isConnected()) {
-			mGoogleApiClient.connect();
-		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
-//			startLocationUpdates();
-		}
-	}
-
-	@Override
-	public void onConnected(@Nullable Bundle bundle) {
-		gpsBuilder = new LocationSettingsRequest.Builder().addLocationRequest(mLocationRequest);
-		gpsBuilder.setAlwaysShow(true);
-		PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, gpsBuilder.build());
-		result.setResultCallback(this);
-		if (mRequestingLocationUpdates) {
-			startLocationUpdates();
-		}
-	}
-
-	@Override
-	public void onConnectionSuspended(int i) {
-		Toast.makeText(this, R.string.locations_services_suspend, Toast.LENGTH_LONG).show();
-	}
-
-	@Override
-	public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-		Toast.makeText(this, R.string.locations_services_fail, Toast.LENGTH_LONG).show();
-	}
-
-	@Override
-	public void onLocationChanged(Location location) {
-		mLocation = location;
-		Log.d("location", mLocation.toString());
-	}
-
-	private void startLocationUpdates() {
-		if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-			LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-		}
-	}
-
-	private void stopLocationUpdates() {
-		LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-	}
-
-	public void switchUpdates() {
-		mRequestingLocationUpdates = !mRequestingLocationUpdates;
-		if (mRequestingLocationUpdates) {
-			startLocationUpdates();
-		}
-		else{
-			stopLocationUpdates();
-		}
-	}
-
-	@Override
-	public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
-		final Status status = locationSettingsResult.getStatus();
-		switch (status.getStatusCode()) {
-			case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-				try {
-					status.startResolutionForResult(MapsWorkoutActivity.this, REQUEST_CHECK_SETTINGS);
-				} catch (IntentSender.SendIntentException e) {
-					Log.d("Exception", e.toString());
-				}
-				break;
-			case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-				Toast.makeText(getApplicationContext(), R.string.locations_fail, Toast.LENGTH_LONG).show();
-				break;
-		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == REQUEST_CHECK_SETTINGS) {
-			if (resultCode == RESULT_OK) {
-			} else {
-				finish();
-			}
-		}
-	}
-
-	@Override
 	public void onBackPressed() {
 		cancelWorkoutAlertDialog();
 	}
@@ -241,6 +157,7 @@ public class MapsWorkoutActivity extends AppCompatActivity implements GoogleApiC
 		alertDialogBuilder.setMessage(R.string.cancel_workout)
 				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
+								stopService(new Intent(getApplicationContext(), LocationService.class));
 								finish();
 							}
 						})
@@ -254,8 +171,7 @@ public class MapsWorkoutActivity extends AppCompatActivity implements GoogleApiC
 	}
 
 	@Override
-	protected void onDestroy() {
-		mGoogleApiClient.disconnect();
-		super.onDestroy();
+	public void passLocation(Location location) {
+		Logger.debug(location.toString());
 	}
 }
