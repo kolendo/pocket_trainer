@@ -29,12 +29,12 @@
 		android:checkableBehavior="single">
 		<item
 			android:id="@+id/nav_bmi"
-			android:icon="@drawable/ic_calculator_24dp"
+			android:icon="@drawable/ic_calculator_black_24dp"
 			android:title="@string/calculate_bmi" />
 
 		<item
 			android:id="@+id/nav_calculate_bfp"
-			android:icon="@drawable/ic_calculator_24dp"
+			android:icon="@drawable/ic_calculator_black_24dp"
 			android:title="@string/calculate_fat" />
 
 	</group>

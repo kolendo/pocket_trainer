@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -40,7 +41,8 @@ public class NewWorkoutFragment extends Fragment {
 	Spinner mWorkoutTypeSpinner;
 	ArrayAdapter<WorkoutType> mWorkoutTypeAdapter;
 	ImageView mWorkoutTypeImageView;
-	View mStartView;
+	Button mStartView;
+	View mAccuracySwitchContent;
 
 	Workout mWorkout;
 
@@ -59,12 +61,14 @@ public class NewWorkoutFragment extends Fragment {
 		mWorkoutTypeSpinner = (Spinner) view.findViewById(R.id.workout_type);
 		mWorkoutTypeAdapter = new WorkoutTypeAdapter(getContext(), R.layout.spinner_workout_type);
 		mWorkoutTypeImageView = (ImageView) view.findViewById(R.id.workout_type_icon);
-		mStartView = view.findViewById(R.id.workout_start);
+		mStartView = (Button) view.findViewById(R.id.workout_start);
+		mAccuracySwitchContent = view.findViewById(R.id.switch_accuracy_workout_content);
 		mWorkout = new Workout();
 
 		mWorkoutTypeSpinner.setAdapter(mWorkoutTypeAdapter);
 		mWorkoutTypeSpinner.setOnItemSelectedListener(onSpinnerListener);
 
+		mAccuracySwitchContent.setOnClickListener(onAccuracySwitchContentListener);
 		mStartView.setOnClickListener(onStartListener);
 		return view;
 	}
@@ -77,6 +81,13 @@ public class NewWorkoutFragment extends Fragment {
 			} else {
 				requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
 			}
+		}
+	};
+
+	private View.OnClickListener onAccuracySwitchContentListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			lessAccuracyInfoDialog();
 		}
 	};
 
@@ -119,5 +130,18 @@ public class NewWorkoutFragment extends Fragment {
 		bundle.putSerializable(MapsWorkoutActivity.EXTRA_WORKOUT, mWorkout);
 		intent.putExtras(bundle);
 		startActivity(intent);
+	}
+
+
+	private void lessAccuracyInfoDialog() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+		alertDialogBuilder.setMessage(R.string.less_accuracy_msg)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				});
+		AlertDialog alert = alertDialogBuilder.create();
+		alert.show();
 	}
 }

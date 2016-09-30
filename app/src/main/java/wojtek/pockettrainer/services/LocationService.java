@@ -2,38 +2,27 @@ package wojtek.pockettrainer.services;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.rafalzajfert.androidlogger.Logger;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import wojtek.pockettrainer.R;
-import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
-import wojtek.pockettrainer.views.fragments.MapTracingFragment;
 
 /**
  * @author Wojtek Kolendo
@@ -42,23 +31,32 @@ import wojtek.pockettrainer.views.fragments.MapTracingFragment;
 public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks,
 		GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+	//	minimalny dystans pomiędzy dwoma następującymi lokacjami do wzięcia pod uwagę (w metrach)
+	private static final int MIN_DISTANCE = 5;
+	//	maksymalny dystans pomiędzy dwoma następującymi lokacjami do wzięcia pod uwagę (w metrach)
+	private static final int MAX_DISTANCE = 100;
+
 	public static final int UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
 	public static final int FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 5;
 
 	private final IBinder mBinder = new LocalBinder();
-
-	public class LocalBinder extends Binder {
-		public LocationService getService() {
-			// Return this instance of LocalService so clients can call public methods
-			return LocationService.this;
-		}
-	}
-
 	private GoogleApiClient mGoogleApiClient;
-	LocationRequest mLocationRequest;
+	private LocationRequest mLocationRequest;
 	boolean mRequestingLocationUpdates = false;
-	ArrayList<Location> mLocationsList = new ArrayList<>();
-	LocationServiceCallback mLocationServiceCallback;
+	private LocationServiceCallback mLocationServiceCallback;
+
+//	Workout Data
+	private ArrayList<Location> mLocationsList;
+	private ArrayList<Double> mSpeedsList;
+	private double mTotalDistance, mCurrentDistance, mCurrentSpeed, mTopSpeed;
+	private Location mCurrentLocation, mLastLocation;
+
+	public LocationService() {
+		mLocationsList = new ArrayList<>();
+		mSpeedsList = new ArrayList<>();
+		mTotalDistance = 0;
+		mTopSpeed = 0;
+	}
 
 	@Override
 	public void onCreate() {
@@ -146,8 +144,33 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 	public void onLocationChanged(Location location) {
 		mLocationsList.add(location);
 		Logger.debug(mLocationsList.size());
-		mLocationServiceCallback.passLocation(location);
+		Logger.debug(location.toString());
+
+		if (mCurrentLocation != null) {
+			mLastLocation = mCurrentLocation;
+			mCurrentLocation = location;
+			setAndSendData();
+		} else {
+			mCurrentLocation = location;
+		}
 	}
+
+	private void setAndSendData() {
+		mCurrentDistance = mCurrentLocation.distanceTo(mLastLocation);
+		if (mCurrentDistance > MIN_DISTANCE && mCurrentDistance < MAX_DISTANCE) {
+			mTotalDistance += mCurrentDistance;
+			mCurrentSpeed = mCurrentDistance / ((mCurrentLocation.getTime() - mLastLocation.getTime()) / 1000);
+			if (mCurrentSpeed > mTopSpeed) {
+				mTopSpeed = mCurrentSpeed;
+			}
+			mSpeedsList.add(mCurrentSpeed);
+			mLocationServiceCallback.passData(mTotalDistance, mCurrentSpeed);
+		} else {
+			mSpeedsList.add(0.0);
+			mLocationServiceCallback.passData(mTotalDistance, 0.0);
+		}
+	}
+
 
 	@Override
 	public void onConnectionSuspended(int i) {
@@ -163,5 +186,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 	public void onDestroy() {
 		mGoogleApiClient.disconnect();
 		super.onDestroy();
+	}
+
+	public class LocalBinder extends Binder {
+		public LocationService getService() {
+			// Return this instance of LocalService so clients can call public methods
+			return LocationService.this;
+		}
 	}
 }

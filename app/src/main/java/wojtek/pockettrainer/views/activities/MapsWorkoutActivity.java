@@ -185,8 +185,8 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 	}
 
 	@Override
-	public void passLocation(Location location) {
-		mMapTracingFragmentListener.receiveLocation(location);
+	public void passData(double totalDistance, double currentSpeed) {
+		mMapTracingFragmentListener.receiveData(totalDistance, currentSpeed);
 	}
 
 	@Override

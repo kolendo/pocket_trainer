@@ -9,6 +9,6 @@ import android.location.Location;
 
 public interface MapTracingFragmentListener {
 
-	void receiveLocation(Location location);
+	void receiveData(double totalDistance, double currentSpeed);
 
 }

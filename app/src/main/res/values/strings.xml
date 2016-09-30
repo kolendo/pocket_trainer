@@ -22,9 +22,11 @@
 
 	<!-- Workout -->
 	<string name="start">Start</string>
-	<string name="select_workout_title">Select new \nworkout type</string>
+	<string name="select_workout_title">Select new workout type</string>
 	<string name="running">Running</string>
 	<string name="cycling">Cycling</string>
+	<string name="switch_accuracy">Less accuracy</string>
+	<string name="switch_units">Metric units</string>
 
 	<!-- Map tracing -->
 	<string name="new_with_whitespace">New </string>
@@ -35,8 +37,10 @@
 	<string name="blank_time">00:00:00</string>
 	<string name="blank_distance">0 km</string>
 	<string name="blank_speed">0 km/h</string>
-	<string name="distance_units"> m</string>
-	<string name="speed_units"> km/h</string>
+	<string name="distance_units_m">%.2f m</string>
+	<string name="distance_units_km">%.2f km</string>
+	<string name="speed_units_mps">%.2f m/s</string>
+	<string name="speed_units_kph">%.2f km/h</string>
 	<string name="workout_paused">Workout paused</string>
 	<string name="workout_resumed">Workout resumed</string>
 
@@ -78,11 +82,13 @@
 	<string name="locations_services_suspend">Location services suspended. Please reconnect.</string>
 	<string name="locations_services_fail">Location services failed.</string>
 	<string name="cancel">Cancel</string>
+	<string name="ok">OK</string>
 	<string name="yes">Yes</string>
 	<string name="no">No</string>
 	<string name="cancel_workout">Do you really want to cancel your workout? \nNo data will be saved.</string>
-	<string name="finish_workout">Do you really want to finish workout?</string>
+	<string name="finish_workout">Do you want to finish your workout?</string>
 	<string name="no_location_permission">Location permission not accessed</string>
+	<string name="less_accuracy_msg">Less accuracy mode increases time interval between location service responses. It disables speedometer, but ensures less battery draining.</string>
 
 
 </resources>

@@ -4,7 +4,6 @@ package wojtek.pockettrainer.views.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -23,9 +22,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.rafalzajfert.androidlogger.Logger;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -49,8 +45,6 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 	private View mBottomSheetView;
 	private BottomSheetBehavior mBottomSheetBehavior;
 	private Workout mWorkout;
-	private ArrayList<Location> mLocationsList;
-	private Location mCurrentLocation, mLastLocation;
 	private long mTime, mTotalTime;
 	private CountDownTimer mTimer;
 	private TextView mTimeTextView, mDistanceTextView, mSpeedTextView;
@@ -71,8 +65,6 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 			mWorkout = (Workout) args.getSerializable(WORKOUT_KEY);
 			mWorkout.setStartDate(System.currentTimeMillis());
 		}
-		Logger.debug(mWorkout.toString());
-		mLocationsList = new ArrayList<>();
 	}
 
 	@Override
@@ -242,42 +234,8 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 	}
 
 	@Override
-	public void receiveLocation(Location location) {
-		if (mWorkout != null) {
-			mWorkout.addLocationsList(location);
-			Logger.debug(mWorkout.getLocationsList().size());
-			Logger.debug(location.toString());
-			if (mCurrentLocation != null) {
-				mLastLocation = mCurrentLocation;
-				mCurrentLocation = location;
-				setCurrentDistance();
-			} else {
-				mCurrentLocation = location;
-			}
-		}
-	}
-
-	private void setCurrentDistance() {
-		double distance = mCurrentLocation.distanceTo(mLastLocation);
-		mWorkout.addDistance(distance);
-		mDistanceTextView.setText(round(distance, 2) + " m");
-		setCurrentSpeed(distance);
-		Logger.debug(distance);
-	}
-
-	private void setCurrentSpeed(double distance) {
-		if (distance > 0.0) {
-			double speed = distance / (mCurrentLocation.getTime() - mLastLocation.getTime()) * 1000;
-			Logger.debug(speed);
-			mWorkout.setTopSpeed(speed);
-			mSpeedTextView.setText(round(speed, 2) + " m/s");
-		} else {
-			mSpeedTextView.setText(R.string.blank_speed);
-		}
-	}
-
-	private double round(double value, int places) {
-		if (places < 0) throw new IllegalArgumentException();
-		return new BigDecimal(value).setScale(places, RoundingMode.HALF_UP).doubleValue();
+	public void receiveData(double totalDistance, double currentSpeed) {
+		mDistanceTextView.setText(String.format(getResources().getString(R.string.distance_units_m), totalDistance));
+		mSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), currentSpeed));
 	}
 }

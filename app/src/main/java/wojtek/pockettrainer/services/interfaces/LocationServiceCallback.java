@@ -9,7 +9,7 @@ import android.location.Location;
 
 public interface LocationServiceCallback {
 
-	void passLocation(Location location);
+	void passData(double totalDistance, double currentSpeed);
 
 	boolean checkGpsPermission();
 }
