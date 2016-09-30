@@ -2,11 +2,10 @@ package wojtek.pockettrainer.models;
 
 import android.location.Location;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import wojtek.pockettrainer.models.enums.WorkoutType;
 
@@ -25,9 +24,27 @@ public class Workout implements Serializable {
 
 	private Calendar mFinishDate;
 
-	private ArrayList<Location> mRouteList;
+	private long mElapsedTime;
 
-//	region Getters and Setters
+	private ArrayList<Location> mLocationsList;
+
+	private ArrayList<Double> mSpeedsList;
+
+	private double mDistance;
+
+	private double mAverageSpeed;
+
+	private double mTopSpeed;
+
+	public Workout() {
+		mLocationsList = new ArrayList<>();
+		mSpeedsList = new ArrayList<>();
+		mDistance = 0;
+		mAverageSpeed = 0;
+		mTopSpeed = 0;
+	}
+
+	//	region Getters and Setters
 	public long getId() {
 		return mId;
 	}
@@ -70,24 +87,83 @@ public class Workout implements Serializable {
 		mWorkoutType = workoutType;
 	}
 
-	public ArrayList<Location> getRouteList() {
-		return mRouteList;
+	public ArrayList<Location> getLocationsList() {
+		return mLocationsList;
 	}
 
-	public void setRouteList(ArrayList<Location> routeList) {
-		mRouteList = routeList;
+	public void setLocationsList(ArrayList<Location> locationsList) {
+		mLocationsList = locationsList;
+	}
+
+	public void addLocationsList(Location location) {
+		mLocationsList.add(location);
+	}
+
+	public ArrayList<Double> getSpeedsList() {
+		return mSpeedsList;
+	}
+
+	public void setSpeedsList(ArrayList<Double> speedsList) {
+		mSpeedsList = speedsList;
+	}
+
+	public void addSpeedsList(double speed) {
+		mSpeedsList.add(speed);
+	}
+
+	public long getElapsedTime() {
+		return mElapsedTime;
+	}
+
+	public void setElapsedTime(long elapsedTime) {
+		mElapsedTime = elapsedTime;
+	}
+
+	public double getDistance() {
+		return mDistance;
+	}
+
+	public void setDistance(double distance) {
+		mDistance = distance;
+	}
+
+	public void addDistance(double distance) {
+		mDistance += distance;
+	}
+
+	public double getAverageSpeed() {
+		return mAverageSpeed;
+	}
+
+	public void setAverageSpeed(double averageSpeed) {
+		mAverageSpeed = averageSpeed;
+	}
+
+	public double getTopSpeed() {
+		return mTopSpeed;
+	}
+
+	public void setTopSpeed(double topSpeed) {
+		if (mTopSpeed < topSpeed) {
+			mTopSpeed = topSpeed;
+		}
 	}
 
 	//	endregion
 
 	@Override
 	public String toString() {
-		return "Packing{" +
+		return "Workout{" +
 				"mId=" + mId +
 				", mStartDate='" + mStartDate + '\'' +
 				", mFinishDate='" + mFinishDate + '\'' +
+				", mElapsedTime='" + mElapsedTime + '\'' +
 				", mWorkoutType=" + mWorkoutType + '\'' +
-				", mRouteList=" + mRouteList +
+				", mDistance=" + mDistance + '\'' +
+				", mAverageSpeed=" + mAverageSpeed + '\'' +
+				", mTopSpeed=" + mTopSpeed + '\'' +
+				", mSpeedsList=" + mSpeedsList + '\'' +
+				", mLocationsList=" + mLocationsList +
 				'}';
 	}
 }

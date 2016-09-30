@@ -1,40 +1,25 @@
 package wojtek.pockettrainer.views.activities;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.rafalzajfert.androidlogger.Logger;
 
 import wojtek.pockettrainer.R;
@@ -42,16 +27,20 @@ import wojtek.pockettrainer.models.Workout;
 import wojtek.pockettrainer.services.LocationService;
 import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
 import wojtek.pockettrainer.views.fragments.MapTracingFragment;
+import wojtek.pockettrainer.views.interfaces.MapTracingFragmentListener;
+import wojtek.pockettrainer.views.interfaces.MapsWorkoutActivityListener;
+
 
 /**
  * @author Wojtek Kolendo
  * @date 17.09.2016
  */
-public class MapsWorkoutActivity extends AppCompatActivity implements LocationServiceCallback {
+public class MapsWorkoutActivity extends AppCompatActivity implements LocationServiceCallback, MapsWorkoutActivityListener {
 
 	private static final int FRAGMENT_CONTAINER = R.id.fragment_frame_map;
 	public static final String EXTRA_WORKOUT = "extra_workout";
 
+	MapTracingFragmentListener mMapTracingFragmentListener;
 	LocationService mService;
 	boolean mBound = false;
 	private Workout mWorkout;
@@ -148,6 +137,13 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 	}
 
 	@Override
+	public void onAttachFragment(Fragment fragment) {
+		super.onAttachFragment(fragment);
+
+		mMapTracingFragmentListener = (MapTracingFragmentListener) fragment;
+	}
+
+	@Override
 	public void onBackPressed() {
 		cancelWorkoutAlertDialog();
 	}
@@ -170,8 +166,46 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 		alert.show();
 	}
 
+	private void finishWorkoutAlertDialog() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setMessage(R.string.finish_workout)
+				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						stopService(new Intent(getApplicationContext(), LocationService.class));
+						finish();
+					}
+				})
+				.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+		AlertDialog alert = alertDialogBuilder.create();
+		alert.show();
+	}
+
 	@Override
 	public void passLocation(Location location) {
-		Logger.debug(location.toString());
+		mMapTracingFragmentListener.receiveLocation(location);
+	}
+
+	@Override
+	public void stopLocationUpdates() {
+		mService.stopLocationUpdates();
+	}
+
+	@Override
+	public void startLocationUpdates() {
+		mService.startLocationUpdates();
+	}
+
+	@Override
+	public void finishWorkout(Workout workout) {
+		finishWorkoutAlertDialog();
+	}
+
+	@Override
+	public boolean checkGpsPermission() {
+		return ActivityCompat.checkSelfPermission(MapsWorkoutActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 	}
 }

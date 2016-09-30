@@ -33,7 +33,7 @@
 		android:gravity="center"
 		android:drawableTop="@drawable/ic_white_road_variant"
 		android:textColor="@color/white"
-		android:text="@string/blank_route"
+		android:text="@string/blank_distance"
 		tools:text="43 km"
 		grid:layout_column="1"
 		grid:layout_columnWeight="1"

@@ -8,5 +8,8 @@ import android.location.Location;
  */
 
 public interface LocationServiceCallback {
+
 	void passLocation(Location location);
+
+	boolean checkGpsPermission();
 }

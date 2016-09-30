@@ -120,9 +120,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 	}
 
 	public void startLocationUpdates() {
-		mRequestingLocationUpdates = true;
-		//noinspection MissingPermission
-		LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,mLocationRequest, LocationService.this);
+		if (mLocationServiceCallback.checkGpsPermission()) {
+			mRequestingLocationUpdates = true;
+			LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,mLocationRequest, LocationService.this);
+		} else {
+			Toast.makeText(getApplicationContext(), R.string.no_location_permission, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	public void stopLocationUpdates() {
@@ -131,8 +134,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 	}
 
 	public Location getLastLocation() {
-		//noinspection MissingPermission
-		return LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+		if (mLocationServiceCallback.checkGpsPermission()) {
+			return LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+		} else {
+			Toast.makeText(getApplicationContext(), R.string.no_location_permission, Toast.LENGTH_SHORT).show();
+			return null;
+		}
 	}
 
 	@Override
