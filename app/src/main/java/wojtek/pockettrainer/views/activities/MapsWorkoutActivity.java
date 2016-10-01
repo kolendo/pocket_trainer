@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
@@ -20,10 +19,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.rafalzajfert.androidlogger.Logger;
+import com.google.android.gms.maps.model.LatLng;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.models.Workout;
+import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.services.LocationService;
 import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
 import wojtek.pockettrainer.views.fragments.MapTracingFragment;
@@ -185,8 +185,18 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 	}
 
 	@Override
-	public void passData(double totalDistance, double currentSpeed) {
-		mMapTracingFragmentListener.receiveData(totalDistance, currentSpeed);
+	public void passDataMeters(LatLng latLng, double totalDistance, double currentSpeed) {
+		mMapTracingFragmentListener.setDataViewMeters(latLng, totalDistance, currentSpeed);
+	}
+
+	@Override
+	public void passDataKilometers(LatLng latLng, double totalDistance, double currentSpeed) {
+		mMapTracingFragmentListener.setDataViewKilometers(latLng, totalDistance, currentSpeed);
+	}
+
+	@Override
+	public void passLocation(LatLng latLng) {
+		mMapTracingFragmentListener.setLocation(latLng);
 	}
 
 	@Override
@@ -207,5 +217,10 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 	@Override
 	public boolean checkGpsPermission() {
 		return ActivityCompat.checkSelfPermission(MapsWorkoutActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+	}
+
+	@Override
+	public WorkoutType getWorkoutType() {
+		return mWorkout.getWorkoutType();
 	}
 }

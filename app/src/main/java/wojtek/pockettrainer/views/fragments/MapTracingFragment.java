@@ -4,6 +4,9 @@ package wojtek.pockettrainer.views.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -11,15 +14,23 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.rafalzajfert.androidlogger.Logger;
 
 import java.util.Locale;
@@ -48,6 +59,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 	private long mTime, mTotalTime;
 	private CountDownTimer mTimer;
 	private TextView mTimeTextView, mDistanceTextView, mSpeedTextView;
+	private Marker mLocationMarker;
 
 	public static MapTracingFragment newInstance(Workout workout) {
 		Bundle args = new Bundle();
@@ -69,7 +81,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_map_tracing, container, false);
+		View view = inflater.inflate(R.layout.fragment_workout_tracing, container, false);
 		mMapView = (MapView) view.findViewById(R.id.map_view);
 		mMapView.onCreate(savedInstanceState);
 		mMapView.getMapAsync(this);
@@ -82,14 +94,28 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 		TextView stopTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_stop);
 
 		mBottomSheetBehavior = BottomSheetBehavior.from(mBottomSheetView);
-		resumeTextView.setOnClickListener(mResumeOnClickListener);
-		pauseTextView.setOnClickListener(mPauseOnClickListener);
-		stopTextView.setOnClickListener(mStopOnClickListener);
+		resumeTextView.setOnClickListener(onResumeOnClickListener);
+		pauseTextView.setOnClickListener(onPauseOnClickListener);
+		stopTextView.setOnClickListener(onStopOnClickListener);
 
 		setBottomSheetPeek();
+		initDataView();
 		startupTimer();
 
 		return view;
+	}
+
+	private void initDataView() {
+		switch (mWorkout.getWorkoutType()) {
+			case CYCLING:
+				mDistanceTextView.setText(R.string.blank_distance_km);
+				mSpeedTextView.setText(R.string.blank_speed_km);
+				break;
+			case RUNNING:
+				mDistanceTextView.setText(R.string.blank_distance_m);
+				mSpeedTextView.setText(R.string.blank_speed_m);
+				break;
+		}
 	}
 
 	@Override
@@ -102,7 +128,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 		}
 	}
 
-	View.OnClickListener mResumeOnClickListener = new View.OnClickListener() {
+	View.OnClickListener onResumeOnClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			if (mTimer == null) {
@@ -113,7 +139,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 		}
 	};
 
-	View.OnClickListener mPauseOnClickListener = new View.OnClickListener() {
+	View.OnClickListener onPauseOnClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			if (mTimer != null) {
@@ -124,7 +150,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 		}
 	};
 
-	View.OnClickListener mStopOnClickListener = new View.OnClickListener() {
+	View.OnClickListener onStopOnClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			mActivityListener.finishWorkout(mWorkout);
@@ -178,9 +204,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
 		mGoogleMap = googleMap;
-
 		if (checkGpsPermission()) {
-			mGoogleMap.setMyLocationEnabled(true);
 			mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
 		}
 		mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -234,8 +258,55 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 	}
 
 	@Override
-	public void receiveData(double totalDistance, double currentSpeed) {
+	public void setDataViewMeters(LatLng latLng, double totalDistance, double currentSpeed) {
 		mDistanceTextView.setText(String.format(getResources().getString(R.string.distance_units_m), totalDistance));
 		mSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), currentSpeed));
+		setMyLocationMarker(latLng, 19);
+	}
+
+	@Override
+	public void setDataViewKilometers(LatLng latLng, double totalDistance, double currentSpeed) {
+		mDistanceTextView.setText(String.format(getResources().getString(R.string.distance_units_km), totalDistance));
+		mSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_kph), currentSpeed));
+		setMyLocationMarker(latLng, 17);
+	}
+
+	@Override
+	public void setLocation(LatLng latLng) {
+		setMyLocationMarker(latLng, 17);
+	}
+
+	private void setMyLocationMarker(LatLng latLng, int zoom) {
+		if (isMapReady()) {
+			if (mLocationMarker != null) {
+				mLocationMarker.setPosition(latLng);
+				moveCamera(latLng, mGoogleMap.getCameraPosition().zoom);
+			} else {
+				mLocationMarker = mGoogleMap.addMarker(new MarkerOptions()
+						.position(latLng)
+						.icon(getMarkerBitmapDescriptor()));
+				moveCamera(latLng, zoom);
+			}
+		}
+	}
+
+	private void moveCamera(LatLng latLng, float zoom) {
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
+		mGoogleMap.animateCamera(cameraUpdate);
+	}
+
+	private BitmapDescriptor getMarkerBitmapDescriptor() {
+		Drawable vectorDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_my_location_accent_24dp);
+		int h = vectorDrawable.getIntrinsicHeight();
+		int w = vectorDrawable.getIntrinsicWidth();
+		vectorDrawable.setBounds(0, 0, w, h);
+		Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bm);
+		vectorDrawable.draw(canvas);
+		return BitmapDescriptorFactory.fromBitmap(bm);
+	}
+
+	private boolean isMapReady() {
+		return mGoogleMap != null;
 	}
 }

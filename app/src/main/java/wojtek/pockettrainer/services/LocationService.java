@@ -16,13 +16,18 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.rafalzajfert.androidlogger.Logger;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.models.Workout;
+import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
+import wojtek.pockettrainer.views.activities.MapsWorkoutActivity;
+
+import static wojtek.pockettrainer.views.activities.MapsWorkoutActivity.EXTRA_WORKOUT;
 
 /**
  * @author Wojtek Kolendo
@@ -149,14 +154,22 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 		if (mCurrentLocation != null) {
 			mLastLocation = mCurrentLocation;
 			mCurrentLocation = location;
-			setAndSendData();
+			mCurrentDistance = mCurrentLocation.distanceTo(mLastLocation);
+			switch (mLocationServiceCallback.getWorkoutType()) {
+				case CYCLING:
+					sendKilometers();
+					break;
+				case RUNNING:
+					sendMeters();
+					break;
+			}
 		} else {
 			mCurrentLocation = location;
+			mLocationServiceCallback.passLocation(new LatLng(location.getLatitude(), location.getLongitude()));
 		}
 	}
 
-	private void setAndSendData() {
-		mCurrentDistance = mCurrentLocation.distanceTo(mLastLocation);
+	private void sendMeters() {
 		if (mCurrentDistance > MIN_DISTANCE && mCurrentDistance < MAX_DISTANCE) {
 			mTotalDistance += mCurrentDistance;
 			mCurrentSpeed = mCurrentDistance / ((mCurrentLocation.getTime() - mLastLocation.getTime()) / 1000);
@@ -164,13 +177,28 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 				mTopSpeed = mCurrentSpeed;
 			}
 			mSpeedsList.add(mCurrentSpeed);
-			mLocationServiceCallback.passData(mTotalDistance, mCurrentSpeed);
+			mLocationServiceCallback.passDataMeters(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, mCurrentSpeed);
 		} else {
 			mSpeedsList.add(0.0);
-			mLocationServiceCallback.passData(mTotalDistance, 0.0);
+			mLocationServiceCallback.passDataMeters(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, 0.0);
 		}
 	}
 
+	private void sendKilometers() {
+		if (mCurrentDistance > MIN_DISTANCE && mCurrentDistance < MAX_DISTANCE) {
+			mCurrentDistance /= 1000;
+			mTotalDistance += mCurrentDistance;
+			mCurrentSpeed = mCurrentDistance / ((mCurrentLocation.getTime() - mLastLocation.getTime()) / 3600000);
+			if (mCurrentSpeed > mTopSpeed) {
+				mTopSpeed = mCurrentSpeed;
+			}
+			mSpeedsList.add(mCurrentSpeed);
+			mLocationServiceCallback.passDataKilometers(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, mCurrentSpeed);
+		} else {
+			mSpeedsList.add(0.0);
+			mLocationServiceCallback.passDataKilometers(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, 0.0);
+		}
+	}
 
 	@Override
 	public void onConnectionSuspended(int i) {

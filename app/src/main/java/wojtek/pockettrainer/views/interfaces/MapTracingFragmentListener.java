@@ -1,6 +1,7 @@
 package wojtek.pockettrainer.views.interfaces;
 
-import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * @author Wojtek Kolendo
@@ -9,6 +10,9 @@ import android.location.Location;
 
 public interface MapTracingFragmentListener {
 
-	void receiveData(double totalDistance, double currentSpeed);
+	void setDataViewMeters(LatLng latLng, double totalDistance, double currentSpeed);
 
+	void setDataViewKilometers(LatLng latLng, double totalDistance, double currentSpeed);
+
+	void setLocation(LatLng latLng);
 }

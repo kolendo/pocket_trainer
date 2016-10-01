@@ -35,8 +35,10 @@
 	<string name="pause">Pause</string>
 	<string name="dash">-</string>
 	<string name="blank_time">00:00:00</string>
-	<string name="blank_distance">0 km</string>
-	<string name="blank_speed">0 km/h</string>
+	<string name="blank_distance_m">0 m</string>
+	<string name="blank_distance_km">0 km</string>
+	<string name="blank_speed_m">0 m/s</string>
+	<string name="blank_speed_km">0 km/h</string>
 	<string name="distance_units_m">%.2f m</string>
 	<string name="distance_units_km">%.2f km</string>
 	<string name="speed_units_mps">%.2f m/s</string>
@@ -88,7 +90,10 @@
 	<string name="cancel_workout">Do you really want to cancel your workout? \nNo data will be saved.</string>
 	<string name="finish_workout">Do you want to finish your workout?</string>
 	<string name="no_location_permission">Location permission not accessed</string>
-	<string name="less_accuracy_msg">Less accuracy mode increases time interval between location service responses. It disables speedometer, but ensures less battery draining.</string>
+	<string name="less_accuracy_msg">Less accuracy mode increases time interval between location service responses. Enabling this gives you less accurate data, such as speedometer, but ensures far less battery draining.</string>
 
+	<!-- Settings Preferences -->
+	<string name="settings_less_accuracy_key">less_accuracy_key</string>
+	<string name="settings_metric_units_key">metric_units_key</string>
 
 </resources>

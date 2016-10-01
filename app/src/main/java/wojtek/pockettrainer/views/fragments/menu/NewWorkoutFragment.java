@@ -19,14 +19,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 
 import wojtek.pockettrainer.models.Workout;
 import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.repositories.preferences.SettingsPreferences;
 import wojtek.pockettrainer.views.activities.MapsWorkoutActivity;
 import wojtek.pockettrainer.views.adapters.WorkoutTypeAdapter;
 
@@ -38,13 +41,10 @@ public class NewWorkoutFragment extends Fragment {
 
 	private static final int REQUEST_PERMISSION_LOCATION = 10101;
 
-	Spinner mWorkoutTypeSpinner;
-	ArrayAdapter<WorkoutType> mWorkoutTypeAdapter;
-	ImageView mWorkoutTypeImageView;
-	Button mStartView;
-	View mAccuracySwitchContent;
-
-	Workout mWorkout;
+	private ImageView mWorkoutTypeImageView;
+	private Button mStartView;
+	private SettingsPreferences mSettingsPreferences = new SettingsPreferences();
+	private Workout mWorkout;
 
 	public static NewWorkoutFragment newInstance() {
 		return new NewWorkoutFragment();
@@ -58,17 +58,23 @@ public class NewWorkoutFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_new_workout, container, false);
-		mWorkoutTypeSpinner = (Spinner) view.findViewById(R.id.workout_type);
-		mWorkoutTypeAdapter = new WorkoutTypeAdapter(getContext(), R.layout.spinner_workout_type);
 		mWorkoutTypeImageView = (ImageView) view.findViewById(R.id.workout_type_icon);
 		mStartView = (Button) view.findViewById(R.id.workout_start);
-		mAccuracySwitchContent = view.findViewById(R.id.switch_accuracy_workout_content);
+		Spinner workoutTypeSpinner = (Spinner) view.findViewById(R.id.workout_type);
+		ArrayAdapter<WorkoutType> workoutTypeAdapter = new WorkoutTypeAdapter(getContext(), R.layout.spinner_workout_type);
+		View accuracySwitchContent = view.findViewById(R.id.switch_accuracy_workout_content);
+		Switch lessAccuracySwitch = (Switch) view.findViewById(R.id.switch_accuracy_workout);
+		Switch metricUnitsSwitch = (Switch) view.findViewById(R.id.switch_units_workout);
+
 		mWorkout = new Workout();
 
-		mWorkoutTypeSpinner.setAdapter(mWorkoutTypeAdapter);
-		mWorkoutTypeSpinner.setOnItemSelectedListener(onSpinnerListener);
-
-		mAccuracySwitchContent.setOnClickListener(onAccuracySwitchContentListener);
+		lessAccuracySwitch.setChecked(mSettingsPreferences.isLessAccuracyEnabled());
+		lessAccuracySwitch.setOnCheckedChangeListener(onCheckedAccuracySwitchListener);
+		metricUnitsSwitch.setChecked(mSettingsPreferences.isMetricUnitsEnabled());
+		metricUnitsSwitch.setOnCheckedChangeListener(onCheckedMetricSwitchListener);
+		workoutTypeSpinner.setAdapter(workoutTypeAdapter);
+		workoutTypeSpinner.setOnItemSelectedListener(onSpinnerListener);
+		accuracySwitchContent.setOnClickListener(onAccuracySwitchContentListener);
 		mStartView.setOnClickListener(onStartListener);
 		return view;
 	}
@@ -88,6 +94,20 @@ public class NewWorkoutFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			lessAccuracyInfoDialog();
+		}
+	};
+
+	private CompoundButton.OnCheckedChangeListener onCheckedAccuracySwitchListener = new CompoundButton.OnCheckedChangeListener() {
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			mSettingsPreferences.setLessAccuracyEnabled(isChecked);
+		}
+	};
+
+	private CompoundButton.OnCheckedChangeListener onCheckedMetricSwitchListener = new CompoundButton.OnCheckedChangeListener() {
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			mSettingsPreferences.setMetricUnitsEnabled(isChecked);
 		}
 	};
 
