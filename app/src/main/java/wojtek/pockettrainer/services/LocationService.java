@@ -22,6 +22,7 @@ import com.rafalzajfert.androidlogger.Logger;
 import java.util.ArrayList;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.models.Position;
 import wojtek.pockettrainer.models.Workout;
 import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
@@ -51,7 +52,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 	private LocationServiceCallback mLocationServiceCallback;
 
 //	Workout Data
-	private ArrayList<Location> mLocationsList;
+	private ArrayList<Position> mLocationsList;
 	private ArrayList<Double> mSpeedsList;
 	private double mTotalDistance, mCurrentDistance, mCurrentSpeed, mTopSpeed;
 	private Location mCurrentLocation, mLastLocation;
@@ -147,7 +148,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
 	@Override
 	public void onLocationChanged(Location location) {
-		mLocationsList.add(location);
+		mLocationsList.add(new Position(location));
 		Logger.debug(mLocationsList.size());
 		Logger.debug(location.toString());
 
@@ -214,6 +215,22 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 	public void onDestroy() {
 		mGoogleApiClient.disconnect();
 		super.onDestroy();
+	}
+
+	public ArrayList<Position> getLocationsList() {
+		return mLocationsList;
+	}
+
+	public ArrayList<Double> getSpeedsList() {
+		return mSpeedsList;
+	}
+
+	public double getTotalDistance() {
+		return mTotalDistance;
+	}
+
+	public double getTopSpeed() {
+		return mTopSpeed;
 	}
 
 	public class LocalBinder extends Binder {

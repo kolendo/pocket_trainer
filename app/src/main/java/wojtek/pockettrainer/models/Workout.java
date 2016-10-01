@@ -1,6 +1,9 @@
 package wojtek.pockettrainer.models;
 
 import android.location.Location;
+import android.widget.Switch;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,9 +27,9 @@ public class Workout implements Serializable {
 
 	private Calendar mFinishDate;
 
-	private long mElapsedTime;
+	private String mElapsedTime;
 
-	private ArrayList<Location> mLocationsList;
+	private ArrayList<Position> mLocationsList;
 
 	private ArrayList<Double> mSpeedsList;
 
@@ -87,16 +90,20 @@ public class Workout implements Serializable {
 		mWorkoutType = workoutType;
 	}
 
-	public ArrayList<Location> getLocationsList() {
+	public ArrayList<Position> getLocationsList() {
 		return mLocationsList;
 	}
 
-	public void setLocationsList(ArrayList<Location> locationsList) {
+	public LatLng getLocationsListLatLng(int index) {
+		return mLocationsList.get(index).getLatLng();
+	}
+
+	public void setLocationsList(ArrayList<Position> locationsList) {
 		mLocationsList = locationsList;
 	}
 
 	public void addLocationsList(Location location) {
-		mLocationsList.add(location);
+		mLocationsList.add(new Position(location));
 	}
 
 	public ArrayList<Double> getSpeedsList() {
@@ -111,11 +118,11 @@ public class Workout implements Serializable {
 		mSpeedsList.add(speed);
 	}
 
-	public long getElapsedTime() {
+	public String getElapsedTime() {
 		return mElapsedTime;
 	}
 
-	public void setElapsedTime(long elapsedTime) {
+	public void setElapsedTime(String elapsedTime) {
 		mElapsedTime = elapsedTime;
 	}
 

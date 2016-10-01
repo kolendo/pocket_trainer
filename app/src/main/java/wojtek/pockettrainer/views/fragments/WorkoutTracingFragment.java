@@ -46,37 +46,25 @@ import wojtek.pockettrainer.views.interfaces.MapsWorkoutActivityListener;
  * @author Wojtek Kolendo
  * @date 17.09.2016
  */
-public class MapTracingFragment extends Fragment implements OnMapReadyCallback, MapTracingFragmentListener {
-
-	private static final String WORKOUT_KEY = "workout_key";
+public class WorkoutTracingFragment extends Fragment implements OnMapReadyCallback, MapTracingFragmentListener {
 
 	MapsWorkoutActivityListener mActivityListener;
 	private GoogleMap mGoogleMap;
 	private MapView mMapView;
 	private View mBottomSheetView;
 	private BottomSheetBehavior mBottomSheetBehavior;
-	private Workout mWorkout;
 	private long mTime, mTotalTime;
 	private CountDownTimer mTimer;
 	private TextView mTimeTextView, mDistanceTextView, mSpeedTextView;
 	private Marker mLocationMarker;
 
-	public static MapTracingFragment newInstance(Workout workout) {
-		Bundle args = new Bundle();
-		args.putSerializable(WORKOUT_KEY, workout);
-		MapTracingFragment fragment = new MapTracingFragment();
-		fragment.setArguments(args);
-		return fragment;
+	public static WorkoutTracingFragment newInstance() {
+		return new WorkoutTracingFragment();
 	}
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Bundle args = getArguments();
-		if (args != null) {
-			mWorkout = (Workout) args.getSerializable(WORKOUT_KEY);
-			mWorkout.setStartDate(System.currentTimeMillis());
-		}
 	}
 
 	@Override
@@ -106,7 +94,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 	}
 
 	private void initDataView() {
-		switch (mWorkout.getWorkoutType()) {
+		switch (mActivityListener.getWorkout().getWorkoutType()) {
 			case CYCLING:
 				mDistanceTextView.setText(R.string.blank_distance_km);
 				mSpeedTextView.setText(R.string.blank_speed_km);
@@ -153,7 +141,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 	View.OnClickListener onStopOnClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			mActivityListener.finishWorkout(mWorkout);
+			mActivityListener.finishWorkout();
 		}
 	};
 
@@ -233,7 +221,7 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 			@Override
 			public void onTick(long millisUntilFinished) {
 				mTime = Integer.MAX_VALUE - millisUntilFinished;
-				setTimeTextView(mTotalTime + mTime);
+				mTimeTextView.setText(setTimeTextView(mTotalTime + mTime));
 			}
 
 			@Override
@@ -243,18 +231,23 @@ public class MapTracingFragment extends Fragment implements OnMapReadyCallback, 
 		}.start();
 	}
 
-	private void finishTimer() {
+	public void finishTimer() {
 		mTimer.cancel();
 		mTimer = null;
 		mTotalTime += mTime;
 	}
 
-	private void setTimeTextView(long milliseconds) {
-		String timestamp = String.format(Locale.getDefault(), "%02d:%02d:%02d",
+	@Override
+	public String getElapsedTime() {
+		finishTimer();
+		return setTimeTextView(mTotalTime);
+	}
+
+	private String setTimeTextView(long milliseconds) {
+		return String.format(Locale.getDefault(), "%02d:%02d:%02d",
 				TimeUnit.MILLISECONDS.toHours(milliseconds),
 				TimeUnit.MILLISECONDS.toMinutes(milliseconds) % TimeUnit.HOURS.toMinutes(1),
 				TimeUnit.MILLISECONDS.toSeconds(milliseconds) % TimeUnit.MINUTES.toSeconds(1));
-		mTimeTextView.setText(timestamp);
 	}
 
 	@Override

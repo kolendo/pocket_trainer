@@ -26,7 +26,8 @@ import wojtek.pockettrainer.models.Workout;
 import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.services.LocationService;
 import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
-import wojtek.pockettrainer.views.fragments.MapTracingFragment;
+import wojtek.pockettrainer.views.fragments.WorkoutDetailsFragment;
+import wojtek.pockettrainer.views.fragments.WorkoutTracingFragment;
 import wojtek.pockettrainer.views.interfaces.MapTracingFragmentListener;
 import wojtek.pockettrainer.views.interfaces.MapsWorkoutActivityListener;
 
@@ -40,7 +41,7 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 	private static final int FRAGMENT_CONTAINER = R.id.fragment_frame_map;
 	public static final String EXTRA_WORKOUT = "extra_workout";
 
-	MapTracingFragmentListener mMapTracingFragmentListener;
+	MapTracingFragmentListener mFragmentListener;
 	LocationService mService;
 	boolean mBound = false;
 	private Workout mWorkout;
@@ -53,7 +54,7 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 		initToolbar();
 
 		if (savedInstanceState == null) {
-			changeFragment(MapTracingFragment.newInstance(mWorkout), false);
+			changeFragment(WorkoutTracingFragment.newInstance(), false);
 		}
 		Intent intent = new Intent(this, LocationService.class);
 		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -92,6 +93,8 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 		mWorkout = (Workout) getIntent().getSerializableExtra(EXTRA_WORKOUT);
 		if (mWorkout == null) {
 			throw new IllegalArgumentException(MapsWorkoutActivity.class.getSimpleName() + " must be started with EXTRA_WORKOUT argument");
+		} else {
+			mWorkout.setStartDate(System.currentTimeMillis());
 		}
 	}
 
@@ -140,7 +143,9 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 	public void onAttachFragment(Fragment fragment) {
 		super.onAttachFragment(fragment);
 
-		mMapTracingFragmentListener = (MapTracingFragmentListener) fragment;
+		if (fragment instanceof WorkoutTracingFragment) {
+			mFragmentListener = (MapTracingFragmentListener) fragment;
+		}
 	}
 
 	@Override
@@ -171,8 +176,7 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 		alertDialogBuilder.setMessage(R.string.finish_workout)
 				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						stopService(new Intent(getApplicationContext(), LocationService.class));
-						finish();
+						prepareWorkoutResult();
 					}
 				})
 				.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -186,17 +190,17 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 
 	@Override
 	public void passDataMeters(LatLng latLng, double totalDistance, double currentSpeed) {
-		mMapTracingFragmentListener.setDataViewMeters(latLng, totalDistance, currentSpeed);
+		mFragmentListener.setDataViewMeters(latLng, totalDistance, currentSpeed);
 	}
 
 	@Override
 	public void passDataKilometers(LatLng latLng, double totalDistance, double currentSpeed) {
-		mMapTracingFragmentListener.setDataViewKilometers(latLng, totalDistance, currentSpeed);
+		mFragmentListener.setDataViewKilometers(latLng, totalDistance, currentSpeed);
 	}
 
 	@Override
 	public void passLocation(LatLng latLng) {
-		mMapTracingFragmentListener.setLocation(latLng);
+		mFragmentListener.setLocation(latLng);
 	}
 
 	@Override
@@ -210,8 +214,13 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 	}
 
 	@Override
-	public void finishWorkout(Workout workout) {
+	public void finishWorkout() {
 		finishWorkoutAlertDialog();
+	}
+
+	@Override
+	public Workout getWorkout() {
+		return mWorkout;
 	}
 
 	@Override
@@ -222,5 +231,21 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 	@Override
 	public WorkoutType getWorkoutType() {
 		return mWorkout.getWorkoutType();
+	}
+
+	private void prepareWorkoutResult() {
+		stopLocationUpdates();
+		mWorkout.setFinishDate(System.currentTimeMillis());
+		mWorkout.setElapsedTime(mFragmentListener.getElapsedTime());
+		mWorkout.setLocationsList(mService.getLocationsList());
+		mWorkout.setSpeedsList(mService.getSpeedsList());
+		mWorkout.setTopSpeed(mService.getTopSpeed());
+		mWorkout.setDistance(mService.getTotalDistance());
+
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+			setTitle(R.string.workout_summary);
+		}
+		changeFragment(WorkoutDetailsFragment.newInstance(mWorkout), true);
 	}
 }

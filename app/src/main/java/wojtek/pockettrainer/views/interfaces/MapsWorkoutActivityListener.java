@@ -13,6 +13,8 @@ public interface MapsWorkoutActivityListener {
 
 	void startLocationUpdates();
 
-	void finishWorkout(Workout workout);
+	void finishWorkout();
+
+	Workout getWorkout();
 
 }

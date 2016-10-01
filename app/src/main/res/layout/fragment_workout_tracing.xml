@@ -3,7 +3,7 @@
 			 xmlns:app="http://schemas.android.com/apk/res-auto"
 			 android:layout_width="match_parent"
 			 android:layout_height="match_parent"
-			 tools:context="wojtek.pockettrainer.views.fragments.MapTracingFragment">
+			 tools:context="wojtek.pockettrainer.views.fragments.WorkoutTracingFragment">
 
 	<com.google.android.gms.maps.MapView
 		android:id="@+id/map_view"

@@ -28,23 +28,35 @@
 	<string name="switch_accuracy">Less accuracy</string>
 	<string name="switch_units">Metric units</string>
 
-	<!-- Map tracing -->
+	<!-- Workout tracing -->
 	<string name="new_with_whitespace">New </string>
 	<string name="finish">Finish</string>
 	<string name="resume">Resume</string>
 	<string name="pause">Pause</string>
 	<string name="dash">-</string>
 	<string name="blank_time">00:00:00</string>
-	<string name="blank_distance_m">0 m</string>
-	<string name="blank_distance_km">0 km</string>
-	<string name="blank_speed_m">0 m/s</string>
-	<string name="blank_speed_km">0 km/h</string>
+	<string name="blank_distance_m">0.00 m</string>
+	<string name="blank_distance_km">0.00 km</string>
+	<string name="blank_speed_m">0.00 m/s</string>
+	<string name="blank_speed_km">0.00 km/h</string>
 	<string name="distance_units_m">%.2f m</string>
 	<string name="distance_units_km">%.2f km</string>
 	<string name="speed_units_mps">%.2f m/s</string>
 	<string name="speed_units_kph">%.2f km/h</string>
 	<string name="workout_paused">Workout paused</string>
 	<string name="workout_resumed">Workout resumed</string>
+
+	<!-- Workout details -->
+	<string name="workout_summary">Workout summary</string>
+	<string name="start_time">Start time</string>
+	<string name="start_location">Start location</string>
+	<string name="finish_time">Finish time</string>
+	<string name="finish_location">Finish location</string>
+	<string name="elapsed_time">Elapsed time</string>
+	<string name="total_distance">Total distance</string>
+	<string name="average_speed">Average speed</string>
+	<string name="top_speed">Top speed</string>
+	<string name="burned_calories">Burned calories</string>
 
 	<!-- Calculators -->
 	<string name="bmi_info">Body Mass Index is a measure of body fat based on your weight in relation to your weight.</string>

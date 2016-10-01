@@ -15,4 +15,6 @@ public interface MapTracingFragmentListener {
 	void setDataViewKilometers(LatLng latLng, double totalDistance, double currentSpeed);
 
 	void setLocation(LatLng latLng);
+
+	String getElapsedTime();
 }
