@@ -1,18 +1,12 @@
 package wojtek.pockettrainer.views.fragments;
 
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -20,27 +14,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.rafalzajfert.androidlogger.Logger;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.models.Workout;
-import wojtek.pockettrainer.views.interfaces.MapTracingFragmentListener;
 import wojtek.pockettrainer.views.interfaces.MapsWorkoutActivityListener;
 
 
@@ -94,10 +85,13 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 		TextView burnedCaloriesTextView = (TextView) view.findViewById(R.id.workout_details_burned_calories);
 		ImageView backgroundImageView = (ImageView) view.findViewById(R.id.workout_details_faded_background);
 
-		startTimeTextView.setText(new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a").format(mWorkout.getStartDate().getTime()));
-		startLocationTextView.setText("Januszowo 34");
-		finishTimeTextView.setText(new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a").format(mWorkout.getFinishDate().getTime()));
-		finishLocationTextView.setText("Aaaaa");
+		startTimeTextView.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(mWorkout.getStartDate().getTime()) +
+				", " + DateFormat.getDateInstance(DateFormat.LONG).format(mWorkout.getStartDate().getTime()));
+		startLocationTextView.setText(getLocationAddress(mWorkout.getLocation(0).getLatitude(), mWorkout.getLocation(0).getLongitude()));
+		finishTimeTextView.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(mWorkout.getFinishDate().getTime()) +
+				", " + DateFormat.getDateInstance(DateFormat.LONG).format(mWorkout.getFinishDate().getTime()));
+		finishLocationTextView.setText(getLocationAddress(mWorkout.getLocation(mWorkout.getLocationsListLastIndex()).getLatitude(),
+				mWorkout.getLocation(mWorkout.getLocationsListLastIndex()).getLongitude()));
 		elapsedTimeTextView.setText(mWorkout.getElapsedTime());
 		averageSpeedTextView.setText("54 km/h");
 		burnedCaloriesTextView.setText("4343 kcal");
@@ -141,5 +135,21 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 	private void moveCamera(LatLng latLng, float zoom) {
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
 		mGoogleMap.animateCamera(cameraUpdate);
+	}
+
+	private String getLocationAddress(double latitude, double longitude) {
+		Geocoder geocoder;
+		List<Address> addresses;
+		String address = "";
+		geocoder = new Geocoder(getContext(), Locale.getDefault());
+
+		try {
+			addresses = geocoder.getFromLocation(latitude, longitude, 1);
+			address = addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getPostalCode() +
+					" " + addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return address;
 	}
 }

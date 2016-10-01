@@ -65,17 +65,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		toggle.syncState();
 
 		mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-
-//		if (UserService.getInstance().getUserProfile().isCourier()) {
-//			Menu menu = mNavigationView.getMenu();
-//			menu.findItem(R.id.nav_deliver_package).setVisible(true);
-//			menu.findItem(R.id.nav_taken_packages).setVisible(true);
-//		}
-
-		TextView emailTextView = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.email);
-//		UserProfile userProfile = UserService.getInstance().getUserProfile();
-//		nameTextView.setText(userProfile.getFullName());
-//		emailTextView.setText(userProfile.getEmail());
 		mNavigationView.setNavigationItemSelectedListener(this);
 	}
 

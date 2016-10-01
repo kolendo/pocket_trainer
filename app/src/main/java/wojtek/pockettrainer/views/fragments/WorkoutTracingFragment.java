@@ -37,7 +37,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import wojtek.pockettrainer.R;
-import wojtek.pockettrainer.models.Workout;
 import wojtek.pockettrainer.views.interfaces.MapTracingFragmentListener;
 import wojtek.pockettrainer.views.interfaces.MapsWorkoutActivityListener;
 
@@ -87,7 +86,7 @@ public class WorkoutTracingFragment extends Fragment implements OnMapReadyCallba
 		stopTextView.setOnClickListener(onStopOnClickListener);
 
 		setBottomSheetPeek();
-		initDataView();
+//		initDataView();
 		startupTimer();
 
 		return view;

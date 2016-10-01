@@ -90,6 +90,14 @@ public class Workout implements Serializable {
 		mWorkoutType = workoutType;
 	}
 
+	public int getLocationsListLastIndex() {
+		return mLocationsList.size() - 1;
+	}
+
+	public Position getLocation(int index) {
+		return mLocationsList.get(index);
+	}
+
 	public ArrayList<Position> getLocationsList() {
 		return mLocationsList;
 	}

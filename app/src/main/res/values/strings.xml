@@ -57,6 +57,7 @@
 	<string name="average_speed">Average speed</string>
 	<string name="top_speed">Top speed</string>
 	<string name="burned_calories">Burned calories</string>
+	<string name="date_format">h:mm a, EEEE, d MMMM yyyy</string>
 
 	<!-- Calculators -->
 	<string name="bmi_info">Body Mass Index is a measure of body fat based on your weight in relation to your weight.</string>

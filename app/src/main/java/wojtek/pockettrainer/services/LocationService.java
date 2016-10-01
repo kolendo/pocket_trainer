@@ -23,12 +23,8 @@ import java.util.ArrayList;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.models.Position;
-import wojtek.pockettrainer.models.Workout;
-import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
-import wojtek.pockettrainer.views.activities.MapsWorkoutActivity;
 
-import static wojtek.pockettrainer.views.activities.MapsWorkoutActivity.EXTRA_WORKOUT;
 
 /**
  * @author Wojtek Kolendo
