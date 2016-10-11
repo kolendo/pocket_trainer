@@ -50,7 +50,7 @@ public class WorkoutTracingFragment extends Fragment implements OnMapReadyCallba
 	MapsWorkoutActivityListener mActivityListener;
 	private GoogleMap mGoogleMap;
 	private MapView mMapView;
-	private View mBottomSheetView;
+	private View mBottomSheetView, mBottomSheetHeaderView;
 	private BottomSheetBehavior mBottomSheetBehavior;
 	private long mTime, mTotalTime;
 	private CountDownTimer mTimer;
@@ -73,6 +73,7 @@ public class WorkoutTracingFragment extends Fragment implements OnMapReadyCallba
 		mMapView.onCreate(savedInstanceState);
 		mMapView.getMapAsync(this);
 		mBottomSheetView = view.findViewById(R.id.map_bottom_sheet);
+		mBottomSheetHeaderView = view.findViewById(R.id.map_bottom_sheet_header);
 		mTimeTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_time);
 		mDistanceTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_route);
 		mSpeedTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_speed);
@@ -208,8 +209,8 @@ public class WorkoutTracingFragment extends Fragment implements OnMapReadyCallba
 		mBottomSheetView.post(new Runnable() {
 			@Override
 			public void run() {
-				mBottomSheetBehavior.setPeekHeight(mTimeTextView.getHeight());
-				mGoogleMap.setPadding(0, 0, 0, mTimeTextView.getHeight());
+				mBottomSheetBehavior.setPeekHeight(mBottomSheetHeaderView.getHeight());
+				mGoogleMap.setPadding(0, 0, 0, mBottomSheetHeaderView.getHeight());
 			}
 		});
 	}

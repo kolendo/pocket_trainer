@@ -62,12 +62,15 @@
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:orientation="vertical">
+
 						<TextView
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content"
 							android:text="@string/start_time"
 							android:textColor="@color/colorAccent"
-							android:textSize="12sp"/>
+							android:textSize="12sp"
+							android:id="@+id/textView4"/>
+
 						<TextView
 							android:id="@+id/workout_details_start_time"
 							android:layout_width="match_parent"
@@ -192,20 +195,20 @@
 					</LinearLayout>
 				</LinearLayout>
 
-				<LinearLayout
-					android:orientation="horizontal"
+				<RelativeLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_marginBottom="@dimen/card_view_vertical_spacing"
-					android:gravity="center_vertical">
+					android:layout_marginBottom="@dimen/card_view_vertical_spacing">
 					<ImageView
+						android:id="@+id/workout_details_total_distance_img"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:src="@drawable/ic_gray_road_variant"
 						android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 					<LinearLayout
-						android:layout_width="match_parent"
+						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:layout_toEndOf="@id/workout_details_total_distance_img"
 						android:orientation="vertical">
 						<TextView
 							android:layout_width="match_parent"
@@ -219,36 +222,33 @@
 							android:layout_height="wrap_content"
 							tools:text="143 434234 km"/>
 					</LinearLayout>
-				</LinearLayout>
-
-				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginBottom="@dimen/card_view_vertical_spacing"
-					android:gravity="center_vertical">
-					<ImageView
+					<LinearLayout
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:src="@drawable/ic_gray_speedometer"
-						android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
-					<LinearLayout
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:orientation="vertical">
-						<TextView
-							android:layout_width="match_parent"
+						android:orientation="horizontal"
+						android:layout_alignParentEnd="true"
+						android:layout_centerInParent="true"
+						android:layout_marginEnd="@dimen/activity_horizontal_margin"
+						android:paddingStart="15dp"
+						android:paddingEnd="15dp"
+						android:paddingTop="2dp"
+						android:paddingBottom="2dp"
+						android:background="@drawable/frame_rounded_accent">
+						<ImageView
+							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:text="@string/average_speed"
-							android:textColor="@color/colorAccent"
-							android:textSize="12sp"/>
+							android:src="@drawable/ic_trending_up_white_24dp"/>
 						<TextView
-							android:id="@+id/workout_details_average_speed"
-							android:layout_width="match_parent"
+							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							tools:text="100 km/h"/>
+							android:layout_gravity="center"
+							android:layout_marginStart="2dp"
+							android:text="@string/chart"
+							android:textSize="13sp"
+							android:textColor="@color/white"
+							android:textAppearance="@style/TextAppearance.AppCompat.Button"/>
 					</LinearLayout>
-				</LinearLayout>
+				</RelativeLayout>
 
 				<LinearLayout
 					android:orientation="horizontal"
@@ -278,6 +278,63 @@
 							tools:text="100 km/h"/>
 					</LinearLayout>
 				</LinearLayout>
+
+				<RelativeLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="@dimen/card_view_vertical_spacing"
+					android:gravity="center_vertical">
+					<ImageView
+						android:id="@+id/workout_details_average_speed_img"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:src="@drawable/ic_gray_speedometer"
+						android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_toEndOf="@id/workout_details_average_speed_img"
+						android:orientation="vertical">
+						<TextView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="@string/average_speed"
+							android:textColor="@color/colorAccent"
+							android:textSize="12sp"/>
+						<TextView
+							android:id="@+id/workout_details_average_speed"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							tools:text="100 km/h"/>
+					</LinearLayout>
+					<LinearLayout
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal"
+						android:layout_alignParentEnd="true"
+						android:layout_centerInParent="true"
+						android:layout_marginEnd="@dimen/activity_horizontal_margin"
+						android:paddingStart="15dp"
+						android:paddingEnd="15dp"
+						android:paddingTop="2dp"
+						android:paddingBottom="2dp"
+						android:background="@drawable/frame_rounded_accent">
+						<ImageView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:src="@drawable/ic_trending_up_white_24dp"/>
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_gravity="center"
+							android:layout_marginStart="2dp"
+							android:text="@string/chart"
+							android:textSize="13sp"
+							android:textColor="@color/white"
+							android:textAppearance="@style/TextAppearance.AppCompat.Button"/>
+					</LinearLayout>
+				</RelativeLayout>
 
 				<LinearLayout
 					android:orientation="horizontal"

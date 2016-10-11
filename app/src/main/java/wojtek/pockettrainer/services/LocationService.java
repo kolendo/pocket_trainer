@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.rafalzajfert.androidlogger.Logger;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.models.Position;
@@ -183,9 +184,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
 	private void sendKilometers() {
 		if (mCurrentDistance > MIN_DISTANCE && mCurrentDistance < MAX_DISTANCE) {
-			mCurrentDistance /= 1000;
+			mCurrentDistance /= 1000d;
 			mTotalDistance += mCurrentDistance;
-			mCurrentSpeed = mCurrentDistance / ((mCurrentLocation.getTime() - mLastLocation.getTime()) / 3600000);
+			Logger.error("distance: " + mCurrentDistance);
+			mCurrentSpeed = mCurrentDistance / ((mCurrentLocation.getTime() - mLastLocation.getTime())/3600000d);
+		Logger.error("time: " + (mCurrentLocation.getTime() - mLastLocation.getTime())/3600000d);
+		Logger.error("speed: " + mCurrentSpeed);
 			if (mCurrentSpeed > mTopSpeed) {
 				mTopSpeed = mCurrentSpeed;
 			}
