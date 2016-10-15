@@ -6,6 +6,7 @@ import android.widget.Switch;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;

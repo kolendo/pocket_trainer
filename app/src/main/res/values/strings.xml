@@ -105,6 +105,9 @@
 	<string name="finish_workout">Do you want to finish your workout?</string>
 	<string name="no_location_permission">Location permission not accessed</string>
 	<string name="less_accuracy_msg">Less accuracy mode increases time interval between location service responses. Enabling this gives you less accurate data, such as speedometer, but ensures far less battery draining.</string>
+	<string name="delete_workout_title">Delete workout</string>
+	<string name="delete_workout_msg">Confirm deleting workout</string>
+	<string name="delete">Delete</string>
 
 	<!-- Settings Preferences -->
 	<string name="settings_less_accuracy_key">less_accuracy_key</string>

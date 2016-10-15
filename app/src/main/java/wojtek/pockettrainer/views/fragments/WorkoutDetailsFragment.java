@@ -45,7 +45,6 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 
 	MapsWorkoutActivityListener mActivityListener;
 	private GoogleMap mGoogleMap;
-	private MapView mMapView;
 	private Workout mWorkout;
 
 	public static WorkoutDetailsFragment newInstance(Workout workout) {
@@ -70,9 +69,9 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_workout_details, container, false);
-		mMapView = (MapView) view.findViewById(R.id.map_view_workout_details);
-		mMapView.onCreate(savedInstanceState);
-		mMapView.getMapAsync(this);
+		MapView mapView = (MapView) view.findViewById(R.id.map_view_workout_details);
+		mapView.onCreate(savedInstanceState);
+		mapView.getMapAsync(this);
 
 		TextView startTimeTextView = (TextView) view.findViewById(R.id.workout_details_start_time);
 		TextView startLocationTextView = (TextView) view.findViewById(R.id.workout_details_start_location);
@@ -93,8 +92,8 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 		finishLocationTextView.setText(getLocationAddress(mWorkout.getLocation(mWorkout.getLocationsListLastIndex()).getLatitude(),
 				mWorkout.getLocation(mWorkout.getLocationsListLastIndex()).getLongitude()));
 		elapsedTimeTextView.setText(mWorkout.getElapsedTime());
-		averageSpeedTextView.setText("54 km/h");
-		burnedCaloriesTextView.setText("4343 kcal");
+		averageSpeedTextView.setText("?");
+		burnedCaloriesTextView.setText("?");
 
 		switch (mWorkout.getWorkoutType()) {
 			case CYCLING:

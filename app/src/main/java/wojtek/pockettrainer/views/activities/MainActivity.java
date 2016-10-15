@@ -26,6 +26,7 @@ import wojtek.pockettrainer.views.fragments.BfpCalculatorFragment;
 import wojtek.pockettrainer.views.fragments.menu.BmiFragment;
 import wojtek.pockettrainer.views.fragments.menu.HomeFragment;
 import wojtek.pockettrainer.views.fragments.menu.NewWorkoutFragment;
+import wojtek.pockettrainer.views.fragments.menu.WorkoutsHistoryFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					changeFragment(NewWorkoutFragment.newInstance(), true);
 					break;
 				case R.id.nav_history:
-					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
+					changeFragment(WorkoutsHistoryFragment.newInstance(), true);
 					break;
 				case R.id.nav_bmi:
 					changeFragment(BmiFragment.newInstance(), true);

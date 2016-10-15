@@ -77,9 +77,9 @@ public class WorkoutTracingFragment extends Fragment implements OnMapReadyCallba
 		mTimeTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_time);
 		mDistanceTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_route);
 		mSpeedTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_speed);
-		TextView resumeTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_resume);
-		TextView pauseTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_pause);
-		TextView stopTextView = (TextView) view.findViewById(R.id.map_bottom_sheet_stop);
+		View resumeTextView = view.findViewById(R.id.map_bottom_sheet_resume);
+		View pauseTextView = view.findViewById(R.id.map_bottom_sheet_pause);
+		View stopTextView = view.findViewById(R.id.map_bottom_sheet_stop);
 
 		mBottomSheetBehavior = BottomSheetBehavior.from(mBottomSheetView);
 		resumeTextView.setOnClickListener(onResumeOnClickListener);
