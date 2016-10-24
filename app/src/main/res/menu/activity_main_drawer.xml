@@ -12,6 +12,15 @@
 	</group>
 
 	<group
+		android:id="@+id/group_training"
+		android:checkableBehavior="single">
+		<item
+			android:id="@+id/nav_planner"
+			android:icon="@drawable/ic_fitness_center_black_24dp"
+			android:title="@string/planner" />
+	</group>
+
+	<group
 		android:id="@+id/group_workouts"
 		android:checkableBehavior="single">
 		<item
@@ -22,6 +31,15 @@
 			android:id="@+id/nav_history"
 			android:icon="@drawable/ic_restore_black_24dp"
 			android:title="@string/history" />
+	</group>
+
+	<group
+		android:id="@+id/group_spotify"
+		android:checkableBehavior="single">
+		<item
+			android:id="@+id/nav_spotify"
+			android:icon="@drawable/ic_spotify_black_24dp"
+			android:title="@string/spotify" />
 	</group>
 
 	<group

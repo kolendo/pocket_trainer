@@ -4,6 +4,8 @@
 			  android:id="@+id/credit_card_layout"
 			  android:layout_width="match_parent"
 			  android:layout_height="wrap_content"
+			  android:clickable="true"
+			  android:foreground="?attr/selectableItemBackground"
 			  android:orientation="horizontal"
 			  android:padding="12dp">
 
@@ -31,6 +33,8 @@
 		android:id="@+id/item_workout_more"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
+		android:duplicateParentState="true"
+		android:clickable="true"
 		android:paddingStart="12dp"
 		android:layout_weight="1">
 

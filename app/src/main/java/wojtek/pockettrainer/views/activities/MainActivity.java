@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.ViewUtils;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_drawer);
+		setStatusBarTranslucent(true);
 		initToolbar();
 		initDrawer();
 		changeFragment(HomeFragment.newInstance(), false);
@@ -124,11 +126,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				case R.id.nav_home:
 					changeFragment(HomeFragment.newInstance(), true);
 					break;
+				case R.id.nav_planner:
+					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
+					break;
 				case R.id.nav_workout:
 					changeFragment(NewWorkoutFragment.newInstance(), true);
 					break;
 				case R.id.nav_history:
 					changeFragment(WorkoutsHistoryFragment.newInstance(), true);
+					break;
+				case R.id.nav_spotify:
+					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
 					break;
 				case R.id.nav_bmi:
 					changeFragment(BmiFragment.newInstance(), true);
@@ -147,5 +155,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 		mDrawerLayout.closeDrawer(GravityCompat.START);
 		return true;
+	}
+
+	protected void setStatusBarTranslucent(boolean makeTranslucent) {
+		if (makeTranslucent) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+		} else {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+		}
 	}
 }

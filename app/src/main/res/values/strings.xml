@@ -10,8 +10,10 @@
 	<!-- Navigation Drawer -->
 	<string name="home">Home</string>
 	<string name="profile">Profile</string>
+	<string name="planner">Training planner</string>
 	<string name="workout">New workout</string>
 	<string name="history">History</string>
+	<string name="spotify">Spotify</string>
 	<string name="calculate_bmi">Calculate BMI</string>
 	<string name="calculate_fat">Calculate BFP</string>
 	<string name="log_out">Log out</string>
