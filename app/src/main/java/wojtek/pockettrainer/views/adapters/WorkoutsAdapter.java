@@ -60,12 +60,13 @@ public class WorkoutsAdapter extends RecyclerView.Adapter<WorkoutsAdapter.MyView
 
 	public class MyViewHolder extends RecyclerView.ViewHolder {
 
-		private ImageView mTypeImageView;
+		private ImageView mTypeImageView, mStarImageView;
 		private TextView mDateTextView, mDistanceTextView;
 		private View mMoreView;
 
 		public MyViewHolder(View itemView) {
 			super(itemView);
+			mStarImageView = (ImageView) itemView.findViewById(R.id.item_workout_fav);
 			mTypeImageView = (ImageView) itemView.findViewById(R.id.item_workout_type);
 			mDateTextView = (TextView) itemView.findViewById(R.id.item_workout_date);
 			mDistanceTextView = (TextView) itemView.findViewById(R.id.item_workout_distance);
@@ -82,10 +83,55 @@ public class WorkoutsAdapter extends RecyclerView.Adapter<WorkoutsAdapter.MyView
 				}
 			});
 
+			mStarImageView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					int position = getLayoutPosition();
+					if (!mWorkouts.get(position).getObject().isFavourite()) {
+						mWorkouts.get(position).getObject().setFavourite(true);
+						mStarImageView.setImageResource(R.drawable.ic_star_border_gray_24dp);
+					} else {
+						mWorkouts.get(position).getObject().setFavourite(false);
+						mStarImageView.setImageResource(R.drawable.ic_star_accent_24dp);
+					}
+				}
+			});
+			mStarImageView.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					if (mItemLongClickListener != null) {
+						int position = getLayoutPosition();
+						mItemLongClickListener.onItemLongClicked(mWorkouts.get(position));
+					}
+					return true;
+				}
+			});
+
 			mMoreView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Toast.makeText(TrainerApplication.getContext(), "not implemented", Toast.LENGTH_SHORT).show();
+				}
+			});
+			mMoreView.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					if (mItemLongClickListener != null) {
+						int position = getLayoutPosition();
+						mItemLongClickListener.onItemLongClicked(mWorkouts.get(position));
+					}
+					return true;
+				}
+			});
+
+			mTypeImageView.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					if (mItemLongClickListener != null) {
+						int position = getLayoutPosition();
+						mItemLongClickListener.onItemLongClicked(mWorkouts.get(position));
+					}
+					return true;
 				}
 			});
 		}

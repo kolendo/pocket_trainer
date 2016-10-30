@@ -5,7 +5,7 @@
 				android:layout_height="wrap_content"
 				android:clickable="true"
 				android:foreground="?attr/selectableItemBackgroundBorderless"
-				android:background="@color/colorPrimary"
+				android:background="@color/colorPrimary_transparent"
 				android:paddingBottom="@dimen/bottom_sheet_horizontal_margin">
 
 	<LinearLayout

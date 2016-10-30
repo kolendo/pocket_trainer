@@ -2,6 +2,7 @@
 	
 	<!-- Activity titles -->
 	<string name="app_name">Pocket Trainer</string>
+	<string name="app_name_line">Pocket\nTrainer</string>
 
 	<string name="lorem_ipsum_short">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
 	<string name="lorem_ipsum_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean interdum quam in magna ultricies egestas. Donec facilisis pretium est nec tempus. Nulla ac pharetra nisi. Proin eget justo turpis. Proin ultrices lacus et orci convallis dictum. Fusce semper augue felis, eget porttitor ipsum bibendum sed.</string>

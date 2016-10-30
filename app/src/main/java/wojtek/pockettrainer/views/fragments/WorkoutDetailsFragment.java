@@ -144,8 +144,18 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 
 		try {
 			addresses = geocoder.getFromLocation(latitude, longitude, 1);
-			address = addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getPostalCode() +
-					" " + addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
+			if (addresses.get(0).getAddressLine(0) != null && !addresses.get(0).getAddressLine(0).isEmpty()) {
+				address += addresses.get(0).getAddressLine(0) + " ";
+			}
+			if (addresses.get(0).getPostalCode() != null && !addresses.get(0).getPostalCode().isEmpty()) {
+				address += addresses.get(0).getPostalCode() + " ";
+			}
+			if (addresses.get(0).getLocality() != null && !addresses.get(0).getLocality().isEmpty()) {
+				address += addresses.get(0).getLocality() + " ";
+			}
+			if (addresses.get(0).getCountryName() != null && !addresses.get(0).getCountryName().isEmpty()) {
+				address += addresses.get(0).getCountryName() + " ";
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

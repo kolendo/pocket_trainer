@@ -26,7 +26,11 @@ public class Workout implements Serializable {
 
 	private Calendar mStartDate;
 
+	private String mStartAddress;
+
 	private Calendar mFinishDate;
+
+	private String mFinishAddress;
 
 	private String mElapsedTime;
 
@@ -39,6 +43,8 @@ public class Workout implements Serializable {
 	private double mAverageSpeed;
 
 	private double mTopSpeed;
+
+	private boolean mFavourite;
 
 	public Workout() {
 		mLocationsList = new ArrayList<>();
@@ -163,6 +169,30 @@ public class Workout implements Serializable {
 		if (mTopSpeed < topSpeed) {
 			mTopSpeed = topSpeed;
 		}
+	}
+
+	public String getStartAddress() {
+		return mStartAddress;
+	}
+
+	public void setStartAddress(String startAddress) {
+		mStartAddress = startAddress;
+	}
+
+	public String getFinishAddress() {
+		return mFinishAddress;
+	}
+
+	public void setFinishAddress(String finishAddress) {
+		mFinishAddress = finishAddress;
+	}
+
+	public boolean isFavourite() {
+		return mFavourite;
+	}
+
+	public void setFavourite(boolean favourite) {
+		mFavourite = favourite;
 	}
 
 	//	endregion
