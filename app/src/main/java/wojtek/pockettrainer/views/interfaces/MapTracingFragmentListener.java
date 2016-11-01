@@ -17,4 +17,6 @@ public interface MapTracingFragmentListener {
 	void setLocation(LatLng latLng);
 
 	String getElapsedTime();
+
+	void showBottomSheet(boolean show);
 }

@@ -58,10 +58,12 @@
 	<string name="elapsed_time">Elapsed time</string>
 	<string name="total_distance">Total distance</string>
 	<string name="average_speed">Average speed</string>
+	<string name="average_speed_without_stops">Average speed without stops</string>
 	<string name="top_speed">Top speed</string>
-	<string name="burned_calories">Burned calories</string>
+	<string name="burned_calories">Estimated burned calories</string>
 	<string name="date_format">h:mm a, EEEE, d MMMM yyyy</string>
 	<string name="chart">Chart</string>
+	<string name="burned_units_kcal">%d kcal</string>
 
 	<!-- Calculators -->
 	<string name="bmi_info">Body Mass Index is a measure of body fat based on your weight in relation to your weight.</string>

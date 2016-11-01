@@ -43,7 +43,6 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 
 	private static final String WORKOUT_KEY = "workout_key";
 
-	MapsWorkoutActivityListener mActivityListener;
 	private GoogleMap mGoogleMap;
 	private Workout mWorkout;
 
@@ -80,45 +79,38 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 		TextView elapsedTimeTextView = (TextView) view.findViewById(R.id.workout_details_elapsed_time);
 		TextView totalDistanceTextView = (TextView) view.findViewById(R.id.workout_details_total_distance);
 		TextView averageSpeedTextView = (TextView) view.findViewById(R.id.workout_details_average_speed);
+		TextView averageSpeedWithoutTopsTextView = (TextView) view.findViewById(R.id.workout_details_average_speed_without_stops);
 		TextView topSpeedTextView = (TextView) view.findViewById(R.id.workout_details_top_speed);
 		TextView burnedCaloriesTextView = (TextView) view.findViewById(R.id.workout_details_burned_calories);
 		ImageView backgroundImageView = (ImageView) view.findViewById(R.id.workout_details_faded_background);
 
 		startTimeTextView.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(mWorkout.getStartDate().getTime()) +
 				", " + DateFormat.getDateInstance(DateFormat.LONG).format(mWorkout.getStartDate().getTime()));
-		startLocationTextView.setText(getLocationAddress(mWorkout.getLocation(0).getLatitude(), mWorkout.getLocation(0).getLongitude()));
+		startLocationTextView.setText(mWorkout.getStartAddress());
 		finishTimeTextView.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(mWorkout.getFinishDate().getTime()) +
 				", " + DateFormat.getDateInstance(DateFormat.LONG).format(mWorkout.getFinishDate().getTime()));
-		finishLocationTextView.setText(getLocationAddress(mWorkout.getLocation(mWorkout.getLocationsListLastIndex()).getLatitude(),
-				mWorkout.getLocation(mWorkout.getLocationsListLastIndex()).getLongitude()));
+		finishLocationTextView.setText(mWorkout.getFinishAddress());
 		elapsedTimeTextView.setText(mWorkout.getElapsedTime());
-		averageSpeedTextView.setText("?");
-		burnedCaloriesTextView.setText("?");
+		burnedCaloriesTextView.setText(String.format(getResources().getString(R.string.burned_units_kcal), mWorkout.getBurnedCalories()));
 
 		switch (mWorkout.getWorkoutType()) {
 			case CYCLING:
 				backgroundImageView.setImageResource(R.drawable.ic_directions_bike_gray_100dp);
 				totalDistanceTextView.setText(String.format(getResources().getString(R.string.distance_units_km), mWorkout.getDistance()));
 				topSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_kph), mWorkout.getTopSpeed()));
+				averageSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_kph), mWorkout.getAverageSpeed()));
+				averageSpeedWithoutTopsTextView.setText(String.format(getResources().getString(R.string.speed_units_kph), mWorkout.getAverageSpeedWithoutStops()));
 				break;
 			case RUNNING:
 				backgroundImageView.setImageResource(R.drawable.ic_directions_run_gray_100dp);
 				totalDistanceTextView.setText(String.format(getResources().getString(R.string.distance_units_m), mWorkout.getDistance()));
 				topSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), mWorkout.getTopSpeed()));
+				averageSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), mWorkout.getAverageSpeed()));
+				averageSpeedWithoutTopsTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), mWorkout.getAverageSpeedWithoutStops()));
 				break;
 		}
 
 		return view;
-	}
-
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-		try {
-			mActivityListener = (MapsWorkoutActivityListener) context;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(context.toString() + " must implement MapsWorkoutActivityListener");
-		}
 	}
 
 	@Override
@@ -136,29 +128,4 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 		mGoogleMap.animateCamera(cameraUpdate);
 	}
 
-	private String getLocationAddress(double latitude, double longitude) {
-		Geocoder geocoder;
-		List<Address> addresses;
-		String address = "";
-		geocoder = new Geocoder(getContext(), Locale.getDefault());
-
-		try {
-			addresses = geocoder.getFromLocation(latitude, longitude, 1);
-			if (addresses.get(0).getAddressLine(0) != null && !addresses.get(0).getAddressLine(0).isEmpty()) {
-				address += addresses.get(0).getAddressLine(0) + " ";
-			}
-			if (addresses.get(0).getPostalCode() != null && !addresses.get(0).getPostalCode().isEmpty()) {
-				address += addresses.get(0).getPostalCode() + " ";
-			}
-			if (addresses.get(0).getLocality() != null && !addresses.get(0).getLocality().isEmpty()) {
-				address += addresses.get(0).getLocality() + " ";
-			}
-			if (addresses.get(0).getCountryName() != null && !addresses.get(0).getCountryName().isEmpty()) {
-				address += addresses.get(0).getCountryName() + " ";
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return address;
-	}
 }

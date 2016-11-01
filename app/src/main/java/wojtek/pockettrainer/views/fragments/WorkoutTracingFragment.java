@@ -195,8 +195,8 @@ public class WorkoutTracingFragment extends Fragment implements OnMapReadyCallba
 		if (checkGpsPermission()) {
 			mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
 		}
-		mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
-		mGoogleMap.getUiSettings().setCompassEnabled(true);
+		mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
+		mGoogleMap.getUiSettings().setCompassEnabled(false);
 		mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
 
 	}
@@ -241,6 +241,17 @@ public class WorkoutTracingFragment extends Fragment implements OnMapReadyCallba
 	public String getElapsedTime() {
 		finishTimer();
 		return setTimeTextView(mTotalTime);
+	}
+
+	@Override
+	public void showBottomSheet(boolean show) {
+		if (!show) {
+			mBottomSheetView.setVisibility(View.GONE);
+		} else {
+			mBottomSheetView.setVisibility(View.VISIBLE);
+			mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+			mGoogleMap.getUiSettings().setCompassEnabled(true);
+		}
 	}
 
 	private String setTimeTextView(long milliseconds) {

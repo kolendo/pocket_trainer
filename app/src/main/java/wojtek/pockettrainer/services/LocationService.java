@@ -20,10 +20,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.rafalzajfert.androidlogger.Logger;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.models.Position;
+import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
 
 
@@ -50,15 +52,17 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
 //	Workout Data
 	private ArrayList<Position> mLocationsList;
-	private ArrayList<Double> mSpeedsList;
-	private double mTotalDistance, mCurrentDistance, mCurrentSpeed, mTopSpeed;
+	private HashMap<Long, Double> mSpeedsHashMap, mDistancesHashMap;
+	private double mTotalDistance, mCurrentDistance, mCurrentSpeed, mTopSpeed, mBurnedCalories;
 	private Location mCurrentLocation, mLastLocation;
 
 	public LocationService() {
 		mLocationsList = new ArrayList<>();
-		mSpeedsList = new ArrayList<>();
+		mSpeedsHashMap = new HashMap<>();
+		mDistancesHashMap = new HashMap<>();
 		mTotalDistance = 0;
 		mTopSpeed = 0;
+		mBurnedCalories = 0;
 	}
 
 	@Override
@@ -108,7 +112,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 		}
 		return mBinder;
 	}
-
 
 	@Override
 	public void onConnected(@Nullable Bundle bundle) {
@@ -163,27 +166,34 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 			}
 		} else {
 			mCurrentLocation = location;
+			mLocationServiceCallback.animateLoading(false);
+			mLocationServiceCallback.showBottomSheet();
 			mLocationServiceCallback.passLocation(new LatLng(location.getLatitude(), location.getLongitude()));
 		}
 	}
 
 	private void sendMeters() {
+		long currentTime = System.currentTimeMillis();
 		if (mCurrentDistance > MIN_DISTANCE && mCurrentDistance < MAX_DISTANCE) {
+			mBurnedCalories += (((mCurrentLocation.getTime() - mLastLocation.getTime()) / 1000) * 0.23);
 			mTotalDistance += mCurrentDistance;
 			mCurrentSpeed = mCurrentDistance / ((mCurrentLocation.getTime() - mLastLocation.getTime()) / 1000);
 			if (mCurrentSpeed > mTopSpeed) {
 				mTopSpeed = mCurrentSpeed;
 			}
-			mSpeedsList.add(mCurrentSpeed);
+			mSpeedsHashMap.put(currentTime, mCurrentSpeed);
+			mDistancesHashMap.put(currentTime, mTotalDistance);
 			mLocationServiceCallback.passDataMeters(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, mCurrentSpeed);
 		} else {
-			mSpeedsList.add(0.0);
+			mSpeedsHashMap.put(currentTime, 0.0);
 			mLocationServiceCallback.passDataMeters(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, 0.0);
 		}
 	}
 
 	private void sendKilometers() {
+		long currentTime = System.currentTimeMillis();
 		if (mCurrentDistance > MIN_DISTANCE && mCurrentDistance < MAX_DISTANCE) {
+			mBurnedCalories += (((mCurrentLocation.getTime() - mLastLocation.getTime()) / 1000) * 0.23);
 			mCurrentDistance /= 1000d;
 			mTotalDistance += mCurrentDistance;
 			Logger.error("distance: " + mCurrentDistance);
@@ -193,10 +203,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 			if (mCurrentSpeed > mTopSpeed) {
 				mTopSpeed = mCurrentSpeed;
 			}
-			mSpeedsList.add(mCurrentSpeed);
+			mSpeedsHashMap.put(currentTime, mCurrentSpeed);
+			mDistancesHashMap.put(currentTime, mTotalDistance);
 			mLocationServiceCallback.passDataKilometers(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, mCurrentSpeed);
 		} else {
-			mSpeedsList.add(0.0);
+			mSpeedsHashMap.put(currentTime, 0.0);
 			mLocationServiceCallback.passDataKilometers(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, 0.0);
 		}
 	}
@@ -221,16 +232,52 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 		return mLocationsList;
 	}
 
-	public ArrayList<Double> getSpeedsList() {
-		return mSpeedsList;
+	public HashMap<Long, Double> getSpeedsHashMap() {
+		return mSpeedsHashMap;
+	}
+
+	public HashMap<Long, Double> getDistancesHashMap() {
+		return mDistancesHashMap;
 	}
 
 	public double getTotalDistance() {
 		return mTotalDistance;
 	}
 
+	public int getBurnedCalories() {
+		return (int) mBurnedCalories;
+	}
+
 	public double getTopSpeed() {
 		return mTopSpeed;
+	}
+
+	public double getAverageSpeed() {
+		double sum = 0;
+		for(Map.Entry<Long, Double> entry : mSpeedsHashMap.entrySet()) {
+			sum += entry.getValue();
+		}
+		if (mSpeedsHashMap.size() > 0) {
+			return sum / mSpeedsHashMap.size();
+		} else {
+			return 0;
+		}
+	}
+
+	public double getAverageSpeedWithoutStops() {
+		double sum = 0;
+		int counter = 0;
+		for(Map.Entry<Long, Double> entry : mSpeedsHashMap.entrySet()) {
+			if (entry.getKey() > 0.0) {
+				sum += entry.getValue();
+				counter++;
+			}
+		}
+		if (counter > 0) {
+			return sum / counter;
+		} else {
+			return 0;
+		}
 	}
 
 	public class LocalBinder extends Binder {

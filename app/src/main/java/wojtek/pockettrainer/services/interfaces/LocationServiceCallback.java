@@ -22,4 +22,8 @@ public interface LocationServiceCallback {
 	boolean checkGpsPermission();
 
 	WorkoutType getWorkoutType();
+
+	void animateLoading(boolean animate);
+
+	void showBottomSheet();
 }

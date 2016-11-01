@@ -23,6 +23,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
+    compile 'com.github.ybq:Android-SpinKit:1.1.0'
+
     compile 'com.rafalzajfert:android-logger:1.1.18'
 
     compile 'com.android.support:appcompat-v7:24.2.1'

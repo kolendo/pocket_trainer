@@ -5,4 +5,5 @@
 	<color name="colorAccent">#00BFA5</color>
 	<color name="tab_shadow_white">#4DFFFFFF</color>
 	<color name="colorPrimary_transparent">#cc00838f</color>
+	<color name="colorAccent_transparent">#cc00BFA5</color>
 </resources>

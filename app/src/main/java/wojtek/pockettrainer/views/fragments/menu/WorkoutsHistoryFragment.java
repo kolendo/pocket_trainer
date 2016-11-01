@@ -19,6 +19,7 @@ import java.util.List;
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.models.Workout;
 import wojtek.pockettrainer.models.enums.WorkoutType;
+import wojtek.pockettrainer.views.activities.MainActivity;
 import wojtek.pockettrainer.views.adapters.WorkoutsAdapter;
 import wojtek.pockettrainer.views.adapters.items.WorkoutItem;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemLongClickListener;
@@ -145,7 +146,8 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 		if (mSelectedItem != null && mSelectedItem.isSelected()) {
 			showConfirmDeleteDialog(mSelectedItem);
 		} else {
-			// TODO: 15.10.2016 starts new workout fragment
+			(getActivity()).setTitle(R.string.workout);
+			((MainActivity)getActivity()).changeFragment(NewWorkoutFragment.newInstance(), true);
 		}
 	}
 

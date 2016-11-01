@@ -1,5 +1,6 @@
 package wojtek.pockettrainer.models;
 
+import android.annotation.SuppressLint;
 import android.location.Location;
 import android.widget.Switch;
 
@@ -9,8 +10,10 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
+import wojtek.pockettrainer.models.enums.Units;
 import wojtek.pockettrainer.models.enums.WorkoutType;
 
 /**
@@ -24,6 +27,8 @@ public class Workout implements Serializable {
 
 	private WorkoutType mWorkoutType;
 
+	private Units mUnits;
+
 	private Calendar mStartDate;
 
 	private String mStartAddress;
@@ -36,22 +41,32 @@ public class Workout implements Serializable {
 
 	private ArrayList<Position> mLocationsList;
 
-	private ArrayList<Double> mSpeedsList;
+	private HashMap<Long, Double> mSpeedsHashMap;
+
+	private HashMap<Long, Double> mDistancesHashMap;
 
 	private double mDistance;
 
 	private double mAverageSpeed;
 
+	private double mAverageSpeedWithoutStops;
+
 	private double mTopSpeed;
+
+	private int mBurnedCalories;
 
 	private boolean mFavourite;
 
+	@SuppressLint("UseSparseArrays")
 	public Workout() {
 		mLocationsList = new ArrayList<>();
-		mSpeedsList = new ArrayList<>();
+		mSpeedsHashMap = new HashMap<>();
+		mDistancesHashMap = new HashMap<>();
 		mDistance = 0;
 		mAverageSpeed = 0;
+		mAverageSpeedWithoutStops = 0;
 		mTopSpeed = 0;
+		mBurnedCalories = 0;
 	}
 
 	//	region Getters and Setters
@@ -121,16 +136,20 @@ public class Workout implements Serializable {
 		mLocationsList.add(new Position(location));
 	}
 
-	public ArrayList<Double> getSpeedsList() {
-		return mSpeedsList;
+	public HashMap<Long, Double> getSpeedsHashMap() {
+		return mSpeedsHashMap;
 	}
 
-	public void setSpeedsList(ArrayList<Double> speedsList) {
-		mSpeedsList = speedsList;
+	public void setSpeedsHashMap(HashMap<Long, Double> speedsHashMap) {
+		mSpeedsHashMap = speedsHashMap;
 	}
 
-	public void addSpeedsList(double speed) {
-		mSpeedsList.add(speed);
+	public HashMap<Long, Double> getDistancesHashMap() {
+		return mDistancesHashMap;
+	}
+
+	public void setDistancesHashMap(HashMap<Long, Double> distancesHashMap) {
+		mDistancesHashMap = distancesHashMap;
 	}
 
 	public String getElapsedTime() {
@@ -159,6 +178,14 @@ public class Workout implements Serializable {
 
 	public void setAverageSpeed(double averageSpeed) {
 		mAverageSpeed = averageSpeed;
+	}
+
+	public double getAverageSpeedWithoutStops() {
+		return mAverageSpeedWithoutStops;
+	}
+
+	public void setAverageSpeedWithoutStops(double averageSpeedWithoutStops) {
+		mAverageSpeedWithoutStops = averageSpeedWithoutStops;
 	}
 
 	public double getTopSpeed() {
@@ -195,6 +222,22 @@ public class Workout implements Serializable {
 		mFavourite = favourite;
 	}
 
+	public Units getUnits() {
+		return mUnits;
+	}
+
+	public void setUnits(Units units) {
+		mUnits = units;
+	}
+
+	public int getBurnedCalories() {
+		return mBurnedCalories;
+	}
+
+	public void setBurnedCalories(int burnedCalories) {
+		mBurnedCalories = burnedCalories;
+	}
+
 	//	endregion
 
 	@Override
@@ -208,7 +251,7 @@ public class Workout implements Serializable {
 				", mDistance=" + mDistance + '\'' +
 				", mAverageSpeed=" + mAverageSpeed + '\'' +
 				", mTopSpeed=" + mTopSpeed + '\'' +
-				", mSpeedsList=" + mSpeedsList + '\'' +
+				", mBurnedCalories=" + mBurnedCalories + '\'' +
 				", mLocationsList=" + mLocationsList +
 				'}';
 	}
