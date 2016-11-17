@@ -1,5 +1,6 @@
 package wojtek.pockettrainer.views.activities;
 
+import android.app.Dialog;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,7 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.ViewUtils;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +29,7 @@ import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.views.fragments.BfpCalculatorFragment;
 import wojtek.pockettrainer.views.fragments.menu.BmiFragment;
+import wojtek.pockettrainer.views.fragments.menu.GymTrainingsListFragment;
 import wojtek.pockettrainer.views.fragments.menu.HomeFragment;
 import wojtek.pockettrainer.views.fragments.menu.NewWorkoutFragment;
 import wojtek.pockettrainer.views.fragments.menu.WorkoutsHistoryFragment;
@@ -85,6 +90,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		}
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		switch(item.getItemId()){
+			case R.id.action_about:
+				showAboutDialog();
+				break;
+			case R.id.action_feedback:
+				Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.action_settings:
+				Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
+				break;
+		}
+		return true;
+	}
+
 	public void changeFragment(final Fragment fragment, boolean useDelay) {
 		mCurrentFragment = fragment;
 		final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -127,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					changeFragment(HomeFragment.newInstance(), true);
 					break;
 				case R.id.nav_planner:
-					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
+					changeFragment(GymTrainingsListFragment.newInstance(), true);
 					break;
 				case R.id.nav_workout:
 					changeFragment(NewWorkoutFragment.newInstance(), true);
@@ -163,5 +192,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		} else {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 		}
+	}
+
+	public void showAboutDialog(){
+		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setCancelable(true);
+		dialog.setContentView(R.layout.dialog_about);
+		dialog.show();
 	}
 }

@@ -12,35 +12,36 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.models.Training;
 import wojtek.pockettrainer.models.Workout;
 import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.views.activities.MainActivity;
-import wojtek.pockettrainer.views.adapters.WorkoutsAdapter;
-import wojtek.pockettrainer.views.adapters.items.WorkoutItem;
+import wojtek.pockettrainer.views.adapters.TrainingsAdapter;
+import wojtek.pockettrainer.views.adapters.items.TrainingItem;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemLongClickListener;
 
 /**
  * @author Wojtek Kolendo
- * @date 15.10.2016
+ * @date 17.11.2016
  */
 
-public class WorkoutsHistoryFragment extends Fragment implements View.OnClickListener {
+public class GymTrainingsListFragment extends Fragment implements View.OnClickListener {
 
 	private RecyclerView mRecyclerView;
-	private WorkoutsAdapter mAdapter;
-	private ArrayList<WorkoutItem> mWorkoutsList;
-	private WorkoutItem mSelectedItem;
+	private TrainingsAdapter mAdapter;
+	private ArrayList<TrainingItem> mTrainingsList;
+	private TrainingItem mSelectedItem;
 
 	private AlertDialog mDialog;
 	private FloatingActionButton mActionButton;
 
-	public static WorkoutsHistoryFragment newInstance() {
-		return new WorkoutsHistoryFragment();
+	public static GymTrainingsListFragment newInstance() {
+		return new GymTrainingsListFragment();
 	}
 
 	@Override
@@ -50,24 +51,24 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_workouts_history, container, false);
-		mWorkoutsList = new ArrayList<>();
+		View view = inflater.inflate(R.layout.fragment_trainings_list, container, false);
+		mTrainingsList = new ArrayList<>();
 
-		mActionButton = (FloatingActionButton) view.findViewById(R.id.workouts_list_action);
+		mActionButton = (FloatingActionButton) view.findViewById(R.id.trainings_list_action);
 		mActionButton.setOnClickListener(this);
 
-		mRecyclerView = (RecyclerView) view.findViewById(R.id.workouts_list);
+		mRecyclerView = (RecyclerView) view.findViewById(R.id.trainings_list);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-		mAdapter = new WorkoutsAdapter(new OnItemLongClickListener<WorkoutItem>() {
+		mAdapter = new TrainingsAdapter(new OnItemLongClickListener<TrainingItem>() {
 			@Override
-			public void onItemLongClicked(WorkoutItem item) {
-				onWorkoutClicked(item);
+			public void onItemLongClicked(TrainingItem item) {
+				onTrainingClicked(item);
 			}
 		});
 		mRecyclerView.setAdapter(mAdapter);
 		mRecyclerView.setLayoutManager(layoutManager);
 
-		setWorkouts();
+		setTrainings();
 		return view;
 	}
 
@@ -82,60 +83,50 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.workouts_list_action:
+			case R.id.trainings_list_action:
 				onActionClicked();
 				break;
 		}
 	}
 
-	public void setWorkouts() {
+	public void setTrainings() {
 		// TODO: 15.10.2016 pobieranie z bazy
-		ArrayList<Workout> workoutsList = new ArrayList<>();
-		Workout workout_c = new Workout();
-		workout_c.setDistance(43.65);
-		workout_c.setWorkoutType(WorkoutType.CYCLING);
-		workout_c.setStartDate(System.currentTimeMillis());
-		workoutsList.add(workout_c);
-		workout_c = new Workout();
-		workout_c.setDistance(43.65);
-		workout_c.setWorkoutType(WorkoutType.CYCLING);
-		workout_c.setStartDate(System.currentTimeMillis());
-		workoutsList.add(workout_c);
-		workout_c = new Workout();
-		workout_c.setDistance(43.65);
-		workout_c.setWorkoutType(WorkoutType.RUNNING);
-		workout_c.setStartDate(System.currentTimeMillis());
-		workoutsList.add(workout_c);
-		workout_c = new Workout();
-		workout_c.setDistance(43.65);
-		workout_c.setWorkoutType(WorkoutType.CYCLING);
-		workout_c.setStartDate(System.currentTimeMillis());
-		workoutsList.add(workout_c);
+		ArrayList<Training> trainingsList = new ArrayList<>();
 
-		for (Workout workout : workoutsList) {
-			mWorkoutsList.add(new WorkoutItem(workout));
+		Training training_a = new Training();
+		training_a.setId(0);
+		training_a.setDescription("Sunday chest lifting");
+		trainingsList.add(training_a);
+
+		Training training_b = new Training();
+		training_b.setId(1);
+		training_b.setDescription("Friday running night");
+		trainingsList.add(training_b);
+
+		for (Training training : trainingsList) {
+			mTrainingsList.add(new TrainingItem(training));
 		}
 
-		mAdapter.setWorkoutsList(mWorkoutsList);
+		mAdapter.setTrainingsList(mTrainingsList);
 		mAdapter.notifyDataSetChanged();
 	}
 
-	public void onWorkoutClicked(WorkoutItem item) {
+	public void onTrainingClicked(TrainingItem item) {
 		if (item.isSelected()) {
 			item.setSelected(false, true);
-			mAdapter.notifyItemChanged(mWorkoutsList.indexOf(item));
+			mAdapter.notifyItemChanged(mTrainingsList.indexOf(item));
 			showAddButton();
 			mSelectedItem = null;
 		} else {
-			for (WorkoutItem cardItem : mWorkoutsList) {
+			for (TrainingItem cardItem : mTrainingsList) {
 				if (cardItem.isSelected()) {
 					cardItem.setSelected(false, true);
-					mAdapter.notifyItemChanged(mWorkoutsList.indexOf(cardItem));
+					mAdapter.notifyItemChanged(mTrainingsList.indexOf(cardItem));
 					break;
 				}
 			}
 			item.setSelected(true, true);
-			mAdapter.notifyItemChanged(mWorkoutsList.indexOf(item));
+			mAdapter.notifyItemChanged(mTrainingsList.indexOf(item));
 			if (mSelectedItem == null)
 				showDeleteButton();
 			mSelectedItem = item;
@@ -146,8 +137,7 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 		if (mSelectedItem != null && mSelectedItem.isSelected()) {
 			showConfirmDeleteDialog(mSelectedItem);
 		} else {
-			(getActivity()).setTitle(R.string.workout);
-			((MainActivity)getActivity()).changeFragment(NewWorkoutFragment.newInstance(), true);
+			Toast.makeText(getContext(), "not implemented", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -171,15 +161,15 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 		});
 	}
 
-	public void showConfirmDeleteDialog(final WorkoutItem item) {
+	public void showConfirmDeleteDialog(final TrainingItem item) {
 		mDialog = new AlertDialog.Builder(getContext(), R.style.TrainerTheme_Dialog)
-				.setTitle(R.string.delete_workout_title)
-				.setMessage(R.string.delete_workout_msg)
+				.setTitle(R.string.delete_training_title)
+				.setMessage(R.string.delete_training_msg)
 				.setCancelable(true)
 				.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
-						deleteWorkout(item);
+						deleteTraining(item);
 					}
 				})
 				.setNegativeButton(R.string.cancel, null)
@@ -187,8 +177,8 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 		mDialog.show();
 	}
 
-	public void deleteWorkout(final WorkoutItem item) {
-//		mWorkoutsList.remove(item);
+	public void deleteTraining(final TrainingItem item) {
+//		mTrainingsList.remove(item);
 //		mAdapter.notifyItemRemoved();
 	}
 }
