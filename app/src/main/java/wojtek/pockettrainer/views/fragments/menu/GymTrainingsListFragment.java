@@ -2,6 +2,7 @@ package wojtek.pockettrainer.views.fragments.menu;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,11 +19,10 @@ import java.util.ArrayList;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.models.Training;
-import wojtek.pockettrainer.models.Workout;
-import wojtek.pockettrainer.models.enums.WorkoutType;
-import wojtek.pockettrainer.views.activities.MainActivity;
+import wojtek.pockettrainer.views.activities.TrainingActivity;
 import wojtek.pockettrainer.views.adapters.TrainingsAdapter;
 import wojtek.pockettrainer.views.adapters.items.TrainingItem;
+import wojtek.pockettrainer.views.adapters.listeners.OnItemClickListener;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemLongClickListener;
 
 /**
@@ -59,12 +59,19 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 
 		mRecyclerView = (RecyclerView) view.findViewById(R.id.trainings_list);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-		mAdapter = new TrainingsAdapter(new OnItemLongClickListener<TrainingItem>() {
-			@Override
-			public void onItemLongClicked(TrainingItem item) {
-				onTrainingClicked(item);
-			}
-		});
+		mAdapter = new TrainingsAdapter(
+				new OnItemLongClickListener<TrainingItem>() {
+					@Override
+					public void onItemLongClicked(TrainingItem item) {
+						onTrainingClicked(item);
+					}
+				},
+				new OnItemClickListener<TrainingItem>() {
+					@Override
+					public void onItemClicked(TrainingItem item) {
+						openTrainingActivity(item.getObject());
+					}
+				});
 		mRecyclerView.setAdapter(mAdapter);
 		mRecyclerView.setLayoutManager(layoutManager);
 
@@ -180,5 +187,11 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 	public void deleteTraining(final TrainingItem item) {
 //		mTrainingsList.remove(item);
 //		mAdapter.notifyItemRemoved();
+	}
+
+	public void openTrainingActivity(Training training) {
+		Intent intent = new Intent(getActivity(), TrainingActivity.class);
+		intent.putExtra(TrainingActivity.EXTRA_TRAINING, training);
+		startActivity(intent);
 	}
 }

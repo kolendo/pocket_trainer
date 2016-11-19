@@ -15,6 +15,10 @@ public class TrainingActivity implements Serializable {
 
 	private long mTime;
 
+	public TrainingActivity() {
+		mSets = 0;
+		mTime = 0;
+	}
 
 	public String getDescription() {
 		return mDescription;

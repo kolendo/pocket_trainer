@@ -30,12 +30,20 @@
 	<string name="author_about">Wojciech Kolendo</string>
 	<string name="author_email">woko27@gmail.com</string>
 
-
 	<!-- Trainings List -->
 	<string name="training_activities_num">%d activities</string>
 	<string name="training_activities_one">1 activity</string>
 	<string name="training_activities_zero">No activities. Tap here to add some.</string>
 
+	<!-- Activities List -->
+	<string name="activity_sets">%d sets</string>
+	<string name="activity_set">1 set</string>
+	<string name="activity_hour">"%d hour "</string>
+	<string name="activity_hours">"%d hours "</string>
+	<string name="activity_minute">"%d minute "</string>
+	<string name="activity_minutes">"%d minutes "</string>
+	<string name="activity_second">"%d second "</string>
+	<string name="activity_seconds">"%d seconds "</string>
 
 	<!-- Workout -->
 	<string name="start">Start</string>

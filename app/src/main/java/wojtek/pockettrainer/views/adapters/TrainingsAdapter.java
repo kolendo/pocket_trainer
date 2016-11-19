@@ -16,6 +16,7 @@ import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.models.Training;
 import wojtek.pockettrainer.views.adapters.items.TrainingItem;
+import wojtek.pockettrainer.views.adapters.listeners.OnItemClickListener;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemLongClickListener;
 
 /**
@@ -30,9 +31,12 @@ public class TrainingsAdapter extends RecyclerView.Adapter<TrainingsAdapter.MyVi
 
 	private ArrayList<TrainingItem> mTrainings;
 	private OnItemLongClickListener<TrainingItem> mItemLongClickListener;
+	private OnItemClickListener<TrainingItem> mItemClickListener;
 
-	public TrainingsAdapter(OnItemLongClickListener<TrainingItem> itemClickListener) {
-		mItemLongClickListener = itemClickListener;
+
+	public TrainingsAdapter(OnItemLongClickListener<TrainingItem> itemLongClickListener, OnItemClickListener<TrainingItem> itemClickListener) {
+		mItemLongClickListener = itemLongClickListener;
+		mItemClickListener = itemClickListener;
 		mTrainings = new ArrayList<>();
 	}
 
@@ -108,7 +112,10 @@ public class TrainingsAdapter extends RecyclerView.Adapter<TrainingsAdapter.MyVi
 			mMoreView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Toast.makeText(TrainerApplication.getContext(), "not implemented", Toast.LENGTH_SHORT).show();
+					if (mItemClickListener != null) {
+						int position = getLayoutPosition();
+						mItemClickListener.onItemClicked(mTrainings.get(position));
+					}
 				}
 			});
 			mMoreView.setOnLongClickListener(new View.OnLongClickListener() {

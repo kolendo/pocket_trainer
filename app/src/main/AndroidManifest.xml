@@ -32,6 +32,12 @@
 			android:screenOrientation="portrait">
 		</activity>
 
+		<activity
+			android:name=".views.activities.TrainingActivity"
+			android:label="Training"
+			android:screenOrientation="portrait">
+		</activity>
+
 		<service
 			android:name=".services.LocationService"
 			android:exported="false"/>
