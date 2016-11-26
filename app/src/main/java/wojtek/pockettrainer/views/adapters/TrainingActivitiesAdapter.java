@@ -6,18 +6,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rafalzajfert.androidlogger.Logger;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.TrainerApplication;
-import wojtek.pockettrainer.models.Training;
 import wojtek.pockettrainer.models.TrainingActivity;
 import wojtek.pockettrainer.views.adapters.items.TrainingActivityItem;
-import wojtek.pockettrainer.views.adapters.items.TrainingItem;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemClickListener;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemLongClickListener;
 
@@ -95,7 +94,7 @@ public class TrainingActivitiesAdapter extends RecyclerView.Adapter<TrainingActi
 		}
 
 		public void setActivity(@NonNull TrainingActivity trainingActivity) {
-			mDescriptionTextView.setText(trainingActivity.getDescription());
+			mDescriptionTextView.setText(trainingActivity.getTitle());
 			int sets = trainingActivity.getSets();
 			long time = trainingActivity.getTime();
 

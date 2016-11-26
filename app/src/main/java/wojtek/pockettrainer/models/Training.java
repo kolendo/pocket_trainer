@@ -1,67 +1,166 @@
 package wojtek.pockettrainer.models;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.JoinEntity;
+import org.greenrobot.greendao.annotation.ToMany;
+
+import java.util.List;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.DaoException;
 
 /**
  * @author Wojtek Kolendo
  * @date 17.11.2016
  */
 
-public class Training implements Serializable {
+@Entity
+public class Training {
 
-	private long mId;
+	@Id(autoincrement = true)
+	private long id;
 
-	private String mDescription;
+	private String title;
 
-	private ArrayList<TrainingActivity> mTrainingActivities;
+	@ToMany
+	@JoinEntity(
+			entity = JoinTrainingsWithTrainingActivities.class,
+			sourceProperty = "trainingId",
+			targetProperty = "trainingActivityId"
+	)
+	private List<TrainingActivity> trainingActivities;
 
-	private boolean mFavourite;
+	private boolean favourite;
+
+	/** Used to resolve relations */
+	@Generated(hash = 2040040024)
+	private transient DaoSession daoSession;
+
+	/** Used for active entity operations. */
+	@Generated(hash = 811827863)
+	private transient TrainingDao myDao;
 
 	public Training() {
-		mFavourite = false;
-		mTrainingActivities = new ArrayList<>();
+		favourite = false;
 	}
 
-	public long getId() {
-		return mId;
+	public Training(String title) {
+		this.title = title;
+		favourite = false;
 	}
 
-	public void setId(long id) {
-		mId = id;
-	}
-
-	public String getDescription() {
-		return mDescription;
-	}
-
-	public void setDescription(String description) {
-		mDescription = description;
-	}
-
-	public ArrayList<TrainingActivity> getTrainingActivities() {
-		return mTrainingActivities;
-	}
-
-	public void setTrainingActivities(ArrayList<TrainingActivity> trainingActivities) {
-		mTrainingActivities = trainingActivities;
-	}
-
-	public boolean isFavourite() {
-		return mFavourite;
-	}
-
-	public void setFavourite(boolean favourite) {
-		mFavourite = favourite;
+	@Generated(hash = 2036222815)
+	public Training(long id, String title, boolean favourite) {
+					this.id = id;
+					this.title = title;
+					this.favourite = favourite;
 	}
 
 	@Override
 	public String toString() {
 		return "TrainingActivity{" +
-				"mId=" + mId +
-				", mDescription='" + mDescription + '\'' +
-				", mTrainingActivities='" + mTrainingActivities + '\'' +
-				", mFavourite='" + mFavourite + '\'' +
+				"id=" + id +
+				", title='" + title + '\'' +
+				", trainingActivities='" + trainingActivities + '\'' +
+				", favourite='" + favourite + '\'' +
 				'}';
 	}
+
+	public long getId() {
+					return this.id;
+	}
+
+	public void setId(long id) {
+					this.id = id;
+	}
+
+	public String getTitle() {
+					return this.title;
+	}
+
+	public void setTitle(String title) {
+					this.title = title;
+	}
+
+	public boolean getFavourite() {
+					return this.favourite;
+	}
+
+	public void setFavourite(boolean favourite) {
+					this.favourite = favourite;
+	}
+
+	/**
+	 * To-many relationship, resolved on first access (and after reset).
+	 * Changes to to-many relations are not persisted, make changes to the target entity.
+	 */
+	@Generated(hash = 785367468)
+	public List<TrainingActivity> getTrainingActivities() {
+					if (trainingActivities == null) {
+									final DaoSession daoSession = this.daoSession;
+									if (daoSession == null) {
+													throw new DaoException("Entity is detached from DAO context");
+									}
+									TrainingActivityDao targetDao = daoSession.getTrainingActivityDao();
+									List<TrainingActivity> trainingActivitiesNew = targetDao
+																	._queryTraining_TrainingActivities(id);
+									synchronized (this) {
+													if (trainingActivities == null) {
+																	trainingActivities = trainingActivitiesNew;
+													}
+									}
+					}
+					return trainingActivities;
+	}
+
+	/** Resets a to-many relationship, making the next get call to query for a fresh result. */
+	@Generated(hash = 1516952399)
+	public synchronized void resetTrainingActivities() {
+					trainingActivities = null;
+	}
+
+	/**
+	 * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+	 * Entity must attached to an entity context.
+	 */
+	@Generated(hash = 128553479)
+	public void delete() {
+					if (myDao == null) {
+									throw new DaoException("Entity is detached from DAO context");
+					}
+					myDao.delete(this);
+	}
+
+	/**
+	 * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+	 * Entity must attached to an entity context.
+	 */
+	@Generated(hash = 1942392019)
+	public void refresh() {
+					if (myDao == null) {
+									throw new DaoException("Entity is detached from DAO context");
+					}
+					myDao.refresh(this);
+	}
+
+	/**
+	 * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+	 * Entity must attached to an entity context.
+	 */
+	@Generated(hash = 713229351)
+	public void update() {
+					if (myDao == null) {
+									throw new DaoException("Entity is detached from DAO context");
+					}
+					myDao.update(this);
+	}
+
+	/** called by internal mechanisms, do not call yourself. */
+	@Generated(hash = 1249407740)
+	public void __setDaoSession(DaoSession daoSession) {
+		this.daoSession = daoSession;
+		myDao = daoSession != null ? daoSession.getTrainingDao() : null;
+	}
+
+
 }

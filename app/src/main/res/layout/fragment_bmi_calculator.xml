@@ -88,7 +88,6 @@
 				android:layout_height="wrap_content"
 				android:textSize="16sp"
 				android:hint="@string/hint_weight"
-				android:imeActionId="@+id/action_login"
 				android:imeOptions="actionNext"
 				android:inputType="numberDecimal"/>
 
@@ -105,7 +104,6 @@
 				android:layout_height="wrap_content"
 				android:textSize="16sp"
 				android:hint="@string/hint_height"
-				android:imeActionId="@+id/action_login"
 				android:imeOptions="actionDone"
 				android:inputType="numberDecimal"/>
 

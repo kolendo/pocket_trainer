@@ -27,12 +27,11 @@ public class TrainingActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_training);
 		initToolbar();
 
-		Training training = (Training) getIntent().getSerializableExtra(EXTRA_TRAINING);
-		setTitle(training.getDescription());
+		long trainingId = getIntent().getLongExtra(EXTRA_TRAINING, -1);
 		if (savedInstanceState == null) {
 			getSupportFragmentManager()
 					.beginTransaction()
-					.add(FRAGMENT_CONTAINER, TrainingFragment.newInstance(training))
+					.add(FRAGMENT_CONTAINER, TrainingFragment.newInstance(trainingId))
 					.commit();
 		}
 	}

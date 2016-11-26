@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -89,7 +88,7 @@ public class TrainingsAdapter extends RecyclerView.Adapter<TrainingsAdapter.MyVi
 				@Override
 				public void onClick(View v) {
 					int position = getLayoutPosition();
-					if (!mTrainings.get(position).getObject().isFavourite()) {
+					if (!mTrainings.get(position).getObject().getFavourite()) {
 						mTrainings.get(position).getObject().setFavourite(true);
 						mStarImageView.setImageResource(R.drawable.ic_star_border_gray_24dp);
 					} else {
@@ -131,7 +130,7 @@ public class TrainingsAdapter extends RecyclerView.Adapter<TrainingsAdapter.MyVi
 		}
 
 		public void setTraining(@NonNull Training training) {
-			mDescriptionTextView.setText(training.getDescription());
+			mDescriptionTextView.setText(training.getTitle());
 			int activities = training.getTrainingActivities().size();
 			if (activities > 1) {
 				mActivitiesTextView.setText(String.format(TrainerApplication.getContext().getString(R.string.training_activities_num), activities));

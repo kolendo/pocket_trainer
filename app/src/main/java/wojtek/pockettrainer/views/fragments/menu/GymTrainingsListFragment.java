@@ -1,6 +1,8 @@
 package wojtek.pockettrainer.views.fragments.menu;
 
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,12 +15,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.rafalzajfert.androidlogger.Logger;
+
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.security.auth.login.LoginException;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.models.Training;
+import wojtek.pockettrainer.models.TrainingDao;
 import wojtek.pockettrainer.views.activities.TrainingActivity;
 import wojtek.pockettrainer.views.adapters.TrainingsAdapter;
 import wojtek.pockettrainer.views.adapters.items.TrainingItem;
@@ -36,6 +49,7 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 	private TrainingsAdapter mAdapter;
 	private ArrayList<TrainingItem> mTrainingsList;
 	private TrainingItem mSelectedItem;
+	private TrainingDao mTrainingDao;
 
 	private AlertDialog mDialog;
 	private FloatingActionButton mActionButton;
@@ -47,6 +61,7 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mTrainingDao = TrainerApplication.getDaoSession().getTrainingDao();
 	}
 
 	@Override
@@ -97,18 +112,7 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 	}
 
 	public void setTrainings() {
-		// TODO: 15.10.2016 pobieranie z bazy
-		ArrayList<Training> trainingsList = new ArrayList<>();
-
-		Training training_a = new Training();
-		training_a.setId(0);
-		training_a.setDescription("Sunday chest lifting");
-		trainingsList.add(training_a);
-
-		Training training_b = new Training();
-		training_b.setId(1);
-		training_b.setDescription("Friday running night");
-		trainingsList.add(training_b);
+		List<Training> trainingsList = mTrainingDao.loadAll();
 
 		for (Training training : trainingsList) {
 			mTrainingsList.add(new TrainingItem(training));
@@ -144,7 +148,7 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 		if (mSelectedItem != null && mSelectedItem.isSelected()) {
 			showConfirmDeleteDialog(mSelectedItem);
 		} else {
-			Toast.makeText(getContext(), "not implemented", Toast.LENGTH_SHORT).show();
+			showNewTrainingDialog();
 		}
 	}
 
@@ -154,6 +158,7 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 			public void onHidden(FloatingActionButton fab) {
 				mActionButton.setImageResource(R.drawable.ic_add_white_24dp);
 				mActionButton.show();
+				mSelectedItem = null;
 			}
 		});
 	}
@@ -185,13 +190,47 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 	}
 
 	public void deleteTraining(final TrainingItem item) {
-//		mTrainingsList.remove(item);
-//		mAdapter.notifyItemRemoved();
+		mTrainingDao.deleteByKey(item.getObject().getId());
+		int index = mTrainingsList.indexOf(item);
+		Logger.error(index);
+		if (index >= 0) {
+			mTrainingsList.remove(index);
+			mAdapter.notifyItemRemoved(index);
+		}
+		showAddButton();
+	}
+
+	public void addNewTraining(Training training) {
+		mTrainingDao.insertOrReplace(training);
+		mTrainingsList.add(new TrainingItem(training));
+		mAdapter.notifyItemInserted(mTrainingsList.size() - 1);
+	}
+
+	public void showNewTrainingDialog() {
+		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.TrainerTheme_Dialog);
+		LayoutInflater inflater = LayoutInflater.from(getActivity());
+		View dialogView = inflater.inflate(R.layout.dialog_new_training, null);
+		final EditText trainingTitleEditText = (EditText) dialogView.findViewById(R.id.training_edit_title);
+		builder.setView(dialogView)
+				.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						String title = trainingTitleEditText.getText().toString();
+						Training training = new Training();
+						training.setId(mTrainingsList.size());
+						training.setTitle(title);
+						addNewTraining(training);
+					}
+				})
+				.setNegativeButton(R.string.cancel, null);
+		AlertDialog dialog = builder.create();
+		dialog.setCancelable(false);
+		dialog.show();
 	}
 
 	public void openTrainingActivity(Training training) {
 		Intent intent = new Intent(getActivity(), TrainingActivity.class);
-		intent.putExtra(TrainingActivity.EXTRA_TRAINING, training);
+		intent.putExtra(TrainingActivity.EXTRA_TRAINING, training.getId());
 		startActivity(intent);
 	}
 }

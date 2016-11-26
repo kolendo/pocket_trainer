@@ -14,11 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import java.util.ArrayList;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.models.Training;
 import wojtek.pockettrainer.models.TrainingActivity;
+import wojtek.pockettrainer.models.TrainingDao;
 import wojtek.pockettrainer.views.adapters.TrainingActivitiesAdapter;
 import wojtek.pockettrainer.views.adapters.items.TrainingActivityItem;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemClickListener;
@@ -42,10 +46,10 @@ public class TrainingFragment extends Fragment implements View.OnClickListener {
 	private AlertDialog mDialog;
 	private FloatingActionButton mActionButton;
 
-	public static TrainingFragment newInstance(Training training) {
+	public static TrainingFragment newInstance(long trainingId) {
 		TrainingFragment fragment = new TrainingFragment();
 		Bundle args = new Bundle();
-		args.putSerializable(EXTRA_TRAINING, training);
+		args.putLong(EXTRA_TRAINING, trainingId);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -53,7 +57,16 @@ public class TrainingFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mTraining = (Training) getArguments().getSerializable(EXTRA_TRAINING);
+		long trainingId = getArguments().getLong(EXTRA_TRAINING);
+		getTrainingFromDao(trainingId);
+	}
+
+	private void getTrainingFromDao(long id) {
+		TrainingDao trainingDao = TrainerApplication.getDaoSession().getTrainingDao();
+
+		QueryBuilder queryBuilder = trainingDao.queryBuilder().where(TrainingDao.Properties.Id.eq(id));
+
+		mTraining = (Training) queryBuilder.list().get(0);
 	}
 
 	@Override
@@ -81,9 +94,17 @@ public class TrainingFragment extends Fragment implements View.OnClickListener {
 				});
 		mRecyclerView.setAdapter(mAdapter);
 		mRecyclerView.setLayoutManager(layoutManager);
-
-		setTrainings();
+		setTrainingActivities();
 		return view;
+	}
+
+	public void setTrainingActivities() {
+		for (TrainingActivity training : mTraining.getTrainingActivities()) {
+			mActivitiesList.add(new TrainingActivityItem(training));
+		}
+
+		mAdapter.setActivitiesList(mActivitiesList);
+		mAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -101,137 +122,6 @@ public class TrainingFragment extends Fragment implements View.OnClickListener {
 				onActionClicked();
 				break;
 		}
-	}
-
-	public void setTrainings() {
-		// TODO: 15.10.2016 pobieranie z bazy
-
-		TrainingActivity training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		TrainingActivity training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		training_a = new TrainingActivity();
-		training_a.setSets(4);
-		training_a.setDescription("Straight lifting");
-		mTraining.getTrainingActivities().add(training_a);
-
-		training_b = new TrainingActivity();
-		training_b.setTime(123456);
-		training_b.setDescription("Running");
-		mTraining.getTrainingActivities().add(training_b);
-
-		for (TrainingActivity training : mTraining.getTrainingActivities()) {
-			mActivitiesList.add(new TrainingActivityItem(training));
-		}
-
-		mAdapter.setActivitiesList(mActivitiesList);
-		mAdapter.notifyDataSetChanged();
 	}
 
 	public void onTrainingClicked(TrainingActivityItem item) {
