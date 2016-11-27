@@ -12,30 +12,30 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class JoinTrainingsWithTrainingActivities {
 
-	@Id
-	private long id;
+	@Id(autoincrement = true)
+	private Long id;
 
 	private long trainingId;
 
 	private long trainingActivityId;
 
-	@Generated(hash = 144328762)
-	public JoinTrainingsWithTrainingActivities(long id, long trainingId,
-									long trainingActivityId) {
-					this.id = id;
-					this.trainingId = trainingId;
-					this.trainingActivityId = trainingActivityId;
+	@Generated(hash = 229904011)
+	public JoinTrainingsWithTrainingActivities(Long id, long trainingId,
+			long trainingActivityId) {
+		this.id = id;
+		this.trainingId = trainingId;
+		this.trainingActivityId = trainingActivityId;
 	}
 
 	@Generated(hash = 399530170)
 	public JoinTrainingsWithTrainingActivities() {
 	}
 
-	public long getId() {
+	public Long getId() {
 					return this.id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 					this.id = id;
 	}
 

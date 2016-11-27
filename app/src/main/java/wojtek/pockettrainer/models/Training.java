@@ -18,7 +18,7 @@ import org.greenrobot.greendao.DaoException;
 public class Training {
 
 	@Id(autoincrement = true)
-	private long id;
+	private Long id;
 
 	private String title;
 
@@ -40,20 +40,21 @@ public class Training {
 	@Generated(hash = 811827863)
 	private transient TrainingDao myDao;
 
-	public Training() {
-		favourite = false;
-	}
 
 	public Training(String title) {
 		this.title = title;
 		favourite = false;
 	}
 
-	@Generated(hash = 2036222815)
-	public Training(long id, String title, boolean favourite) {
-					this.id = id;
-					this.title = title;
-					this.favourite = favourite;
+	@Generated(hash = 409535726)
+	public Training(Long id, String title, boolean favourite) {
+		this.id = id;
+		this.title = title;
+		this.favourite = favourite;
+	}
+
+	@Generated(hash = 1863741921)
+	public Training() {
 	}
 
 	@Override
@@ -66,11 +67,11 @@ public class Training {
 				'}';
 	}
 
-	public long getId() {
+	public Long getId() {
 					return this.id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 					this.id = id;
 	}
 

@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.rafalzajfert.androidlogger.Logger;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,8 @@ import javax.security.auth.login.LoginException;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.TrainerApplication;
+import wojtek.pockettrainer.models.JoinTrainingsWithTrainingActivities;
+import wojtek.pockettrainer.models.JoinTrainingsWithTrainingActivitiesDao;
 import wojtek.pockettrainer.models.Training;
 import wojtek.pockettrainer.models.TrainingDao;
 import wojtek.pockettrainer.views.activities.TrainingActivity;
@@ -48,7 +52,7 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 	private RecyclerView mRecyclerView;
 	private TrainingsAdapter mAdapter;
 	private ArrayList<TrainingItem> mTrainingsList;
-	private TrainingItem mSelectedItem;
+	private TrainingItem mSelectedItem, mUpdatedItem;
 	private TrainingDao mTrainingDao;
 
 	private AlertDialog mDialog;
@@ -84,6 +88,7 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 				new OnItemClickListener<TrainingItem>() {
 					@Override
 					public void onItemClicked(TrainingItem item) {
+						mUpdatedItem = item;
 						openTrainingActivity(item.getObject());
 					}
 				});
@@ -99,6 +104,17 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 		super.onPause();
 		if (mDialog != null && mDialog.isShowing()) {
 			mDialog.dismiss();
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (mUpdatedItem != null) {
+			int index = mTrainingsList.indexOf(mUpdatedItem);
+			mTrainingsList.get(index).getObject().resetTrainingActivities();
+			mAdapter.notifyItemChanged(index);
+			mUpdatedItem = null;
 		}
 	}
 
@@ -191,8 +207,15 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 
 	public void deleteTraining(final TrainingItem item) {
 		mTrainingDao.deleteByKey(item.getObject().getId());
+		QueryBuilder queryBuilder = TrainerApplication.getDaoSession().getJoinTrainingsWithTrainingActivitiesDao().queryBuilder();
+		queryBuilder.where(JoinTrainingsWithTrainingActivitiesDao.Properties.TrainingId.eq(item.getObject().getId()));
+		List<JoinTrainingsWithTrainingActivities> joinTrainingsWithTrainingActivitiesList = queryBuilder.list();
+		for (JoinTrainingsWithTrainingActivities itemJoin : joinTrainingsWithTrainingActivitiesList) {
+			TrainerApplication.getDaoSession().getTrainingActivityDao().deleteByKey(itemJoin.getTrainingActivityId());
+			TrainerApplication.getDaoSession().getJoinTrainingsWithTrainingActivitiesDao().deleteByKey(itemJoin.getId());
+		}
+
 		int index = mTrainingsList.indexOf(item);
-		Logger.error(index);
 		if (index >= 0) {
 			mTrainingsList.remove(index);
 			mAdapter.notifyItemRemoved(index);
@@ -201,7 +224,7 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 	}
 
 	public void addNewTraining(Training training) {
-		mTrainingDao.insertOrReplace(training);
+		mTrainingDao.insert(training);
 		mTrainingsList.add(new TrainingItem(training));
 		mAdapter.notifyItemInserted(mTrainingsList.size() - 1);
 	}
@@ -215,10 +238,7 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 				.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
-						String title = trainingTitleEditText.getText().toString();
-						Training training = new Training();
-						training.setId(mTrainingsList.size());
-						training.setTitle(title);
+						Training training = new Training(null, trainingTitleEditText.getText().toString(), false);
 						addNewTraining(training);
 					}
 				})

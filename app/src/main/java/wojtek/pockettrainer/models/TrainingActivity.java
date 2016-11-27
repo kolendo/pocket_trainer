@@ -16,7 +16,7 @@ import org.greenrobot.greendao.annotation.Generated;
 public class TrainingActivity {
 
 	@Id(autoincrement = true)
-	private long id;
+	private Long id;
 
 	private String title;
 
@@ -32,14 +32,14 @@ public class TrainingActivity {
 		time = 0;
 	}
 
-	@Generated(hash = 759100894)
-	public TrainingActivity(long id, String title, String description, int sets,
-									long time) {
-					this.id = id;
-					this.title = title;
-					this.description = description;
-					this.sets = sets;
-					this.time = time;
+	@Generated(hash = 890698638)
+	public TrainingActivity(Long id, String title, String description, int sets,
+			long time) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.sets = sets;
+		this.time = time;
 	}
 
 	@Override
@@ -53,11 +53,11 @@ public class TrainingActivity {
 				'}';
 	}
 
-	public long getId() {
+	public Long getId() {
 					return this.id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 					this.id = id;
 	}
 
