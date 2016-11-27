@@ -57,7 +57,6 @@ public class Workout implements Serializable {
 
 	private boolean mFavourite;
 
-	@SuppressLint("UseSparseArrays")
 	public Workout() {
 		mLocationsList = new ArrayList<>();
 		mSpeedsHashMap = new HashMap<>();

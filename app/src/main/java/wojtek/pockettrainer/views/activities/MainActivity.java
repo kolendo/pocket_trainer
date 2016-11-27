@@ -121,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		if (oldFragment != null) {
 			fragmentManager
 					.beginTransaction()
-					.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+//					.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+					.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
 					.remove(oldFragment)
 					.commit();
 		}
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			public void run() {
 				fragmentManager
 						.beginTransaction()
-						.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+						.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_right)
 						.add(FRAGMENT_CONTAINER, fragment)
 						.commit();
 			}

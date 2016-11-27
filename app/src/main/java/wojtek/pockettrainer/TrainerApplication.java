@@ -47,11 +47,11 @@ public class TrainerApplication extends Application {
 		// TODO: 26.11.2016
 //		 STOPSHIP: 26.11.2016 DELETE MOCK
 
-		Training training_a = new Training(null, "Sunday chest lifting", false);
-		getDaoSession().getTrainingDao().insert(training_a);
-
-		Training training_b = new Training(null, "Friday running night", true);
-		getDaoSession().getTrainingDao().insert(training_b);
+//		Training training_a = new Training(null, "Sunday chest lifting", false);
+//		getDaoSession().getTrainingDao().insert(training_a);
+//
+//		Training training_b = new Training(null, "Friday running night", true);
+//		getDaoSession().getTrainingDao().insert(training_b);
 
 	}
 
