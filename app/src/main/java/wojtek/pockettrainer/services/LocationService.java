@@ -21,10 +21,13 @@ import com.rafalzajfert.androidlogger.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.models.Distance;
 import wojtek.pockettrainer.models.Position;
+import wojtek.pockettrainer.models.Speed;
 import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
 
@@ -52,14 +55,15 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
 //	Workout Data
 	private ArrayList<Position> mLocationsList;
-	private HashMap<Long, Double> mSpeedsHashMap, mDistancesHashMap;
+	private List<Speed> mSpeedsList;
+	private List<Distance> mDistancesList;
 	private double mTotalDistance, mCurrentDistance, mCurrentSpeed, mTopSpeed, mBurnedCalories;
 	private Location mCurrentLocation, mLastLocation;
 
 	public LocationService() {
 		mLocationsList = new ArrayList<>();
-		mSpeedsHashMap = new HashMap<>();
-		mDistancesHashMap = new HashMap<>();
+		mSpeedsList = new ArrayList<>();
+		mDistancesList = new ArrayList<>();
 		mTotalDistance = 0;
 		mTopSpeed = 0;
 		mBurnedCalories = 0;
@@ -181,11 +185,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 			if (mCurrentSpeed > mTopSpeed) {
 				mTopSpeed = mCurrentSpeed;
 			}
-			mSpeedsHashMap.put(currentTime, mCurrentSpeed);
-			mDistancesHashMap.put(currentTime, mTotalDistance);
+			mSpeedsList.add(new Speed(currentTime, mCurrentSpeed));
+			mDistancesList.add(new Distance(currentTime, mTotalDistance));
 			mLocationServiceCallback.passDataMeters(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, mCurrentSpeed);
 		} else {
-			mSpeedsHashMap.put(currentTime, 0.0);
+			mSpeedsList.add(new Speed(currentTime, 0.0));
+			mDistancesList.add(new Distance(currentTime, mTotalDistance));
 			mLocationServiceCallback.passDataMeters(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, 0.0);
 		}
 	}
@@ -203,11 +208,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 			if (mCurrentSpeed > mTopSpeed) {
 				mTopSpeed = mCurrentSpeed;
 			}
-			mSpeedsHashMap.put(currentTime, mCurrentSpeed);
-			mDistancesHashMap.put(currentTime, mTotalDistance);
+			mSpeedsList.add(new Speed(currentTime, mCurrentSpeed));
+			mDistancesList.add(new Distance(currentTime, mTotalDistance));
 			mLocationServiceCallback.passDataKilometers(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, mCurrentSpeed);
 		} else {
-			mSpeedsHashMap.put(currentTime, 0.0);
+			mSpeedsList.add(new Speed(currentTime, 0.0));
 			mLocationServiceCallback.passDataKilometers(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), mTotalDistance, 0.0);
 		}
 	}
@@ -232,12 +237,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 		return mLocationsList;
 	}
 
-	public HashMap<Long, Double> getSpeedsHashMap() {
-		return mSpeedsHashMap;
+	public List<Speed> getSpeedsList() {
+		return mSpeedsList;
 	}
 
-	public HashMap<Long, Double> getDistancesHashMap() {
-		return mDistancesHashMap;
+	public List<Distance> getDistancesList() {
+		return mDistancesList;
 	}
 
 	public double getTotalDistance() {
@@ -254,11 +259,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
 	public double getAverageSpeed() {
 		double sum = 0;
-		for(Map.Entry<Long, Double> entry : mSpeedsHashMap.entrySet()) {
-			sum += entry.getValue();
-		}
-		if (mSpeedsHashMap.size() > 0) {
-			return sum / mSpeedsHashMap.size();
+		if (mSpeedsList.size() > 0) {
+			for (Speed speed : mSpeedsList) {
+				sum += speed.getSpeed();
+			}
+			return sum / mSpeedsList.size();
 		} else {
 			return 0;
 		}
@@ -267,9 +272,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 	public double getAverageSpeedWithoutStops() {
 		double sum = 0;
 		int counter = 0;
-		for(Map.Entry<Long, Double> entry : mSpeedsHashMap.entrySet()) {
-			if (entry.getKey() > 0.0) {
-				sum += entry.getValue();
+		for (Speed speed : mSpeedsList) {
+			if (speed.getSpeed() > 0.0) {
+				sum += speed.getSpeed();
 				counter++;
 			}
 		}

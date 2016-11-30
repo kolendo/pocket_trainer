@@ -33,6 +33,9 @@ import wojtek.pockettrainer.repositories.preferences.SettingsPreferences;
 import wojtek.pockettrainer.views.activities.MapsWorkoutActivity;
 import wojtek.pockettrainer.views.adapters.WorkoutTypeAdapter;
 
+import static wojtek.pockettrainer.models.enums.WorkoutType.CYCLING;
+import static wojtek.pockettrainer.models.enums.WorkoutType.RUNNING;
+
 /**
  * @author Wojtek Kolendo
  * @date 11.09.2016
@@ -44,7 +47,7 @@ public class NewWorkoutFragment extends Fragment {
 	private ImageView mWorkoutTypeImageView;
 	private Button mStartView;
 	private SettingsPreferences mSettingsPreferences = new SettingsPreferences();
-	private Workout mWorkout;
+	private int mSelectedType = -1;
 
 	public static NewWorkoutFragment newInstance() {
 		return new NewWorkoutFragment();
@@ -65,8 +68,6 @@ public class NewWorkoutFragment extends Fragment {
 		View accuracySwitchContent = view.findViewById(R.id.switch_accuracy_workout_content);
 		Switch lessAccuracySwitch = (Switch) view.findViewById(R.id.switch_accuracy_workout);
 		Switch metricUnitsSwitch = (Switch) view.findViewById(R.id.switch_units_workout);
-
-		mWorkout = new Workout();
 
 		lessAccuracySwitch.setChecked(mSettingsPreferences.isLessAccuracyEnabled());
 		lessAccuracySwitch.setOnCheckedChangeListener(onCheckedAccuracySwitchListener);
@@ -116,13 +117,14 @@ public class NewWorkoutFragment extends Fragment {
 		public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 			switch ((int)id) {
 				case 0:
-					mWorkout.setWorkoutType(WorkoutType.CYCLING);
+					mWorkoutTypeImageView.setImageResource(CYCLING.getResourceImage());
+					mSelectedType = 0;
 					break;
 				case 1:
-					mWorkout.setWorkoutType(WorkoutType.RUNNING);
+					mWorkoutTypeImageView.setImageResource(RUNNING.getResourceImage());
+					mSelectedType = 1;
 					break;
 			}
-			mWorkoutTypeImageView.setImageResource(mWorkout.getWorkoutType().getResourceImage());
 		}
 		@Override
 		public void onNothingSelected(AdapterView<?> parentView) {
@@ -144,11 +146,8 @@ public class NewWorkoutFragment extends Fragment {
 	}
 
 	private void startMapActivity() {
-		mWorkout.setStartDate(System.currentTimeMillis());
 		Intent intent = new Intent(getContext(), MapsWorkoutActivity.class);
-		Bundle bundle = new Bundle();
-		bundle.putSerializable(MapsWorkoutActivity.EXTRA_WORKOUT, mWorkout);
-		intent.putExtras(bundle);
+		intent.putExtra(MapsWorkoutActivity.EXTRA_WORKOUT, mSelectedType);
 		startActivity(intent);
 	}
 

@@ -5,65 +5,87 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.Serializable;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
+
 
 /**
  * @author Wojtek Kolendo
  * @date 01.10.2016
  */
 
-public class Position implements Serializable {
+@Entity
+public class Position {
 
-	private double mLatitude;
+	@Id(autoincrement = true)
+	private Long id;
 
-	private double mLongitude;
+	private double latitude;
 
-	private double mAltitude;
+	private double longitude;
+
+	private double altitude;
 
 	public Position() {
 	}
 
 	public Position(Location location) {
-		mLatitude = location.getLatitude();
-		mLongitude = location.getLongitude();
-		mAltitude = location.getAltitude();
+		latitude = location.getLatitude();
+		longitude = location.getLongitude();
+		altitude = location.getAltitude();
 	}
 
-	@NonNull
+	@Generated(hash = 46318097)
+	public Position(Long id, double latitude, double longitude, double altitude) {
+					this.id = id;
+					this.latitude = latitude;
+					this.longitude = longitude;
+					this.altitude = altitude;
+	}
+
 	public LatLng getLatLng() {
-		return new LatLng(mLatitude, mLongitude);
+		return new LatLng(latitude, longitude);
 	}
 
 	public double getLatitude() {
-		return mLatitude;
+		return latitude;
 	}
 
 	public void setLatitude(double latitude) {
-		mLatitude = latitude;
+		this.latitude = latitude;
 	}
 
 	public double getLongitude() {
-		return mLongitude;
+		return longitude;
 	}
 
 	public void setLongitude(double longitude) {
-		mLongitude = longitude;
+		this.longitude = longitude;
 	}
 
 	public double getAltitude() {
-		return mAltitude;
+		return altitude;
 	}
 
 	public void setAltitude(double altitude) {
-		mAltitude = altitude;
+		this.altitude = altitude;
 	}
 
 	@Override
 	public String toString() {
 		return "Position{" +
-				"mLatitude=" + mLatitude +
-				", mLongitude='" + mLongitude +
-				", mAltitude='" + mAltitude +
+				"latitude=" + latitude +
+				", longitude='" + longitude +
+				", altitude='" + altitude +
 				'}';
+	}
+
+	public Long getId() {
+					return this.id;
+	}
+
+	public void setId(Long id) {
+					this.id = id;
 	}
 }

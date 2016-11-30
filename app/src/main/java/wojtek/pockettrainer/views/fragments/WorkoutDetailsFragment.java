@@ -48,7 +48,7 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 
 	public static WorkoutDetailsFragment newInstance(Workout workout) {
 		Bundle args = new Bundle();
-		args.putSerializable(WORKOUT_KEY, workout);
+//		args.putSerializable(WORKOUT_KEY, workout);
 		WorkoutDetailsFragment fragment = new WorkoutDetailsFragment();
 		fragment.setArguments(args);
 		return fragment;

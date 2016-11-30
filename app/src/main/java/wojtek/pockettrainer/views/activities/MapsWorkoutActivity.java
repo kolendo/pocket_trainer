@@ -21,15 +21,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ProgressBar;
 
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.models.Workout;
@@ -103,12 +100,14 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 	};
 
 	private void initWorkout() {
-		mWorkout = (Workout) getIntent().getSerializableExtra(EXTRA_WORKOUT);
-		if (mWorkout == null) {
-			throw new IllegalArgumentException(MapsWorkoutActivity.class.getSimpleName() + " must be started with EXTRA_WORKOUT argument");
-		} else {
-			mWorkout.setStartDate(System.currentTimeMillis());
+		mWorkout = new Workout();
+		int workoutType = getIntent().getIntExtra(EXTRA_WORKOUT, 0);
+		if (workoutType == 0) {
+			mWorkout.setWorkoutType(WorkoutType.CYCLING);
+		} else if (workoutType == 1) {
+			mWorkout.setWorkoutType(WorkoutType.RUNNING);
 		}
+		mWorkout.setStartDate(System.currentTimeMillis());
 	}
 
 	private void initToolbar() {
@@ -287,9 +286,9 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 				stopLocationUpdates();
 				mWorkout.setFinishDate(System.currentTimeMillis());
 				mWorkout.setElapsedTime(mFragmentListener.getElapsedTime());
-				mWorkout.setLocationsList(mService.getLocationsList());
-				mWorkout.setSpeedsHashMap(mService.getSpeedsHashMap());
-				mWorkout.setDistancesHashMap(mService.getDistancesHashMap());
+//				mWorkout.setLocationsList(mService.getLocationsList());
+//				mWorkout.setSpeedsList(mService.getSpeedsList());
+//				mWorkout.setDistancesList(mService.getDistancesList());
 				mWorkout.setTopSpeed(mService.getTopSpeed());
 				mWorkout.setAverageSpeed(mService.getAverageSpeed());
 				mWorkout.setAverageSpeedWithoutStops(mService.getAverageSpeedWithoutStops());

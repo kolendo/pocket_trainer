@@ -1,14 +1,21 @@
 package wojtek.pockettrainer.models.enums;
 
-import wojtek.pockettrainer.R;
-import wojtek.pockettrainer.TrainerApplication;
 
 /**
  * @author Wojtek Kolendo
  */
 public enum Units {
 
-	METRIC,
-	IMPERIAL;
+	METRIC(0),
+	IMPERIAL(1);
 
+	private final int id;
+
+	Units(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
+	}
 }
