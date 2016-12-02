@@ -1,6 +1,7 @@
 package wojtek.pockettrainer.views.fragments.menu;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import wojtek.pockettrainer.views.adapters.WorkoutsAdapter;
 import wojtek.pockettrainer.views.adapters.items.WorkoutItem;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemClickListener;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemLongClickListener;
+import wojtek.pockettrainer.views.interfaces.MainActivityListener;
 
 /**
  * @author Wojtek Kolendo
@@ -43,6 +45,8 @@ import wojtek.pockettrainer.views.adapters.listeners.OnItemLongClickListener;
  */
 
 public class WorkoutsHistoryFragment extends Fragment implements View.OnClickListener {
+
+	MainActivityListener mMainActivityListener;
 
 	private RecyclerView mRecyclerView;
 	private WorkoutsAdapter mAdapter;
@@ -91,6 +95,16 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 
 		setWorkouts();
 		return view;
+	}
+
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		try {
+			mMainActivityListener = (MainActivityListener) context;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(context.toString() + " must implement MainActivityListener");
+		}
 	}
 
 	@Override
@@ -147,8 +161,9 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 		if (mSelectedItem != null && mSelectedItem.isSelected()) {
 			showConfirmDeleteDialog(mSelectedItem);
 		} else {
-			(getActivity()).setTitle(R.string.workout);
-			((MainActivity)getActivity()).changeFragment(NewWorkoutFragment.newInstance(), true);
+			getActivity().setTitle(R.string.workout);
+			mMainActivityListener.setDrawerItemChecked(R.id.nav_workout);
+			mMainActivityListener.changeFragment(NewWorkoutFragment.newInstance(), true);
 		}
 	}
 

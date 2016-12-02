@@ -34,8 +34,9 @@ import wojtek.pockettrainer.views.fragments.menu.GymTrainingsListFragment;
 import wojtek.pockettrainer.views.fragments.menu.HomeFragment;
 import wojtek.pockettrainer.views.fragments.menu.NewWorkoutFragment;
 import wojtek.pockettrainer.views.fragments.menu.WorkoutsHistoryFragment;
+import wojtek.pockettrainer.views.interfaces.MainActivityListener;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MainActivityListener {
 
 	private static final float DEFAULT_APP_BAR_ELEVATION = dpToPx(4);
 	private static final int FRAGMENT_CONTAINER = R.id.fragment_frame;
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		return true;
 	}
 
+	@Override
 	public void changeFragment(final Fragment fragment, boolean useDelay) {
 		mCurrentFragment = fragment;
 		final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -202,5 +204,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		dialog.setCancelable(true);
 		dialog.setContentView(R.layout.dialog_about);
 		dialog.show();
+	}
+
+	@Override
+	public void setDrawerItemChecked(int item) {
+		mNavigationView.getMenu().findItem(item).setChecked(true);
 	}
 }
