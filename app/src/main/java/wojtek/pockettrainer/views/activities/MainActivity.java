@@ -28,6 +28,7 @@ import android.widget.Toast;
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.views.fragments.BfpCalculatorFragment;
+import wojtek.pockettrainer.views.fragments.menu.BfpFragment;
 import wojtek.pockettrainer.views.fragments.menu.BmiFragment;
 import wojtek.pockettrainer.views.fragments.menu.GymTrainingsListFragment;
 import wojtek.pockettrainer.views.fragments.menu.HomeFragment;
@@ -171,8 +172,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				case R.id.nav_bmi:
 					changeFragment(BmiFragment.newInstance(), true);
 					break;
-				case R.id.nav_calculate_bfp:
-					changeFragment(BfpCalculatorFragment.newInstance(), true);
+				case R.id.nav_bfp:
+					changeFragment(BfpFragment.newInstance(), true);
 					break;
 				case R.id.nav_settings:
 					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();

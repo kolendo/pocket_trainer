@@ -55,7 +55,7 @@
 	<string name="select_workout_title">Select new workout type</string>
 	<string name="running">Running</string>
 	<string name="cycling">Cycling</string>
-	<string name="switch_accuracy">Less accuracy</string>
+	<string name="switch_accuracy">Enable less accuracy</string>
 	<string name="switch_units">Metric units</string>
 
 	<!-- Workout tracing -->
@@ -94,10 +94,12 @@
 
 	<!-- Calculators -->
 	<string name="bmi_info">Body Mass Index is a measure of body fat based on your weight in relation to your weight.</string>
+	<string name="bfp_info">Body Fat Percentage is the total mass of fat divided by total body mass.</string>
 	<string name="calculate_your_bmi">Calculate your \nBody Mass Index</string>
 	<string name="calculate_your_bfp">Calculate your \nBody Fat Percentage</string>
 	<string name="hint_weight">Enter weight</string>
 	<string name="hint_height">Enter height</string>
+	<string name="hint_age">Enter age</string>
 	<string name="calculate">Calculate</string>
 	<string name="male">Male</string>
 	<string name="female">Female</string>
@@ -107,22 +109,32 @@
 	<string name="validate_calculator_sex">Select your sex</string>
 	<string name="validate_calculator_weight">Enter your weight</string>
 	<string name="validate_calculator_height">Enter your height</string>
+	<string name="validate_calculator_age">Enter your age</string>
 	<string name="your_bmi">Your BMI:</string>
+	<string name="your_bfp">Your BFP:</string>
 	<string name="use_calculator">use calculator first</string>
 	<string name="bmi_result_title_great">Great!</string>
 	<string name="bmi_result_title_good">Good, but could be great!</string>
+	<string name="bfp_result_title_oops">Oops!</string>
+	<string name="bfp_result_title_great">Great!</string>
+	<string name="bfp_result_title_good">Good, but could be great!</string>
 	<string name="bmi_result_title_oops">Oops!</string>
 	<string name="bmi_underweight_info">You are underweight, you should seriously gain some weight.</string>
 	<string name="bmi_underweight_mild_info">You are little underweight, try gain some weight.</string>
 	<string name="bmi_normal_info">You have healthy weight and body, keep it up!</string>
 	<string name="bmi_overweight_info">You are overweight, try loose some weight and don\'t give up.</string>
 	<string name="bmi_obesity_info">You have obesity, you should seriously loose weight.</string>
+	<string name="bfp_underweight_info">You are underweight, you should seriously gain some weight.</string>
+	<string name="bfp_underweight_mild_info">You are little underweight, try gain some weight.</string>
+	<string name="bfp_normal_info">You have healthy weight and body, keep it up!</string>
+	<string name="bfp_overweight_info">You are overweight, try loose some weight and don\'t give up.</string>
+	<string name="bfp_obesity_info">You have obesity, you should seriously loose weight.</string>
 	<string name="underweight_severely">Severely underweight</string>
 	<string name="underweight">Underweight</string>
 	<string name="normal">Normal</string>
 	<string name="overweight">Overweight</string>
 	<string name="obesity">Obesity</string>
-	<string name="bmi_annotation">Bare in mind that those ranges don\'t fit exactly for everyone, for instance if you are well build. Muscles weight more than fat.</string>
+	<string name="bmi_annotation">Bare in mind that those ranges don\'t fit exactly for everyone, for instance if you are well build. Muscles weight more than fat. Also, the percentage of essential body fat for women is greater than that for men, due to the demands of childbearing and other hormonal functions</string>
 
 	<!-- Dialogs -->
 	<string name="gps_disabled">Location service is disabled. \nDo you want to open location settings?</string>
