@@ -153,8 +153,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 	@Override
 	public void onLocationChanged(Location location) {
 		mLocationsList.add(new Position(location));
-		Logger.debug(mLocationsList.size());
-		Logger.debug(location.toString());
 
 		if (mCurrentLocation != null) {
 			mLastLocation = mCurrentLocation;

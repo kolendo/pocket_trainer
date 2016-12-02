@@ -2,6 +2,7 @@ package wojtek.pockettrainer.views.fragments.menu;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,15 +14,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.TrainerApplication;
+import wojtek.pockettrainer.models.JoinWorkoutWithDistances;
+import wojtek.pockettrainer.models.JoinWorkoutWithDistancesDao;
+import wojtek.pockettrainer.models.JoinWorkoutWithPositions;
+import wojtek.pockettrainer.models.JoinWorkoutWithPositionsDao;
+import wojtek.pockettrainer.models.JoinWorkoutWithSpeeds;
+import wojtek.pockettrainer.models.JoinWorkoutWithSpeedsDao;
 import wojtek.pockettrainer.models.Workout;
+import wojtek.pockettrainer.models.WorkoutDao;
 import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.views.activities.MainActivity;
+import wojtek.pockettrainer.views.activities.WorkoutDetailsActivity;
 import wojtek.pockettrainer.views.adapters.WorkoutsAdapter;
 import wojtek.pockettrainer.views.adapters.items.WorkoutItem;
+import wojtek.pockettrainer.views.adapters.listeners.OnItemClickListener;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemLongClickListener;
 
 /**
@@ -35,6 +48,7 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 	private WorkoutsAdapter mAdapter;
 	private ArrayList<WorkoutItem> mWorkoutsList;
 	private WorkoutItem mSelectedItem;
+	private WorkoutDao mWorkoutDao;
 
 	private AlertDialog mDialog;
 	private FloatingActionButton mActionButton;
@@ -46,6 +60,7 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mWorkoutDao = TrainerApplication.getDaoSession().getWorkoutDao();
 	}
 
 	@Override
@@ -58,12 +73,19 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 
 		mRecyclerView = (RecyclerView) view.findViewById(R.id.workouts_list);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-		mAdapter = new WorkoutsAdapter(new OnItemLongClickListener<WorkoutItem>() {
-			@Override
-			public void onItemLongClicked(WorkoutItem item) {
-				onWorkoutClicked(item);
-			}
-		});
+		mAdapter = new WorkoutsAdapter(
+				new OnItemLongClickListener<WorkoutItem>() {
+					@Override
+					public void onItemLongClicked(WorkoutItem item) {
+						onWorkoutClicked(item);
+					}
+				},
+				new OnItemClickListener<Long>() {
+					@Override
+					public void onItemClicked(Long id) {
+						openWorkoutDetailsActivity(id);
+					}
+				});
 		mRecyclerView.setAdapter(mAdapter);
 		mRecyclerView.setLayoutManager(layoutManager);
 
@@ -89,28 +111,7 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 	}
 
 	public void setWorkouts() {
-		// TODO: 15.10.2016 pobieranie z bazy
-		ArrayList<Workout> workoutsList = new ArrayList<>();
-		Workout workout_c = new Workout();
-		workout_c.setDistance(43.65);
-		workout_c.setWorkoutType(WorkoutType.CYCLING);
-		workout_c.setStartDate(System.currentTimeMillis());
-		workoutsList.add(workout_c);
-		workout_c = new Workout();
-		workout_c.setDistance(43.65);
-		workout_c.setWorkoutType(WorkoutType.CYCLING);
-		workout_c.setStartDate(System.currentTimeMillis());
-		workoutsList.add(workout_c);
-		workout_c = new Workout();
-		workout_c.setDistance(43.65);
-		workout_c.setWorkoutType(WorkoutType.RUNNING);
-		workout_c.setStartDate(System.currentTimeMillis());
-		workoutsList.add(workout_c);
-		workout_c = new Workout();
-		workout_c.setDistance(43.65);
-		workout_c.setWorkoutType(WorkoutType.CYCLING);
-		workout_c.setStartDate(System.currentTimeMillis());
-		workoutsList.add(workout_c);
+		List<Workout> workoutsList = mWorkoutDao.loadAll();
 
 		for (Workout workout : workoutsList) {
 			mWorkoutsList.add(new WorkoutItem(workout));
@@ -157,6 +158,7 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 			public void onHidden(FloatingActionButton fab) {
 				mActionButton.setImageResource(R.drawable.ic_add_white_24dp);
 				mActionButton.show();
+				mSelectedItem = null;
 			}
 		});
 	}
@@ -188,7 +190,44 @@ public class WorkoutsHistoryFragment extends Fragment implements View.OnClickLis
 	}
 
 	public void deleteWorkout(final WorkoutItem item) {
-//		mWorkoutsList.remove(item);
-//		mAdapter.notifyItemRemoved();
+//		deleting workout
+		mWorkoutDao.deleteByKey(item.getObject().getId());
+//		deleting locations list
+		QueryBuilder queryBuilder = TrainerApplication.getDaoSession().getJoinWorkoutWithPositionsDao().queryBuilder();
+		queryBuilder.where(JoinWorkoutWithPositionsDao.Properties.WorkoutId.eq(item.getObject().getId()));
+		List<JoinWorkoutWithPositions> joinWorkoutWithPositionsList = queryBuilder.list();
+		for (JoinWorkoutWithPositions itemJoin : joinWorkoutWithPositionsList) {
+			TrainerApplication.getDaoSession().getPositionDao().deleteByKey(itemJoin.getPositionId());
+			TrainerApplication.getDaoSession().getJoinWorkoutWithPositionsDao().deleteByKey(itemJoin.getId());
+		}
+//		deleting speeds list
+		queryBuilder = TrainerApplication.getDaoSession().getJoinWorkoutWithSpeedsDao().queryBuilder();
+		queryBuilder.where(JoinWorkoutWithSpeedsDao.Properties.WorkoutId.eq(item.getObject().getId()));
+		List<JoinWorkoutWithSpeeds> joinWorkoutWithSpeedsList = queryBuilder.list();
+		for (JoinWorkoutWithSpeeds itemJoin : joinWorkoutWithSpeedsList) {
+			TrainerApplication.getDaoSession().getSpeedDao().deleteByKey(itemJoin.getSpeedId());
+			TrainerApplication.getDaoSession().getJoinWorkoutWithSpeedsDao().deleteByKey(itemJoin.getId());
+		}
+//		deleting distances list
+		queryBuilder = TrainerApplication.getDaoSession().getJoinWorkoutWithDistancesDao().queryBuilder();
+		queryBuilder.where(JoinWorkoutWithDistancesDao.Properties.WorkoutId.eq(item.getObject().getId()));
+		List<JoinWorkoutWithDistances> joinWorkoutWithDistancesList = queryBuilder.list();
+		for (JoinWorkoutWithDistances itemJoin : joinWorkoutWithDistancesList) {
+			TrainerApplication.getDaoSession().getDistanceDao().deleteByKey(itemJoin.getDistanceId());
+			TrainerApplication.getDaoSession().getJoinWorkoutWithDistancesDao().deleteByKey(itemJoin.getId());
+		}
+
+		int index = mWorkoutsList.indexOf(item);
+		if (index >= 0) {
+			mWorkoutsList.remove(index);
+			mAdapter.notifyItemRemoved(index);
+		}
+		showAddButton();
+	}
+
+	public void openWorkoutDetailsActivity(long workoutId) {
+		Intent intent = new Intent(getActivity(), WorkoutDetailsActivity.class);
+		intent.putExtra(WorkoutDetailsActivity.EXTRA_WORKOUT_DETAILS, workoutId);
+		startActivity(intent);
 	}
 }

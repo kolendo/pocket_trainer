@@ -284,7 +284,9 @@ public class Workout {
 				", averageSpeed=" + averageSpeed + '\'' +
 				", topSpeed=" + topSpeed + '\'' +
 				", burnedCalories=" + burnedCalories + '\'' +
-				", locationsList=" + locationsList +
+				", locationsList=" + getLocationsList().size() +
+				", speedsList=" + getSpeedsList().size() +
+				", distancesList=" + getDistancesList().size() +
 				'}';
 	}
 

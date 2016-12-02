@@ -23,6 +23,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.rafalzajfert.androidlogger.Logger;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -31,7 +33,9 @@ import java.util.List;
 import java.util.Locale;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.models.Workout;
+import wojtek.pockettrainer.models.WorkoutDao;
 import wojtek.pockettrainer.views.interfaces.MapsWorkoutActivityListener;
 
 
@@ -46,9 +50,9 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 	private GoogleMap mGoogleMap;
 	private Workout mWorkout;
 
-	public static WorkoutDetailsFragment newInstance(Workout workout) {
+	public static WorkoutDetailsFragment newInstance(Long workoutId) {
 		Bundle args = new Bundle();
-//		args.putSerializable(WORKOUT_KEY, workout);
+		args.putLong(WORKOUT_KEY, workoutId);
 		WorkoutDetailsFragment fragment = new WorkoutDetailsFragment();
 		fragment.setArguments(args);
 		return fragment;
@@ -59,10 +63,16 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 		super.onCreate(savedInstanceState);
 		Bundle args = getArguments();
 		if (args != null) {
-			mWorkout = (Workout) args.getSerializable(WORKOUT_KEY);
-			mWorkout.setStartDate(System.currentTimeMillis());
+			long workoutId = args.getLong(WORKOUT_KEY);
+			getWorkoutFromDao(workoutId);
 		}
-		Logger.debug(mWorkout.toString());
+	}
+
+	private void getWorkoutFromDao(long id) {
+		WorkoutDao workoutDao = TrainerApplication.getDaoSession().getWorkoutDao();
+		QueryBuilder queryBuilder = workoutDao.queryBuilder().where(WorkoutDao.Properties.Id.eq(id));
+
+		mWorkout = (Workout) queryBuilder.list().get(0);
 	}
 
 	@Override
@@ -84,30 +94,32 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 		TextView burnedCaloriesTextView = (TextView) view.findViewById(R.id.workout_details_burned_calories);
 		ImageView backgroundImageView = (ImageView) view.findViewById(R.id.workout_details_faded_background);
 
-		startTimeTextView.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(mWorkout.getStartDate().getTime()) +
-				", " + DateFormat.getDateInstance(DateFormat.LONG).format(mWorkout.getStartDate().getTime()));
-		startLocationTextView.setText(mWorkout.getStartAddress());
-		finishTimeTextView.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(mWorkout.getFinishDate().getTime()) +
-				", " + DateFormat.getDateInstance(DateFormat.LONG).format(mWorkout.getFinishDate().getTime()));
-		finishLocationTextView.setText(mWorkout.getFinishAddress());
-		elapsedTimeTextView.setText(mWorkout.getElapsedTime());
-		burnedCaloriesTextView.setText(String.format(getResources().getString(R.string.burned_units_kcal), mWorkout.getBurnedCalories()));
+		if (mWorkout != null) {
+			startTimeTextView.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(mWorkout.getStartDate().getTime()) +
+					", " + DateFormat.getDateInstance(DateFormat.LONG).format(mWorkout.getStartDate().getTime()));
+			startLocationTextView.setText(mWorkout.getStartAddress());
+			finishTimeTextView.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(mWorkout.getFinishDate().getTime()) +
+					", " + DateFormat.getDateInstance(DateFormat.LONG).format(mWorkout.getFinishDate().getTime()));
+			finishLocationTextView.setText(mWorkout.getFinishAddress());
+			elapsedTimeTextView.setText(mWorkout.getElapsedTime());
+			burnedCaloriesTextView.setText(String.format(getResources().getString(R.string.burned_units_kcal), mWorkout.getBurnedCalories()));
 
-		switch (mWorkout.getWorkoutType()) {
-			case CYCLING:
-				backgroundImageView.setImageResource(R.drawable.ic_directions_bike_gray_100dp);
-				totalDistanceTextView.setText(String.format(getResources().getString(R.string.distance_units_km), mWorkout.getDistance()));
-				topSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_kph), mWorkout.getTopSpeed()));
-				averageSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_kph), mWorkout.getAverageSpeed()));
-				averageSpeedWithoutTopsTextView.setText(String.format(getResources().getString(R.string.speed_units_kph), mWorkout.getAverageSpeedWithoutStops()));
-				break;
-			case RUNNING:
-				backgroundImageView.setImageResource(R.drawable.ic_directions_run_gray_100dp);
-				totalDistanceTextView.setText(String.format(getResources().getString(R.string.distance_units_m), mWorkout.getDistance()));
-				topSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), mWorkout.getTopSpeed()));
-				averageSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), mWorkout.getAverageSpeed()));
-				averageSpeedWithoutTopsTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), mWorkout.getAverageSpeedWithoutStops()));
-				break;
+			switch (mWorkout.getWorkoutType()) {
+				case CYCLING:
+					backgroundImageView.setImageResource(R.drawable.ic_directions_bike_gray_100dp);
+					totalDistanceTextView.setText(String.format(getResources().getString(R.string.distance_units_km), mWorkout.getDistance()));
+					topSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_kph), mWorkout.getTopSpeed()));
+					averageSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_kph), mWorkout.getAverageSpeed()));
+					averageSpeedWithoutTopsTextView.setText(String.format(getResources().getString(R.string.speed_units_kph), mWorkout.getAverageSpeedWithoutStops()));
+					break;
+				case RUNNING:
+					backgroundImageView.setImageResource(R.drawable.ic_directions_run_gray_100dp);
+					totalDistanceTextView.setText(String.format(getResources().getString(R.string.distance_units_m), mWorkout.getDistance()));
+					topSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), mWorkout.getTopSpeed()));
+					averageSpeedTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), mWorkout.getAverageSpeed()));
+					averageSpeedWithoutTopsTextView.setText(String.format(getResources().getString(R.string.speed_units_mps), mWorkout.getAverageSpeedWithoutStops()));
+					break;
+			}
 		}
 
 		return view;
@@ -120,7 +132,7 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 		mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
 		mGoogleMap.getUiSettings().setCompassEnabled(false);
 		mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
-		moveCamera(mWorkout.getLocationsListLatLng(0), 11);
+		moveCamera(mWorkout.getLocationsList().get(0).getLatLng(), 11);
 	}
 
 	private void moveCamera(LatLng latLng, float zoom) {

@@ -23,13 +23,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.rafalzajfert.androidlogger.Logger;
+
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import wojtek.pockettrainer.R;
+import wojtek.pockettrainer.TrainerApplication;
+import wojtek.pockettrainer.models.Distance;
+import wojtek.pockettrainer.models.DistanceDao;
+import wojtek.pockettrainer.models.JoinWorkoutWithDistances;
+import wojtek.pockettrainer.models.JoinWorkoutWithDistancesDao;
+import wojtek.pockettrainer.models.JoinWorkoutWithPositions;
+import wojtek.pockettrainer.models.JoinWorkoutWithPositionsDao;
+import wojtek.pockettrainer.models.JoinWorkoutWithSpeeds;
+import wojtek.pockettrainer.models.JoinWorkoutWithSpeedsDao;
+import wojtek.pockettrainer.models.Position;
+import wojtek.pockettrainer.models.PositionDao;
+import wojtek.pockettrainer.models.Speed;
+import wojtek.pockettrainer.models.SpeedDao;
 import wojtek.pockettrainer.models.Workout;
+import wojtek.pockettrainer.models.WorkoutDao;
 import wojtek.pockettrainer.models.enums.WorkoutType;
 import wojtek.pockettrainer.services.LocationService;
 import wojtek.pockettrainer.services.interfaces.LocationServiceCallback;
@@ -124,7 +142,7 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 				onBackPressed();
 			}
 		});
-		setTitle(getResources().getText(R.string.new_with_whitespace) + mWorkout.getWorkoutType().toString());
+		setTitle(getResources().getText(R.string.new_with_whitespace) + mWorkout.getWorkoutType().toString().toLowerCase());
 	}
 
 
@@ -162,7 +180,11 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 
 	@Override
 	public void onBackPressed() {
-		cancelWorkoutAlertDialog();
+		if (getSupportFragmentManager().findFragmentById(FRAGMENT_CONTAINER) instanceof WorkoutTracingFragment) {
+			cancelWorkoutAlertDialog();
+		} else {
+			super.onBackPressed();
+		}
 	}
 
 	private void cancelWorkoutAlertDialog() {
@@ -254,6 +276,34 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 		}
 	}
 
+	private void saveWorkout() {
+		WorkoutDao workoutDao = TrainerApplication.getDaoSession().getWorkoutDao();
+		PositionDao positionDao = TrainerApplication.getDaoSession().getPositionDao();
+		SpeedDao speedDao = TrainerApplication.getDaoSession().getSpeedDao();
+		DistanceDao distanceDao = TrainerApplication.getDaoSession().getDistanceDao();
+		JoinWorkoutWithPositionsDao joinWorkoutWithPositionsDao = TrainerApplication.getDaoSession().getJoinWorkoutWithPositionsDao();
+		JoinWorkoutWithSpeedsDao joinWorkoutWithSpeedsDao = TrainerApplication.getDaoSession().getJoinWorkoutWithSpeedsDao();
+		JoinWorkoutWithDistancesDao joinWorkoutWithDistancesDao = TrainerApplication.getDaoSession().getJoinWorkoutWithDistancesDao();
+
+		long workoutId = workoutDao.insert(mWorkout);
+
+		for (Position position : mService.getLocationsList()) {
+			long id = positionDao.insert(position);
+			joinWorkoutWithPositionsDao.insert(new JoinWorkoutWithPositions(null, workoutId, id));
+		}
+
+		for (Distance distance : mService.getDistancesList()) {
+			long id = distanceDao.insert(distance);
+			joinWorkoutWithDistancesDao.insert(new JoinWorkoutWithDistances(null, workoutId, id));
+		}
+
+		for (Speed speed : mService.getSpeedsList()) {
+			long id = speedDao.insert(speed);
+			joinWorkoutWithSpeedsDao.insert(new JoinWorkoutWithSpeeds(null, workoutId, id));
+		}
+
+	}
+
 	@Override
 	public void showBottomSheet() {
 		mFragmentListener.showBottomSheet(true);
@@ -273,30 +323,26 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 			@Override
 			protected void onPostExecute(Void aVoid) {
 				super.onPostExecute(aVoid);
-				if (getSupportActionBar() != null) {
-					getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-					setTitle(R.string.workout_summary);
-				}
-				changeFragment(WorkoutDetailsFragment.newInstance(mWorkout), true);
+				setTitle(R.string.workout_summary);
+				changeFragment(WorkoutDetailsFragment.newInstance(mWorkout.getId()), true);
 				animateLoading(false);
 			}
 
 			@Override
 			protected Void doInBackground(Void... params) {
 				stopLocationUpdates();
+				ArrayList<Position> positionArrayList = mService.getLocationsList();
 				mWorkout.setFinishDate(System.currentTimeMillis());
 				mWorkout.setElapsedTime(mFragmentListener.getElapsedTime());
-//				mWorkout.setLocationsList(mService.getLocationsList());
-//				mWorkout.setSpeedsList(mService.getSpeedsList());
-//				mWorkout.setDistancesList(mService.getDistancesList());
 				mWorkout.setTopSpeed(mService.getTopSpeed());
 				mWorkout.setAverageSpeed(mService.getAverageSpeed());
 				mWorkout.setAverageSpeedWithoutStops(mService.getAverageSpeedWithoutStops());
 				mWorkout.setDistance(mService.getTotalDistance());
-				mWorkout.setStartAddress(getLocationAddress(mWorkout.getLocation(0).getLatitude(), mWorkout.getLocation(0).getLongitude()));
-				mWorkout.setFinishAddress(getLocationAddress(mWorkout.getLocation(mWorkout.getLocationsListLastIndex()).getLatitude(),
-						mWorkout.getLocation(mWorkout.getLocationsListLastIndex()).getLongitude()));
+				mWorkout.setStartAddress(getLocationAddress(positionArrayList.get(0).getLatitude(), positionArrayList.get(0).getLongitude()));
+				mWorkout.setFinishAddress(getLocationAddress(positionArrayList.get(positionArrayList.size() - 1).getLatitude(),
+						positionArrayList.get(positionArrayList.size() - 1).getLongitude()));
 				mWorkout.setBurnedCalories(mService.getBurnedCalories());
+				saveWorkout();
 				return null;
 			}
 		}.execute();

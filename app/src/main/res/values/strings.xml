@@ -59,7 +59,7 @@
 	<string name="switch_units">Metric units</string>
 
 	<!-- Workout tracing -->
-	<string name="new_with_whitespace">New </string>
+	<string name="new_with_whitespace">"New "</string>
 	<string name="finish">Finish</string>
 	<string name="resume">Resume</string>
 	<string name="pause">Pause</string>

@@ -17,6 +17,7 @@ import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.TrainerApplication;
 import wojtek.pockettrainer.models.Workout;
 import wojtek.pockettrainer.views.adapters.items.WorkoutItem;
+import wojtek.pockettrainer.views.adapters.listeners.OnItemClickListener;
 import wojtek.pockettrainer.views.adapters.listeners.OnItemLongClickListener;
 
 /**
@@ -31,9 +32,12 @@ public class WorkoutsAdapter extends RecyclerView.Adapter<WorkoutsAdapter.MyView
 
 	private ArrayList<WorkoutItem> mWorkouts;
 	private OnItemLongClickListener<WorkoutItem> mItemLongClickListener;
+	private OnItemClickListener<Long> mItemClickListener;
 
-	public WorkoutsAdapter(OnItemLongClickListener<WorkoutItem> itemClickListener) {
-		mItemLongClickListener = itemClickListener;
+	public WorkoutsAdapter(OnItemLongClickListener<WorkoutItem> itemLongClickListener, OnItemClickListener<Long> itemClickListener) {
+		mItemLongClickListener = itemLongClickListener;
+		mItemClickListener = itemClickListener;
+
 		mWorkouts = new ArrayList<>();
 	}
 
@@ -110,7 +114,10 @@ public class WorkoutsAdapter extends RecyclerView.Adapter<WorkoutsAdapter.MyView
 			mMoreView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Toast.makeText(TrainerApplication.getContext(), "not implemented", Toast.LENGTH_SHORT).show();
+					if (mItemClickListener != null) {
+						int position = getLayoutPosition();
+						mItemClickListener.onItemClicked(mWorkouts.get(position).getObject().getId());
+					}
 				}
 			});
 			mMoreView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -138,7 +145,7 @@ public class WorkoutsAdapter extends RecyclerView.Adapter<WorkoutsAdapter.MyView
 
 		public void setWorkout(@NonNull Workout workout) {
 			mDateTextView.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(workout.getStartDate().getTime())
-					+ DateFormat.getDateInstance(DateFormat.LONG).format(workout.getStartDate().getTime()));
+					+ " " + DateFormat.getDateInstance(DateFormat.LONG).format(workout.getStartDate().getTime()));
 			switch (workout.getWorkoutType()) {
 				case CYCLING:
 					mTypeImageView.setImageResource(R.drawable.ic_directions_bike_gray_48dp);
