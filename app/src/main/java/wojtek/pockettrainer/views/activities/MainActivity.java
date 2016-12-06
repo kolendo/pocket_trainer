@@ -168,9 +168,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				case R.id.nav_history:
 					changeFragment(WorkoutsHistoryFragment.newInstance(), true);
 					break;
-				case R.id.nav_spotify:
-					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
-					break;
+//				case R.id.nav_spotify:
+//					Toast.makeText(this, "Not implemented!", Toast.LENGTH_SHORT).show();
+//					break;
 				case R.id.nav_bmi:
 					changeFragment(BmiFragment.newInstance(), true);
 					break;

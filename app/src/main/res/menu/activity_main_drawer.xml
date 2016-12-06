@@ -33,14 +33,14 @@
 			android:title="@string/history" />
 	</group>
 
-	<group
-		android:id="@+id/group_spotify"
-		android:checkableBehavior="single">
-		<item
-			android:id="@+id/nav_spotify"
-			android:icon="@drawable/ic_spotify_black_24dp"
-			android:title="@string/spotify" />
-	</group>
+	<!--<group-->
+		<!--android:id="@+id/group_spotify"-->
+		<!--android:checkableBehavior="single">-->
+		<!--<item-->
+			<!--android:id="@+id/nav_spotify"-->
+			<!--android:icon="@drawable/ic_spotify_black_24dp"-->
+			<!--android:title="@string/spotify" />-->
+	<!--</group>-->
 
 	<group
 		android:id="@+id/group_calculators"

@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
+
+def applicationName = "PocketTrainer";
+
+def prodVersion = 1;
+def prodVersionName = "1.0.0";
+
+def devVersion = 1;
+def devVersionName = "0.0.1";
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -17,6 +26,43 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    productFlavors {
+        prod {
+            versionCode prodVersion
+            versionName prodVersionName
+        }
+        dev {
+            versionCode devVersion
+            versionName devVersionName
+        }
+    }
+}
+
+android.applicationVariants.all { variant ->
+    variant.assemble.doLast {
+        variant.outputs.each { output ->
+            File unaligned = output.packageApplication.outputFile;
+            File aligned = output.outputFile
+            if (!unaligned.getName().equalsIgnoreCase(aligned.getName())) {
+                unaligned.delete()
+            }
+        }
+    }
+
+    variant.outputs.each { output ->
+        def apkName = applicationName;
+        if (variant.getName().contains("prod")) {
+            apkName += "-v" + prodVersionName;
+        } else {
+            apkName += "-v" + devVersionName+"dev";
+        }
+        if (variant.buildType.name.equals("debug")) {
+            apkName += "-debug";
+        }
+        apkName += ".apk";
+        output.outputFile = file(output.outputFile.getParent() + File.separator + apkName);
     }
 }
 
