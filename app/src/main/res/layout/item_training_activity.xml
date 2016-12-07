@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-				xmlns:tools="http://schemas.android.com/tools"
-				android:layout_width="match_parent"
-				android:layout_height="60dp"
-				android:paddingEnd="12dp"
-				android:paddingLeft="32dp"
-				android:paddingTop="12dp"
-				android:paddingBottom="10dp"
-				android:gravity="center"
-				android:orientation="horizontal">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:tools="http://schemas.android.com/tools"
+			  android:layout_width="match_parent"
+			  android:layout_height="60dp"
+			  android:paddingRight="12dp"
+			  android:paddingLeft="32dp"
+			  android:paddingTop="12dp"
+			  android:paddingBottom="10dp"
+			  android:gravity="center"
+			  android:orientation="horizontal"
+			  tools:ignore="RtlHardcoded">
+<LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_weight="1"
+	android:orientation="vertical">
 
 	<TextView
-		android:id="@+id/item_activity_description"
-		android:layout_width="wrap_content"
+		android:id="@+id/item_activity_title"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:textColor="@color/colorAccent"
 		android:textSize="15sp"
@@ -22,16 +28,15 @@
 		android:id="@+id/item_activity_subdescription"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
 		tools:text="4 sets"/>
 
-	<ImageView
-		android:layout_width="wrap_content"
+</LinearLayout>
+
+	<TextView
+		android:id="@+id/item_activity_description"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_gravity="center_vertical"
-		android:adjustViewBounds="true"
-		android:layout_centerInParent="true"
-		android:layout_alignParentEnd="true"
-		android:src="@drawable/ic_keyboard_arrow_right_gray_24dp"
-		tools:ignore="ContentDescription"/>
-</RelativeLayout>
+		android:layout_weight="1"
+		tools:text="Break every 20 mins"/>
+
+</LinearLayout>

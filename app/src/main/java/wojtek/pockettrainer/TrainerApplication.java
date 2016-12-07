@@ -50,11 +50,15 @@ public class TrainerApplication extends Application {
 		Training training_a = new Training(0L, "Friday running night", true);
 		getDaoSession().getTrainingDao().insertOrReplace(training_a);
 
-		TrainingActivity trainingActivity_a = new TrainingActivity(0L, "Treadmill", "Break every 20 mins", 0, 5400000);
+		TrainingActivity trainingActivity_a = new TrainingActivity(0L, "Treadmill", "Break every 30 mins", 0, 5400000);
 		getDaoSession().getTrainingActivityDao().insertOrReplace(trainingActivity_a);
+		TrainingActivity trainingActivity_b = new TrainingActivity(1L, "Stationary bicycle", "Hill climbing mode ", 0, 2700000);
+		getDaoSession().getTrainingActivityDao().insertOrReplace(trainingActivity_b);
 
 		JoinTrainingsWithTrainingActivities joinTrainingsWithTrainingActivities_a = new JoinTrainingsWithTrainingActivities(0L, 0, 0);
+		JoinTrainingsWithTrainingActivities joinTrainingsWithTrainingActivities_b = new JoinTrainingsWithTrainingActivities(1L, 0, 1);
 		getDaoSession().getJoinTrainingsWithTrainingActivitiesDao().insertOrReplace(joinTrainingsWithTrainingActivities_a);
+		getDaoSession().getJoinTrainingsWithTrainingActivitiesDao().insertOrReplace(joinTrainingsWithTrainingActivities_b);
 
 	}
 

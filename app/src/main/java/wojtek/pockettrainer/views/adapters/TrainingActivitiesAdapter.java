@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.rafalzajfert.androidlogger.Logger;
-
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -64,10 +62,11 @@ public class TrainingActivitiesAdapter extends RecyclerView.Adapter<TrainingActi
 
 	public class MyViewHolder extends RecyclerView.ViewHolder {
 
-		private TextView mDescriptionTextView, mSubDescriptionTextView;
+		private TextView mTitleTextView, mSubDescriptionTextView, mDescriptionTextView;
 
 		public MyViewHolder(View itemView) {
 			super(itemView);
+			mTitleTextView = (TextView) itemView.findViewById(R.id.item_activity_title);
 			mDescriptionTextView = (TextView) itemView.findViewById(R.id.item_activity_description);
 			mSubDescriptionTextView = (TextView) itemView.findViewById(R.id.item_activity_subdescription);
 
@@ -94,7 +93,8 @@ public class TrainingActivitiesAdapter extends RecyclerView.Adapter<TrainingActi
 		}
 
 		public void setActivity(@NonNull TrainingActivity trainingActivity) {
-			mDescriptionTextView.setText(trainingActivity.getTitle());
+			mTitleTextView.setText(trainingActivity.getTitle());
+			mDescriptionTextView.setText(trainingActivity.getDescription());
 			int sets = trainingActivity.getSets();
 			long time = trainingActivity.getTime();
 
@@ -125,28 +125,13 @@ public class TrainingActivitiesAdapter extends RecyclerView.Adapter<TrainingActi
 
 			StringBuilder sb = new StringBuilder(64);
 			if (hours > 0) {
-				sb.append(hours);
-				if (hours > 1) {
-					sb.append(String.format(TrainerApplication.getContext().getString(R.string.activity_hours), hours));
-				} else {
-					sb.append(String.format(TrainerApplication.getContext().getString(R.string.activity_hour), hours));
-				}
+				sb.append(String.format(TrainerApplication.getContext().getString(R.string.activity_hour), hours));
 			}
 			if (minutes > 0) {
-				sb.append(minutes);
-				if (minutes > 1) {
-					sb.append(String.format(TrainerApplication.getContext().getString(R.string.activity_minutes), minutes));
-				} else {
-					sb.append(String.format(TrainerApplication.getContext().getString(R.string.activity_minute), minutes));
-				}
+				sb.append(String.format(TrainerApplication.getContext().getString(R.string.activity_minute), minutes));
 			}
 			if (seconds > 0) {
-				sb.append(seconds);
-				if (seconds > 1) {
-					sb.append(String.format(TrainerApplication.getContext().getString(R.string.activity_seconds), seconds));
-				} else {
-					sb.append(String.format(TrainerApplication.getContext().getString(R.string.activity_second), seconds));
-				}
+				sb.append(String.format(TrainerApplication.getContext().getString(R.string.activity_second), seconds));
 			}
 			return(sb.toString());
 		}

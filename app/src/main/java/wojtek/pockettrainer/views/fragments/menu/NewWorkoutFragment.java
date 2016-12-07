@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -67,12 +68,25 @@ public class NewWorkoutFragment extends Fragment {
 		ArrayAdapter<WorkoutType> workoutTypeAdapter = new WorkoutTypeAdapter(getContext(), R.layout.spinner_workout_type);
 		View accuracySwitchContent = view.findViewById(R.id.switch_accuracy_workout_content);
 		Switch lessAccuracySwitch = (Switch) view.findViewById(R.id.switch_accuracy_workout);
-		Switch metricUnitsSwitch = (Switch) view.findViewById(R.id.switch_units_workout);
+		RadioGroup unitsRadioGroup = (RadioGroup) view.findViewById(R.id.units_group);
 
 		lessAccuracySwitch.setChecked(mSettingsPreferences.isLessAccuracyEnabled());
 		lessAccuracySwitch.setOnCheckedChangeListener(onCheckedAccuracySwitchListener);
-		metricUnitsSwitch.setChecked(mSettingsPreferences.isMetricUnitsEnabled());
-		metricUnitsSwitch.setOnCheckedChangeListener(onCheckedMetricSwitchListener);
+		if (mSettingsPreferences.isMetricUnitsEnabled()) {
+			unitsRadioGroup.check(R.id.units_metric);
+		} else {
+			unitsRadioGroup.check(R.id.units_imperial);
+		}
+		unitsRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup radioGroup, int i) {
+				if(i == R.id.units_metric) {
+					mSettingsPreferences.setMetricUnitsEnabled(true);
+				} else if(i == R.id.units_imperial) {
+					mSettingsPreferences.setMetricUnitsEnabled(false);
+				}
+			}
+		});
 		workoutTypeSpinner.setAdapter(workoutTypeAdapter);
 		workoutTypeSpinner.setOnItemSelectedListener(onSpinnerListener);
 		accuracySwitchContent.setOnClickListener(onAccuracySwitchContentListener);
@@ -102,13 +116,6 @@ public class NewWorkoutFragment extends Fragment {
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			mSettingsPreferences.setLessAccuracyEnabled(isChecked);
-		}
-	};
-
-	private CompoundButton.OnCheckedChangeListener onCheckedMetricSwitchListener = new CompoundButton.OnCheckedChangeListener() {
-		@Override
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			mSettingsPreferences.setMetricUnitsEnabled(isChecked);
 		}
 	};
 

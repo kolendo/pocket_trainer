@@ -1,9 +1,5 @@
 package wojtek.pockettrainer.models;
 
-import android.location.Location;
-
-import com.google.android.gms.maps.model.LatLng;
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;

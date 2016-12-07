@@ -251,6 +251,7 @@ public class GymTrainingsListFragment extends Fragment implements View.OnClickLi
 	public void openTrainingActivity(Training training) {
 		Intent intent = new Intent(getActivity(), TrainingActivity.class);
 		intent.putExtra(TrainingActivity.EXTRA_TRAINING, training.getId());
+		intent.putExtra(TrainingActivity.EXTRA_TITLE, training.getTitle());
 		startActivity(intent);
 	}
 }

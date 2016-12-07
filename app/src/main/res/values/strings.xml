@@ -28,7 +28,7 @@
 	<string name="about">About</string>
 	<string name="feedback">Feedback</string>
 	<string name="author_about">Wojciech Kolendo</string>
-	<string name="author_email">woko27@gmail.com</string>
+	<string name="author_email">wojciech.kolendo@gmail.com</string>
 
 	<!-- Trainings List -->
 	<string name="training_activities_num">%d activities</string>
@@ -43,12 +43,9 @@
 	<string name="time">Time</string>
 	<string name="activity_sets">%d sets</string>
 	<string name="activity_set">1 set</string>
-	<string name="activity_hour">"%d hour "</string>
-	<string name="activity_hours">"%d hours "</string>
-	<string name="activity_minute">"%d minute "</string>
-	<string name="activity_minutes">"%d minutes "</string>
-	<string name="activity_second">"%d second "</string>
-	<string name="activity_seconds">"%d seconds "</string>
+	<string name="activity_hour">"%d h "</string>
+	<string name="activity_minute">"%d min "</string>
+	<string name="activity_second">"%d sec "</string>
 
 	<!-- Workout -->
 	<string name="start">Start</string>
@@ -56,7 +53,8 @@
 	<string name="running">Running</string>
 	<string name="cycling">Cycling</string>
 	<string name="switch_accuracy">Enable less accuracy</string>
-	<string name="switch_units">Metric units</string>
+	<string name="metric">Metric</string>
+	<string name="imperial">Imperial</string>
 
 	<!-- Workout tracing -->
 	<string name="new_with_whitespace">"New "</string>

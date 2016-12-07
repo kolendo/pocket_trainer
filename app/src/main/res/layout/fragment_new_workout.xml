@@ -45,49 +45,53 @@
 				android:id="@+id/workout_type"/>
 		</LinearLayout>
 
-		<LinearLayout
-			android:orientation="vertical"
-			android:gravity="end"
+		<RadioGroup
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:id="@+id/units_group"
+			android:layout_marginBottom="16dp"
+			android:layout_gravity="center">
 
-			<LinearLayout
-				android:id="@+id/switch_accuracy_workout_content"
+			<RadioButton
+				android:layout_width="100dp"
+				android:layout_height="wrap_content"
+				android:text="@string/metric"
+				android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+				android:id="@+id/units_metric"
+				android:layout_margin="5dp"
+				android:layout_gravity="center_vertical"/>
+
+			<RadioButton
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/activity_vertical_margin"
-				android:orientation="horizontal">
-				<ImageView
-					android:layout_width="16dp"
-					android:layout_height="16dp"
-					android:layout_marginEnd="2dp"
-					android:layout_gravity="center"
-					android:src="@drawable/ic_help_outline_gray_24dp"/>
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/switch_accuracy"
-					android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
-				<Switch
-					android:id="@+id/switch_accuracy_workout"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"/>
-			</LinearLayout>
+				android:text="@string/imperial"
+				android:id="@+id/units_imperial"
+				android:layout_margin="5dp"/>
+		</RadioGroup>
 
-			<LinearLayout
-				android:orientation="horizontal"
+
+		<LinearLayout
+			android:id="@+id/switch_accuracy_workout_content"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/activity_vertical_margin"
+			android:orientation="horizontal">
+			<ImageView
+				android:layout_width="16dp"
+				android:layout_height="16dp"
+				android:layout_marginEnd="2dp"
+				android:layout_gravity="center"
+				android:src="@drawable/ic_help_outline_gray_24dp"/>
+			<TextView
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/switch_units"
-					android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
-				<Switch
-					android:id="@+id/switch_units_workout"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"/>
-			</LinearLayout>
+				android:layout_height="wrap_content"
+				android:text="@string/switch_accuracy"
+				android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
+			<Switch
+				android:id="@+id/switch_accuracy_workout"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
 		</LinearLayout>
 
 		<Button

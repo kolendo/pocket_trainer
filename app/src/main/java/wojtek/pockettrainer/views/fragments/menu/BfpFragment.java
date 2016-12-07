@@ -43,7 +43,7 @@ public class BfpFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {;
 		View view =  inflater.inflate(R.layout.fragment_bfp, container, false);
 		mViewPager = (ViewPager) view.findViewById(R.id.bfp_view_pager);
-		mAdapterViewPager = new BmiAdapter(getChildFragmentManager());
+		mAdapterViewPager = new BfpAdapter(getChildFragmentManager());
 		mViewPager.setAdapter(mAdapterViewPager);
 		mTabLayout = (TabLayout) view.findViewById(R.id.bfp_tabs);
 
@@ -57,11 +57,11 @@ public class BfpFragment extends Fragment {
 		mViewPager.setCurrentItem(page, true);
 	}
 
-	public static class BmiAdapter extends FragmentPagerAdapter {
+	public static class BfpAdapter extends FragmentPagerAdapter {
 
 		private BfpResultFragment mRangesFragment;
 
-		public BmiAdapter(FragmentManager fragmentManager) {
+		public BfpAdapter(FragmentManager fragmentManager) {
 			super(fragmentManager);
 			mRangesFragment = mRangesFragment.newInstance();
 		}

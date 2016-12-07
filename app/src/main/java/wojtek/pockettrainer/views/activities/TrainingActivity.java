@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.ViewUtils;
+import android.text.TextUtils;
 import android.view.MenuItem;
 
 import wojtek.pockettrainer.R;
@@ -20,6 +22,7 @@ public class TrainingActivity extends AppCompatActivity {
 
 	private static final int FRAGMENT_CONTAINER = R.id.fragment_frame_training;
 	public static final String EXTRA_TRAINING = "extra_training";
+	public static final String EXTRA_TITLE = "extra_title";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,10 @@ public class TrainingActivity extends AppCompatActivity {
 		initToolbar();
 
 		long trainingId = getIntent().getLongExtra(EXTRA_TRAINING, -1);
+		String title = getIntent().getStringExtra(EXTRA_TITLE);
+		if (!TextUtils.isEmpty(title)) {
+			setTitle(title);
+		}
 		if (savedInstanceState == null) {
 			getSupportFragmentManager()
 					.beginTransaction()
