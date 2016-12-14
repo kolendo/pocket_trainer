@@ -72,7 +72,7 @@ public class WorkoutDetailsFragment extends Fragment implements OnMapReadyCallba
 		WorkoutDao workoutDao = TrainerApplication.getDaoSession().getWorkoutDao();
 		QueryBuilder queryBuilder = workoutDao.queryBuilder().where(WorkoutDao.Properties.Id.eq(id));
 
-		mWorkout = (Workout) queryBuilder.list().get(0);
+		mWorkout = (Workout) queryBuilder.unique();
 	}
 
 	@Override

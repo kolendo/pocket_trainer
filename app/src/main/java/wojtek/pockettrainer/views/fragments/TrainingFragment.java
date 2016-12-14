@@ -1,8 +1,11 @@
 package wojtek.pockettrainer.views.fragments;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,14 +15,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.rafalzajfert.androidlogger.Logger;
+import com.shawnlin.numberpicker.NumberPicker;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import wojtek.pockettrainer.R;
 import wojtek.pockettrainer.TrainerApplication;
@@ -78,7 +88,7 @@ public class TrainingFragment extends Fragment implements View.OnClickListener {
 		QueryBuilder queryBuilder = trainingDao.queryBuilder().where(TrainingDao.Properties.Id.eq(id));
 
 		Logger.error(mJoinTrainingsWithTrainingActivitiesDao.loadAll().size());
-		mTraining = (Training) queryBuilder.list().get(0);
+		mTraining = (Training) queryBuilder.unique();
 	}
 
 	@Override
@@ -236,13 +246,41 @@ public class TrainingFragment extends Fragment implements View.OnClickListener {
 		View dialogView = inflater.inflate(R.layout.dialog_new_training_activity, null);
 		final EditText trainingActivityTitleEditText = (EditText) dialogView.findViewById(R.id.training_activity_edit_title);
 		final EditText trainingActivityDescriptionEditText = (EditText) dialogView.findViewById(R.id.training_activity_edit_description);
+		final RadioGroup typeRadioGroup = (RadioGroup) dialogView.findViewById(R.id.training_activity_radio_group);
+		final NumberPicker numberPickerSets = (NumberPicker) dialogView.findViewById(R.id.number_picker_sets);
+		final NumberPicker numberPickerTimeMin = (NumberPicker) dialogView.findViewById(R.id.number_picker_time_min);
+		final NumberPicker numberPickerTimeSec = (NumberPicker) dialogView.findViewById(R.id.number_picker_time_sec);
+		final View numberPickerTimeFrame = dialogView.findViewById(R.id.number_picker_time_frame);
+
+		typeRadioGroup.check(R.id.training_activity_radio_sets);
+		numberPickerTimeFrame.setVisibility(View.INVISIBLE);
+		numberPickerSets.setVisibility(View.VISIBLE);
+
+		typeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup radioGroup, int i) {
+				if(i == R.id.training_activity_radio_sets) {
+					numberPickerTimeFrame.setVisibility(View.INVISIBLE);
+					numberPickerSets.setVisibility(View.VISIBLE);
+				} else if(i == R.id.training_activity_radio_time) {
+					numberPickerSets.setVisibility(View.INVISIBLE);
+					numberPickerTimeFrame.setVisibility(View.VISIBLE);
+				}
+			}
+		});
+
 		builder.setView(dialogView)
 				.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
 						String title = trainingActivityTitleEditText.getText().toString();
 						String description = trainingActivityDescriptionEditText.getText().toString();
-						addNewTrainingActivity(new TrainingActivity(null, title, description, 60, 0));
+						if (typeRadioGroup.getCheckedRadioButtonId() == R.id.training_activity_radio_sets) {
+							addNewTrainingActivity(new TrainingActivity(null, title, description, numberPickerSets.getValue(), 0));
+						} else {
+							long milis = TimeUnit.MINUTES.toMillis((long) numberPickerTimeMin.getValue()) + TimeUnit.SECONDS.toMillis((long) numberPickerTimeSec.getValue());
+							addNewTrainingActivity(new TrainingActivity(null, title, description, 0, milis));
+						}
 					}
 				})
 				.setNegativeButton(R.string.cancel, null);

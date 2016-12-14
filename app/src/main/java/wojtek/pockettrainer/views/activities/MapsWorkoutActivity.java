@@ -301,7 +301,6 @@ public class MapsWorkoutActivity extends AppCompatActivity implements LocationSe
 			long id = speedDao.insert(speed);
 			joinWorkoutWithSpeedsDao.insert(new JoinWorkoutWithSpeeds(null, workoutId, id));
 		}
-
 	}
 
 	@Override
